@@ -6,7 +6,8 @@ import struct
 from PIL import Image
 
 ROOT=Path(__file__).resolve().parents[1]
-SLUGS=['trajectory','ridges','chord','cluster','spatial','feasibility']
+CATALOG=json.loads((ROOT/'gallery/catalog.json').read_text(encoding='utf-8'))['charts']
+SLUGS=[chart['id'] for chart in CATALOG]
 
 
 def inspect_emf(file):
@@ -28,9 +29,10 @@ def inspect_emf(file):
 
 def main():
     previews=ROOT/'docs/assets/charts';previews.mkdir(parents=True,exist_ok=True)
-    manifest={'data':'gallery/demo-data.json','source':'independent illustrative data','charts':[]}
-    for slug in SLUGS:
-        item={'id':slug,'outputs':{}}
+    manifest={'data':['gallery/demo-data.json','gallery/extra-data.json'],'source':'independent illustrative data','charts':[]}
+    for chart in CATALOG:
+        slug=chart['id']
+        item={**chart,'outputs':{}}
         for backend,suffix in [('python','png'),('matlab','emf')]:
             file=ROOT/f'docs/downloads/figures/{backend}/{slug}.{suffix}'
             with Image.open(file) as image:

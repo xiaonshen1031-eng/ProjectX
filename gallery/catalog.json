@@ -1,0 +1,130 @@
+{
+  "charts": [
+    {
+      "id": "gantt",
+      "family": "time",
+      "title": "资源调度甘特与功率分解",
+      "description": "连接各对象的可用窗口、实际分配和分组功率，解释总体变化的来源。",
+      "tags": "时间窗 · 资源分配 · 功率构成",
+      "extra": true,
+      "featured": true
+    },
+    {
+      "id": "sankey",
+      "family": "relation",
+      "title": "多阶段桑基流图",
+      "description": "用相连的流带展开多阶段分配，保持各阶段的总量对应。",
+      "tags": "阶段流向 · 构成 · 总量对应",
+      "extra": true,
+      "featured": true
+    },
+    {
+      "id": "raincloud",
+      "family": "distribution",
+      "title": "雨云分布与区间比较",
+      "description": "把密度、观测分布、四分位区间和尾部范围放在同一比较中。",
+      "tags": "分布形态 · 原始点 · 区间统计",
+      "extra": true,
+      "featured": true
+    },
+    {
+      "id": "parallel",
+      "family": "relation",
+      "title": "多指标平行坐标",
+      "description": "在统一尺度下连接多项指标，呈现不同方案的结构和组内分布。",
+      "tags": "多指标 · 方案群组 · 分布包络",
+      "extra": true,
+      "featured": true
+    },
+    {
+      "id": "spatial",
+      "family": "space",
+      "title": "空间场与节点网络",
+      "description": "把连续空间分布与节点连接放在同一坐标系中，观察局部强度与网络结构。",
+      "tags": "空间分布 · 节点 · 网络叠加",
+      "extra": false,
+      "featured": true
+    },
+    {
+      "id": "feasibility",
+      "family": "space",
+      "title": "可行域与状态投影",
+      "description": "同时呈现约束边界、状态投影路径与位移，说明状态如何进入可行区域。",
+      "tags": "等值线 · 可行边界 · 投影路径",
+      "extra": false,
+      "featured": true
+    },
+    {
+      "id": "trajectory",
+      "family": "time",
+      "title": "轨迹包络与约束诊断",
+      "description": "轨迹与分布包络对应上界，再用同一时间轴展开约束余量。",
+      "tags": "时序包络 · 边界 · 余量",
+      "extra": false,
+      "featured": false
+    },
+    {
+      "id": "ridges",
+      "family": "distribution",
+      "title": "条件分布山峦图",
+      "description": "沿条件展开分布形状，用中位数和四分位距呈现位置与离散程度。",
+      "tags": "密度 · 中位数 · 四分位距",
+      "extra": false,
+      "featured": false
+    },
+    {
+      "id": "chord",
+      "family": "relation",
+      "title": "弦带与关系矩阵",
+      "description": "弦带宽度与矩阵权重对应，连接整体网络结构和具体的成对关系。",
+      "tags": "弦带 · 联系强度 · 成对关系",
+      "extra": false,
+      "featured": false
+    },
+    {
+      "id": "cluster",
+      "family": "relation",
+      "title": "聚类关系矩阵",
+      "description": "统一聚类树与矩阵的对象顺序，呈现关系分组、方向与强度。",
+      "tags": "层级聚类 · 相关系数 · 同序排列",
+      "extra": false,
+      "featured": false
+    },
+    {
+      "id": "polar",
+      "family": "time",
+      "title": "环形时序分布",
+      "description": "沿环形时间轴比较周期变化，由内向外对应四种条件。",
+      "tags": "周期结构 · 条件分层 · 环形图谱",
+      "extra": true,
+      "featured": false
+    },
+    {
+      "id": "calibration",
+      "family": "evaluation",
+      "title": "校准与分辨联合诊断",
+      "description": "结合校准区间、各区间样本量和类别概率分布，分析预测表现。",
+      "tags": "校准区间 · 样本量 · 概率分布",
+      "extra": true,
+      "featured": false
+    },
+    {
+      "id": "spectrum",
+      "family": "time",
+      "title": "时频结构与频带能量",
+      "description": "对齐原始信号、时频结构和频带能量，展开频率随时间的变化。",
+      "tags": "信号 · 时频分布 · 频带能量",
+      "extra": true,
+      "featured": false
+    },
+    {
+      "id": "forest",
+      "family": "evaluation",
+      "title": "配对差异与效应量森林",
+      "description": "在相同条件下展示配对差异分布、均值和区间，比较条件间的变化。",
+      "tags": "配对差异 · 条件分布 · 区间估计",
+      "extra": true,
+      "featured": false
+    }
+  ]
+}

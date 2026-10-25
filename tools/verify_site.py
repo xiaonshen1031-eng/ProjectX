@@ -60,7 +60,9 @@ def main():
             source=ROOT/'skill'/name
             require(source.is_file() and source_bytes(source)==archive.read(name),'Skill source mismatch')
     gallery=json.loads((DOCS/'gallery.json').read_text(encoding='utf-8'))
-    require(len(gallery['charts'])==6,'Expected six chart families')
+    catalog=json.loads((ROOT/'gallery/catalog.json').read_text(encoding='utf-8'))['charts']
+    require(len(catalog)==14,'Expected fourteen chart types')
+    require([c['id'] for c in gallery['charts']]==[c['id'] for c in catalog],'Chart catalog mismatch')
     for chart in gallery['charts']:
         for backend in ('python','matlab'):
             output=chart['outputs'][backend];p=DOCS/output['path']
@@ -73,7 +75,7 @@ def main():
     video=manifest['video']
     for key in ('src','poster','captions'):require((DOCS/video[key]).is_file(),'Missing chart video resource')
     require(20<video['duration']<120,'Unexpected chart video duration')
-    print(json.dumps({'status':'pass','chartFamilies':6,'nativeOutputs':12,'siteAssets':len(assets),'documentArtifacts':0,'skillSha256':manifest['sha256']},indent=2))
+    print(json.dumps({'status':'pass','chartFamilies':len(catalog),'nativeOutputs':len(catalog)*2,'siteAssets':len(assets),'documentArtifacts':0,'skillSha256':manifest['sha256']},indent=2))
 
 
 if __name__=='__main__':main()
