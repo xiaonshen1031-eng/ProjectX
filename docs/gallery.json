@@ -120,10 +120,10 @@
         "matlab": {
           "path": "downloads/figures/matlab/feasibility.emf",
           "format": "EMF",
-          "bytes": 106516,
-          "sha256": "bd53cad930a3d528413c8c64b410c0209938e6450e950ea680d9d877d50cfda4",
+          "bytes": 106468,
+          "sha256": "c609fabd1cee6a7e9091d3171bd0ae6be822b0850ace82a8b7775a2ce5a2c648",
           "preview": "assets/charts/matlab-feasibility.webp",
-          "records": 1850,
+          "records": 1848,
           "embeddedRasterRecords": 0
         }
       }
