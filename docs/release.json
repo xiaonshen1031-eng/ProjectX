@@ -1,0 +1,77 @@
+{
+  "name": "Senior-ProjectX",
+  "displayName": "ProjectX",
+  "version": "1.1.0",
+  "date": "2026-10-25",
+  "license": "MIT",
+  "author": "XiaoN",
+  "copyright": "Copyright © NCEPU-Senior",
+  "download": "downloads/Senior-ProjectX-v1.1.0.zip",
+  "bytes": 321916,
+  "sha256": "e9f8549d55ed2ac3aa19e323c9a69ec7758178c2a9fc3f05696b5f62f2c239e1",
+  "source": "https://github.com/xiaonshen1031-eng/ProjectX",
+  "tests": {
+    "regressions": 73,
+    "cli": 22,
+    "powershell": 5
+  },
+  "video": {
+    "src": "assets/ProjectX-charts-demo.mp4",
+    "poster": "assets/charts-film-poster.webp",
+    "captions": "assets/charts-demo.zh.vtt",
+    "duration": 59.75,
+    "chapters": [
+      {
+        "id": "modes",
+        "title": "两种绘图模式",
+        "start": 0,
+        "duration": 9.597,
+        "text": "ProjectX提供两种绘图模式。MATLAB绘制并导出EMF矢量图，Python绘制并导出PNG图像。"
+      },
+      {
+        "id": "time",
+        "title": "时序约束诊断",
+        "start": 9.597,
+        "duration": 8.475,
+        "text": "轨迹包络与约束诊断，沿同一时间轴呈现参考曲线、分布范围、约束上界和余量。"
+      },
+      {
+        "id": "distribution",
+        "title": "条件分布山峦图",
+        "start": 18.072,
+        "duration": 8.1,
+        "text": "条件分布山峦图，把不同条件下的密度逐层展开，同时呈现中位数与四分位距。"
+      },
+      {
+        "id": "relation",
+        "title": "弦带与关系矩阵",
+        "start": 26.173,
+        "duration": 7.447,
+        "text": "弦带与关系矩阵，用弦带宽度表现联系强弱，再与具体的成对权重对应。"
+      },
+      {
+        "id": "cluster",
+        "title": "聚类关系矩阵",
+        "start": 33.62,
+        "duration": 7.998,
+        "text": "聚类关系矩阵，把聚类树和相关系数按相同的对象顺序排列，呈现关系结构。"
+      },
+      {
+        "id": "space",
+        "title": "空间场与节点网络",
+        "start": 41.618,
+        "duration": 7.781,
+        "text": "空间场与节点网络，把连续分布、节点强度和对象连接放在同一坐标系中。"
+      },
+      {
+        "id": "feasibility",
+        "title": "可行域与状态投影",
+        "start": 49.399,
+        "duration": 10.344,
+        "text": "可行域与状态投影，同时展现多重边界、投影路径和位移。选择图型，查看源码，下载原图。"
+      }
+    ],
+    "content": "Complex chart types using independent illustrative data",
+    "narration": "中文语音与字幕"
+  }
+}

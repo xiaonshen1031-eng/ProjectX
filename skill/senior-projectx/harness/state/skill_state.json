@@ -1,0 +1,276 @@
+{
+  "schema_version": 1,
+  "skill_version": "1.1.0",
+  "last_modified": "2026-10-25T12:27:03+08:00",
+  "last_regression": {
+    "eval_id": "senior_projectx_1_1_0_portable_distribution",
+    "status": "pass",
+    "timestamp": "2026-10-25T12:27:03+08:00"
+  },
+  "preferences": {
+    "results_should_use_scientific_narrative_not_report_style": {
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 6,
+      "last_confirmed": "2026-08-13",
+      "statement": "results should use scientific narrative not report style",
+      "status": "active"
+    },
+    "figures_require_standalone_and_word_render_qa": {
+      "scope": "project_word",
+      "confidence": 1.0,
+      "evidence_count": 8,
+      "last_confirmed": "2026-08-13",
+      "statement": "figures require standalone and word render qa",
+      "status": "active"
+    },
+    "avoid_formulaic_contrast_templates": {
+      "statement": "Revise every confirmed rhetorical contrast while retaining concrete engineering conditions.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-23",
+      "status": "active"
+    },
+    "avoid_mechanical_transition_scaffolding": {
+      "statement": "Do not organize scientific logic with repeated generic transitions.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-23",
+      "status": "active"
+    },
+    "avoid_mechanical_enumeration": {
+      "statement": "Use enumeration only when it carries real structure, such as distinct contributions.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-23",
+      "status": "active"
+    },
+    "avoid_defensive_writing": {
+      "statement": "Remove every confirmed self-negating or reviewer-facing defense, including a single occurrence; correct unsupported claims at source and state genuine operating conditions and adverse observations directly.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 2,
+      "last_confirmed": "2026-10-09",
+      "status": "active"
+    },
+    "evidence_boundaries_without_defensive_disclosure": {
+      "statement": "State scientific and engineering conditions and adverse observations accurately; keep operational status and self-negating defenses outside final text. Conclusions synthesize supported outcomes without a mandatory catalogue of missing capabilities.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 3,
+      "last_confirmed": "2026-10-10",
+      "status": "active"
+    },
+    "citations_follow_semantic_referent": {
+      "statement": "Attach citations to the author, named method/object, or exact supported claim.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-23",
+      "status": "active"
+    },
+    "methodology_is_mathematical_chain": {
+      "statement": "Write methodology as a continuous mathematical dependency rather than a module list.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-23",
+      "status": "active"
+    },
+    "equation_backend_supports_office_math_and_mathtype_toggle_tex": {
+      "statement": "Support declared Office Math or MathType Toggle TeX without silent conversion or mixing.",
+      "scope": "project_word",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-23",
+      "status": "active"
+    },
+    "results_follow_scientific_questions": {
+      "statement": "Organize results around scientific questions rather than artifact order.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-23",
+      "status": "active"
+    },
+    "distinct_subfigures_receive_distinct_interpretation": {
+      "statement": "Interpret distinct subfigures separately or through an explicit joint synthesis.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-23",
+      "status": "active"
+    },
+    "table_and_figure_roles_are_not_redundant": {
+      "statement": "Assign nonredundant evidence roles to tables and figures.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-23",
+      "status": "active"
+    },
+    "project_lineage_language_stays_out_of_manuscript": {
+      "statement": "Keep project and prompt lineage out of scientific prose without flagging neutral phrases such as previous studies.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-26",
+      "status": "active"
+    },
+    "tables_use_semantic_compression": {
+      "statement": "Retain table fields only when quantitative, discriminative, reproducibility-critical, or non-derivable.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-26",
+      "status": "active"
+    },
+    "office_math_covers_inline_math_semantics": {
+      "statement": "Office Math manuscripts require real OMML for display equations and genuine inline variables or expressions.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-08-26",
+      "status": "active"
+    },
+    "consumer_gated_verification": {
+      "statement": "Do not generate or require cryptographic hashes unless an explicit consumer, user request, transfer-integrity requirement, or release contract makes them operationally necessary.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-09-06",
+      "status": "active"
+    },
+    "scientific_figure_recipe_pool": {
+      "statement": "Use accepted scientific figures as reusable design evidence; choose structure from the question and data schema, then MATLAB or Python, without copying dataset-specific values or overfitting source aesthetics.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-09-06",
+      "status": "active"
+    },
+    "project_connected_client_report_prose": {
+      "statement": "Organize assigned subtopics around connected data/model/output reasoning and engineering questions; remove experimental, defensive and authoring narration while retaining adaptation, conditions and adverse results. Read neighboring paragraphs together and preserve accepted evidence during prose-only revisions.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 2,
+      "last_confirmed": "2026-10-09",
+      "status": "active"
+    },
+    "project_regular_black_word_profile": {
+      "statement": "Default to regular black SimSun/TNR, 12 pt two-character-indented 1.5-multiple body and black unshaded three-line tables at 10.5 pt single spacing; explicit user/customer templates override. Keep headings regular and distinguish plot typography and paragraph roles.",
+      "scope": "project_word",
+      "confidence": 1.0,
+      "evidence_count": 2,
+      "last_confirmed": "2026-10-09",
+      "status": "active"
+    },
+    "project_mathtype_includes_inline_references": {
+      "statement": "Native MathType includes genuine inline variables and table formulas, with ordered case-sensitive source coverage, context-appropriate final sizing, native-content verification and render/reopen checks; counts alone are insufficient.",
+      "scope": "project_word",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-10-01",
+      "status": "active"
+    },
+    "project_centered_numbered_native_equations": {
+      "statement": "Center actual native display objects in the current text area, with continuous right-margin numeric fields; inline math is unnumbered. Preserve native streams/previews and cross-reference targets; layout flags alone are not Word visual centering, authenticity or reopen proof.",
+      "scope": "project_word",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-10-09",
+      "status": "active"
+    },
+    "project_question_led_diverse_figures": {
+      "statement": "Choose complementary plot families from technical outputs, not type quotas or all-heatmap/bar/line defaults; omit defensive footers, preserve aspect ratios and inspect insertion size. Verify Chinese bold YaHei and TNR glyph handling for categories, legends, mixed labels and secondary axes separately from Word fonts.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-10-09",
+      "status": "active"
+    },
+    "project_continuous_numerically_matched_analysis": {
+      "statement": "Carry model outputs into engineering analysis with named fair cases, correct units/statistics/time windows/denominators, supported mechanisms and actual uncertainty semantics. Aligned regional aggregation is not a sum of separate peaks; zero-display omission does not alter valid data or metric populations.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-10-09",
+      "status": "active"
+    },
+    "project_gb_first_use_verified_references": {
+      "statement": "Use GB/T 7714 sequential citation unless overridden; verify the applicable edition, publisher/repository metadata and first-use order. Distinguish dataset contributors/version from article metadata; do not cite local paths or infer publication years from DOI strings.",
+      "scope": "project_word",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-10-09",
+      "status": "active"
+    },
+    "project_six_class_editorial_gate": {
+      "statement": "Conference, Journal and Project final text must contain no confirmed experimental-report, AI formulaic, stacked, redundant, defensive or mechanical prose. All branches use current-text-bound candidates, strict final checks and whole-text semantic reading. Preserve actual technical protocols, conditions and adverse observations; Project delivery screens the current DOCX.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 2,
+      "last_confirmed": "2026-10-10",
+      "status": "active"
+    },
+    "native_diagrams_prioritize_real_mechanisms_and_precise_connections": {
+      "statement": "Organize native diagrams around real mechanisms; align repeated visible centers/baselines, map every legend/callout, and check scaled strokes, head clearances, painted bounds and complete motifs. Preserve accepted constraints and truthful native editability.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 2,
+      "last_confirmed": "2026-10-17",
+      "status": "active"
+    },
+    "accepted_figure_source_and_frozen_constraints_persist": {
+      "statement": "Use the user-designated saved source and accepted editing history; bind export/insertion to that revision. Preserve accepted text, icons, geometry and native equations; later timestamps on old exports or manifests do not override user edits.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 2,
+      "last_confirmed": "2026-10-17",
+      "status": "active"
+    },
+    "decision_results_show_actual_domains_and_successor_outcomes": {
+      "statement": "Visualize verified preparation/domain/action results with explicit operating regimes, faithful threshold censoring and distinct branch/support semantics, without new experiments or invented statistical complexity.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-10-17",
+      "status": "active"
+    },
+    "word_figure_insertion_preserves_native_content_and_numbering": {
+      "statement": "Insert an aspect-preserving export from the accepted source into a manuscript copy, preserve existing native equations/media, update figure references collision-safely, clear effective picture indents and inspect the actual final Word pages.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-10-17",
+      "status": "active"
+    },
+    "curve_diagnostics_preserve_matched_units_and_band_semantics": {
+      "statement": "Use distinct matched-summary and aligned local trajectory/state roles when the saved evidence supports them. Keep case selection, denominators, member order and units; distinguish expert dispersion, predictive coverage, confidence and threshold events. Numeric coordinates remain truthful during layout repair.",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-10-17",
+      "status": "active"
+    },
+    "project_rich_scientific_figures": {
+      "statement": "取消简单柱线、稀疏独立散点和均值排名的默认输出，优先约束诊断、窗口分配、条件分布、时空图谱和多指标联动；复杂度必须来自真实数据，保持图型互补与最终尺寸可读性。",
+      "scope": "project",
+      "confidence": 1.0,
+      "evidence_count": 1,
+      "last_confirmed": "2026-10-25",
+      "status": "active"
+    }
+  },
+  "version_history": [
+    {
+      "version": "1.1.0",
+      "previous_version": "1.0.0",
+      "timestamp": "2026-10-25T12:07:39+08:00",
+      "summary": "补齐Project经验维护和回归；兼容有序公式清单；修复Word模板和纯公式表格转换；加入原生Office流程与编辑检查；升级图型规则、模板、生成器和来源校验。"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "status": "R&D draft",
+  "project_figure_profile": "engineering_report",
+  "expected_start_number": 1,
+  "required_formats": [
+    "pdf",
+    "png"
+  ],
+  "figures": [
+    {
+      "number": 1,
+      "caption": "Replace with the final caption",
+      "scientific_question": "Replace with the scientific question this figure answers",
+      "purpose": "main_performance",
+      "plot_type": "paired_estimation",
+      "plot_type_justification": "Explain why this encoding answers the scientific question",
+      "claim_ids": [
+        "C1"
+      ],
+      "data_source": "path to saved result data",
+      "generator_script": "path to MATLAB/Python/R source",
+      "values_from_saved_results": false,
+      "manual_value_entry": false,
+      "evaluation_unit": "scene, seed, subject, map, feeder, mission, or candidate",
+      "sample_size": 0,
+      "strongest_comparator_visible": false,
+      "is_stochastic": true,
+      "uncertainty_visible": false,
+      "raw_points_or_distribution_visible": false,
+      "is_heatmap": false,
+      "heatmap_text_contrast_checked": "not_applicable",
+      "is_spatial": false,
+      "aspect_ratio_preserved": false,
+      "physical_units_present": false,
+      "common_limits_documented": "not_applicable",
+      "formats": [
+        "pdf",
+        "png"
+      ],
+      "artifacts": {
+        "pdf": "figure/final/Figure_1.pdf",
+        "png": "figure/final/Figure_1.png"
+      },
+      "final_width_cm": 16.5,
+      "final_height_cm": 10.0,
+      "final_size_typography_checked": false,
+      "full_frame_visible": false,
+      "legend_data_clearance_checked": false,
+      "no_clipping": false,
+      "no_overlap": false,
+      "color_accessibility_checked": false,
+      "standalone_vector_qa": false,
+      "body_discussion_reference": "",
+      "placeholder": true,
+      "plot_backend": "matlab_or_python",
+      "recipe_id": "replace_with_recipe_or_custom",
+      "reference_pool_ids": [],
+      "required_formats": [
+        "pdf",
+        "png"
+      ],
+      "comparator_set": [],
+      "shared_scale_group": "",
+      "annotation_readability_checked": false,
+      "manuscript_rendered_qa": false
+    }
+  ],
+  "manuscript_mode": "project"
+}

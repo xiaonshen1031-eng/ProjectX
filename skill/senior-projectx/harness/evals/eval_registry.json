@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "runs": [
+    {
+      "eval_id": "projectx_rich_policy_integration_initial",
+      "timestamp": "2026-10-25T12:07:39+08:00",
+      "status": "fail",
+      "checks": [
+        "71 cases: 68 passed, 3 failed, 0 errors, 0 skipped"
+      ],
+      "artifacts": [],
+      "notes": "Three language-isolation fixtures lacked figure artifacts after the figure gate was added. Isolated that gate in the prose-specific suite; rich-figure integration is covered by its own tests. Failure retained before the successful rerun."
+    },
+    {
+      "eval_id": "projectx_integration_corrected",
+      "timestamp": "2026-10-25T12:07:39+08:00",
+      "status": "pass",
+      "checks": [
+        "71 cases passed; 0 failures, errors or skips"
+      ],
+      "artifacts": [],
+      "notes": "Actual complete rerun after correcting prose-test isolation. The added conditional-point regression will be included in the final release run."
+    },
+    {
+      "eval_id": "senior_projectx_1_1_0_full_release",
+      "timestamp": "2026-10-25T12:20:54+08:00",
+      "status": "pass",
+      "checks": [
+        "73 of 73 regressions passed; no failures, errors or skips",
+        "8 Word pages and 23 native MathType objects verified",
+        "Native equation update changed only the intended MTEF and survived reopen",
+        "4 PPT pages, 3 editable charts/workbooks and an already-open source preserved",
+        "Three sourced diagnostic figure modes and rejection of simple/default wrappers"
+      ],
+      "artifacts": [
+        "harness/evals/release_1_1_0.json",
+        "references/release-validation.md"
+      ],
+      "notes": "Actual Windows Office and numerical tests completed. Generated Office files and private run paths remain in the task workspace."
+    },
+    {
+      "eval_id": "senior_projectx_1_1_0_portable_distribution",
+      "timestamp": "2026-10-25T12:27:03+08:00",
+      "status": "pass",
+      "checks": [
+        "Extracted package: 73 regressions, 22 CLI entrypoints and 5 PowerShell 5.1 scripts passed",
+        "Skill metadata, relative resources, Word template metadata and archive CRC passed"
+      ],
+      "artifacts": [
+        "harness/evals/release_1_1_0.json"
+      ],
+      "notes": "Executed from an extracted standalone directory; no skill installation performed."
+    }
+  ]
+}

@@ -1,0 +1,132 @@
+{
+  "data": "gallery/demo-data.json",
+  "source": "independent illustrative data",
+  "charts": [
+    {
+      "id": "trajectory",
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/trajectory.png",
+          "format": "PNG",
+          "bytes": 160750,
+          "sha256": "28743b945cf9e33e0953888a8c696af686d95d672811d452fcecaea5aded46d3",
+          "preview": "assets/charts/python-trajectory.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/trajectory.emf",
+          "format": "EMF",
+          "bytes": 53784,
+          "sha256": "3b32fced99568cb9e965d35d6b90d43b9daa79d45f093690559a728130f6aa11",
+          "preview": "assets/charts/matlab-trajectory.webp",
+          "records": 933,
+          "embeddedRasterRecords": 0
+        }
+      }
+    },
+    {
+      "id": "ridges",
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/ridges.png",
+          "format": "PNG",
+          "bytes": 148172,
+          "sha256": "46d89a3a3934559d59a4b840f769ac5455a63592e392fc3df769cb80443feec6",
+          "preview": "assets/charts/python-ridges.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/ridges.emf",
+          "format": "EMF",
+          "bytes": 100556,
+          "sha256": "e20d434423733ae4412ae1f2a9b8026e237e1195fb04e77b47e291c58b26c025",
+          "preview": "assets/charts/matlab-ridges.webp",
+          "records": 899,
+          "embeddedRasterRecords": 0
+        }
+      }
+    },
+    {
+      "id": "chord",
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/chord.png",
+          "format": "PNG",
+          "bytes": 250157,
+          "sha256": "5ef21ac3763211713baf464abe3141add35f0601433ba4adba7eb8767d3da166",
+          "preview": "assets/charts/python-chord.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/chord.emf",
+          "format": "EMF",
+          "bytes": 147252,
+          "sha256": "78e3742d32e448d88344070bebb168ebd37f5073f95afba41b1f2c421947a75c",
+          "preview": "assets/charts/matlab-chord.webp",
+          "records": 1897,
+          "embeddedRasterRecords": 0
+        }
+      }
+    },
+    {
+      "id": "cluster",
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/cluster.png",
+          "format": "PNG",
+          "bytes": 117638,
+          "sha256": "ddf76d9af56ac982170079a9a4fc80a1e16b2f82d8eed9ef41df8adf74aa5bb3",
+          "preview": "assets/charts/python-cluster.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/cluster.emf",
+          "format": "EMF",
+          "bytes": 112988,
+          "sha256": "687a6e7c3efe870d4d935edcece41f6365f67735e5e9f6f5cba4a3fced16b5b7",
+          "preview": "assets/charts/matlab-cluster.webp",
+          "records": 3360,
+          "embeddedRasterRecords": 0
+        }
+      }
+    },
+    {
+      "id": "spatial",
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/spatial.png",
+          "format": "PNG",
+          "bytes": 337613,
+          "sha256": "bf1db23c67c4326a08e57aee7dfc7f42b3ab01a99360b4adb25f832ea969040b",
+          "preview": "assets/charts/python-spatial.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/spatial.emf",
+          "format": "EMF",
+          "bytes": 181688,
+          "sha256": "792df38d67e2328e0245c95aa1718facc37bffa9a918973a7dae599f52e47a3d",
+          "preview": "assets/charts/matlab-spatial.webp",
+          "records": 5393,
+          "embeddedRasterRecords": 0
+        }
+      }
+    },
+    {
+      "id": "feasibility",
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/feasibility.png",
+          "format": "PNG",
+          "bytes": 254393,
+          "sha256": "f85822357191ce31a78cf58fa8637da36146400ff2acb5237e4f84e5bcdde08a",
+          "preview": "assets/charts/python-feasibility.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/feasibility.emf",
+          "format": "EMF",
+          "bytes": 106516,
+          "sha256": "bd53cad930a3d528413c8c64b410c0209938e6450e950ea680d9d877d50cfda4",
+          "preview": "assets/charts/matlab-feasibility.webp",
+          "records": 1850,
+          "embeddedRasterRecords": 0
+        }
+      }
+    }
+  ]
+}

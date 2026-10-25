@@ -1,0 +1,11 @@
+numpy
+pandas
+scipy
+matplotlib
+Pillow
+python-docx
+lxml
+olefile
+requests
+# Optional Office Math conversion: latex2mathml
+# Native MathType conversion uses installed Microsoft Word and MathType on Windows.

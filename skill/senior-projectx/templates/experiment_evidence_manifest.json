@@ -1,0 +1,272 @@
+{
+  "study": {
+    "experiment_id": "UUID embedded in every generated evidence artifact",
+    "title": "Replace with the manuscript title",
+    "target_venue": "按当前委托研究任务与客户要求填写",
+    "status": "R&D draft",
+    "claims": [
+      {
+        "id": "C1",
+        "statement": "Replace with one falsifiable contribution-level claim",
+        "claim_type": "performance, model_comparison, stability, generalization, ood_generalization, predictive_uncertainty, composite_synergy, or deployment",
+        "primary_metric": "Replace with metric and direction",
+        "failure_condition": "Replace with the result that would weaken or remove the claim",
+        "test_contract": {
+          "experiment_or_analysis_id": "stable experiment or analysis identifier",
+          "strongest_comparator": "strongest fair comparator for this claim",
+          "evaluation_unit": "unit used for the claim-level comparison and inference",
+          "statistical_decision": "prespecified interval, test, margin, or descriptive decision rule",
+          "figure_ids": [
+            "Figure 1"
+          ],
+          "table_ids": [
+            "Table 1"
+          ]
+        },
+        "evidence_artifacts": [
+          {
+            "role": "raw_result",
+            "path": "path to raw result export",
+            "claim_id": "C1",
+            "experiment_id": "same UUID as study.experiment_id",
+            "purpose": "unit-level values supporting the primary metric",
+            "content_markers": [
+              "method",
+              "RMSE"
+            ]
+          },
+          {
+            "role": "analysis_script",
+            "path": "path to analysis script",
+            "claim_id": "C1",
+            "experiment_id": "same UUID as study.experiment_id",
+            "purpose": "reproduce the claim-level estimate and interval",
+            "content_markers": [
+              "RMSE",
+              "confidence interval"
+            ]
+          },
+          {
+            "role": "table_or_figure",
+            "path": "path to final evidence artifact",
+            "claim_id": "C1",
+            "experiment_id": "same UUID as study.experiment_id",
+            "purpose": "rendered or tabular claim evidence",
+            "content_markers": [
+              "RMSE"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "data": {
+    "training_split": "path or immutable split identifier",
+    "validation_split": "path or immutable split identifier",
+    "development_test_split": "path or immutable split identifier",
+    "sealed_test_split": "path or immutable split identifier",
+    "test_never_used_for_selection": false,
+    "external_transfer_label": "not_applicable",
+    "task_structure": "independent_samples or time_series",
+    "temporal_protocol": {
+      "preserves_time_order": "not_applicable",
+      "forecast_origin_and_horizon": "not_applicable",
+      "window_and_stride": "not_applicable",
+      "backtest_design": "not_applicable",
+      "preprocessing_fitted_without_future_data": "not_applicable"
+    },
+    "generalization": {
+      "claim_level": "within_site, multi_site_in_distribution, leave_site_out, cross_region, ood_regime, or not_applicable",
+      "held_out_factor": "not_applicable",
+      "shift_definition": "not_applicable",
+      "development_exclusion_confirmed": "not_applicable"
+    },
+    "provenance_file": "path to data provenance record"
+  },
+  "methods": {
+    "proposed": "Proposed method name",
+    "method_structure": "single, composite, or pipeline",
+    "online_pipeline_stages": [
+      "ingestion",
+      "preprocessing",
+      "model_inference",
+      "postprocessing",
+      "output"
+    ],
+    "baselines": [
+      {
+        "name": "Strong task-compatible baseline",
+        "role": "strong_classical",
+        "same_environment": true,
+        "same_budget_and_constraints": true,
+        "tuning_budget_disclosed": true
+      }
+    ],
+    "methodological_references": []
+  },
+  "statistics": {
+    "primary_metrics": [
+      "primary metric 1"
+    ],
+    "evaluation_unit": "scene, map, seed, subject, feeder, or mission",
+    "independent_training_runs": 1,
+    "paired_design": true,
+    "interval_method": "bootstrap or model-based interval",
+    "multiplicity_correction": "not_applicable",
+    "effect_size_reported": false,
+    "noninferiority_margin_prespecified": "not_applicable"
+  },
+  "forecasting_statistics": {
+    "applicable": false,
+    "loss_differential_defined": "not_applicable",
+    "serial_dependence_handled": "not_applicable",
+    "horizon_adjustment_or_block_design": "not_applicable",
+    "multiple_comparisons_handled": "not_applicable"
+  },
+  "composite_method": {
+    "applicable": false,
+    "claim_id": "C1",
+    "factor_a_name": "not_applicable",
+    "factor_b_name": "not_applicable",
+    "factorial_variants": [
+      {
+        "name": "simple_backbone + simple_head",
+        "factor_a": false,
+        "factor_b": false
+      },
+      {
+        "name": "A + simple_head",
+        "factor_a": true,
+        "factor_b": false
+      },
+      {
+        "name": "simple_backbone + B",
+        "factor_a": false,
+        "factor_b": true
+      },
+      {
+        "name": "A + B",
+        "factor_a": true,
+        "factor_b": true
+      }
+    ],
+    "component_only_variants": [],
+    "capacity_matched_baseline": {
+      "name": "not_applicable",
+      "parameter_difference_percent": "not_applicable",
+      "same_tuning_budget": false
+    },
+    "capacity_tolerance_percent": "not_applicable",
+    "coupling_placebo_variant": {
+      "name": "not_applicable",
+      "disrupted_path": "not_applicable",
+      "capacity_preserved": false
+    },
+    "coupling_mechanism": {
+      "source_tensor": "not_applicable",
+      "operation": "not_applicable",
+      "destination": "not_applicable",
+      "claimed_new_capability": "not_applicable"
+    },
+    "interaction_contrast": {
+      "formula": "not_applicable",
+      "loss_direction": "lower or higher",
+      "evaluation_unit": "not_applicable",
+      "interval_method": "not_applicable"
+    },
+    "interaction_interval_reported": "not_applicable",
+    "mechanism_signature": {
+      "regime": "not_applicable",
+      "metric": "not_applicable",
+      "direction": "not_applicable",
+      "selection_source": "development data or prior literature"
+    },
+    "mechanism_signature_prespecified": "not_applicable",
+    "mechanism_signature_tested": "not_applicable",
+    "evidence_artifacts": [
+      {
+        "role": "raw_result",
+        "path": "path to factorial raw results",
+        "claim_id": "C1",
+        "experiment_id": "same UUID as study.experiment_id",
+        "purpose": "factorial unit-level losses",
+        "content_markers": [
+          "factor_a",
+          "factor_b",
+          "MAE"
+        ]
+      },
+      {
+        "role": "statistical_output",
+        "path": "path to interaction interval output",
+        "claim_id": "C1",
+        "experiment_id": "same UUID as study.experiment_id",
+        "purpose": "interaction estimate and confidence interval",
+        "content_markers": [
+          "interaction",
+          "confidence interval"
+        ]
+      },
+      {
+        "role": "analysis_script",
+        "path": "path to interaction analysis script",
+        "claim_id": "C1",
+        "experiment_id": "same UUID as study.experiment_id",
+        "purpose": "reproduce interaction and regime tests",
+        "content_markers": [
+          "interaction",
+          "bootstrap"
+        ]
+      }
+    ]
+  },
+  "execution": {
+    "postprocessing_present": false,
+    "postprocessed_metrics_recomputed": "not_applicable",
+    "raw_and_postprocessed_feasibility_reported": "not_applicable",
+    "fallback_defined": "not_applicable",
+    "mission_level_fallback_rate_reported": "not_applicable"
+  },
+  "uncertainty": {
+    "calibration_claimed": false,
+    "coverage_reported": "not_applicable",
+    "interval_width_reported": "not_applicable",
+    "nll_or_proper_score_reported": "not_applicable",
+    "subgroup_calibration_reported": "not_applicable"
+  },
+  "timing": {
+    "deployment_claimed": false,
+    "hardware": "hardware specification",
+    "software": "software and version",
+    "batch_size_or_candidate_count": "value",
+    "warmup_runs": 0,
+    "mean_reported": false,
+    "p50_reported": false,
+    "p95_reported": false,
+    "end_to_end_cycle": false,
+    "pipeline_stages_included": [],
+    "p99_reported": false,
+    "throughput_reported": false,
+    "peak_memory_reported": false,
+    "operational_deadline_compared": false
+  },
+  "artifacts": {
+    "raw_results": [
+      "path"
+    ],
+    "table_exports": [
+      "path"
+    ],
+    "figure_manifest": "path",
+    "code_version": "git commit, release tag, archive version, or other stable code identifier",
+    "checkpoint_reference": "not_applicable"
+  },
+  "gates": {
+    "no_placeholder_results": false,
+    "all_claims_traceable": false,
+    "negative_results_disclosed": false,
+    "all_figures_reproduce_saved_data": false,
+    "render_qa_passed": false
+  },
+  "manuscript_mode": "project"
+}

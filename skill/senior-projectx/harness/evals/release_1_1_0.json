@@ -1,0 +1,93 @@
+{
+  "skill": "Senior-ProjectX",
+  "version": "1.1.0",
+  "validation_date": "2026-10-25",
+  "status": "pass",
+  "environment": {
+    "unit_test_python": "3.11.9",
+    "document_authoring_python": "3.12.14",
+    "word": "16.0",
+    "powerpoint": "16.0",
+    "mathtype_backend": "installed Word MathType module, Equation.DSMT4"
+  },
+  "unit_regressions": {
+    "status": "pass",
+    "tests_run": 73,
+    "passed": 73,
+    "failed": 0,
+    "errors": 0,
+    "skipped": 0,
+    "skip_reasons": [],
+    "failures": []
+  },
+  "behavior_cases": 38,
+  "word": {
+    "status": "pass",
+    "pages_reviewed": 8,
+    "native_formulas": 23,
+    "display_formulas": 5,
+    "inline_formulas": 18,
+    "table_formulas": 3,
+    "numbering": "centered native objects with right-aligned 1-5 numbers",
+    "independent_mtef_comparison": "23/23 equal",
+    "native_preview_and_reopen": "pass",
+    "report_delivery_audit": "pass"
+  },
+  "formula_update": {
+    "status": "pass",
+    "method": "Word native OLE update from a newly converted MathType expression, followed by save/close/reopen and MTEF comparison",
+    "object_count": 23,
+    "changed_object_indices": [
+      22
+    ],
+    "target_matches_new_expression": true
+  },
+  "table_formula_size": {
+    "status": "pass",
+    "additional_formulas_checked": 4,
+    "body_pt": 12,
+    "table_pt": 10.5,
+    "both_dimensions_checked": true
+  },
+  "powerpoint": {
+    "status": "pass",
+    "slides_reviewed": 4,
+    "native_charts": 3,
+    "native_tables": 1,
+    "embedded_chart_workbooks": 3,
+    "native_mathtype": 1,
+    "chart_and_workbook_numbers_match_results": true,
+    "native_edits_verified_after_reopen": true,
+    "already_open_source_preserved": true
+  },
+  "figures": {
+    "status": "pass",
+    "views": [
+      "temporal constraint and margin diagnostic",
+      "availability-window and power-allocation Gantt",
+      "scenario-by-time constraint atlas"
+    ],
+    "saved_sources_and_hashes_checked": true,
+    "simple_standalone_and_decorative_wrapper_rejection": "pass"
+  },
+  "maintenance": {
+    "status": "pass",
+    "feedback_decision_preference_version_and_eval_persistence": "pass",
+    "chinese_utf8_under_legacy_console": "pass"
+  },
+  "distribution": {
+    "installation_performed": false,
+    "test_data": "synthetic toolchain case",
+    "private_paths_and_generated_office_files_included": false,
+    "portable_extracted_package_test": {
+      "status": "pass",
+      "regressions": 73,
+      "cli_help_checks": 22,
+      "powershell_5_1_parse_checks": 5,
+      "resource_and_template_selftest": "pass",
+      "skill_manifest_validation": "pass",
+      "archive_crc": "pass",
+      "extracted_files_equal_source": true
+    }
+  }
+}
