@@ -21,10 +21,6 @@
   menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'收起导航':'展开导航');nav.classList.toggle('open',open);});
   $$('a',nav).forEach(a=>a.addEventListener('click',closeMenu));
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&nav.classList.contains('open')){closeMenu();menu.focus();}});
-  const art=$('.hero-art'),stage=$('.art-stage');
-  new ResizeObserver(entries=>entries.forEach(e=>art.style.setProperty('--art-scale',String(e.contentRect.width/640)))).observe(art);
-  art.addEventListener('pointermove',event=>{if(reduced||motionPreference.matches||!matchMedia('(pointer:fine)').matches)return;const r=art.getBoundingClientRect();stage.style.setProperty('--pointer-x',`${((event.clientX-r.left)/r.width-.5)*10}px`);stage.style.setProperty('--pointer-y',`${((event.clientY-r.top)/r.height-.5)*8}px`);});
-  art.addEventListener('pointerleave',()=>{stage.style.setProperty('--pointer-x','0px');stage.style.setProperty('--pointer-y','0px');});
   let toastTimer;
   function toast(text){const el=$('#toast');el.textContent=text;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2300);}
   $('#copy-prompt').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('#starter-prompt').textContent.trim());toast('项目提示已复制');}catch{const r=document.createRange();r.selectNodeContents($('#starter-prompt'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('提示已选中，可手动复制');}});
@@ -41,17 +37,21 @@
     const content=stages[button.dataset.stage];
     stageTabs.forEach(tab=>{const active=tab===button;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});
     $('#workflow-detail').setAttribute('aria-labelledby',button.id);
+    $('.stage-watermark').textContent=content[0].slice(0,2);
     ['workflow-step-label','workflow-step-title','workflow-step-body','workflow-input','workflow-process','workflow-output'].forEach((id,i)=>$('#'+id).textContent=content[i]);
     if(focus)button.focus({preventScroll:true});
   }
   stageTabs.forEach((button,i)=>{
     button.addEventListener('click',()=>showStage(button));
-    button.addEventListener('keydown',event=>{let next;if(event.key==='ArrowRight')next=(i+1)%stageTabs.length;if(event.key==='ArrowLeft')next=(i+stageTabs.length-1)%stageTabs.length;if(event.key==='Home')next=0;if(event.key==='End')next=stageTabs.length-1;if(next!==undefined){event.preventDefault();showStage(stageTabs[next],true);}});
+    button.addEventListener('keydown',event=>{let next;if(['ArrowRight','ArrowDown'].includes(event.key))next=(i+1)%stageTabs.length;if(['ArrowLeft','ArrowUp'].includes(event.key))next=(i+stageTabs.length-1)%stageTabs.length;if(event.key==='Home')next=0;if(event.key==='End')next=stageTabs.length-1;if(next!==undefined){event.preventDefault();showStage(stageTabs[next],true);}});
   });
+  $$('[data-route]').forEach(link=>link.addEventListener('click',()=>showStage($('#stage-'+link.dataset.route))));
   const chartDialog=$('#chart-dialog'),videoDialog=$('#video-dialog'),video=$('#demo-video');
   const charts=$$('.chart-card');
   const titles=Object.fromEntries(charts.map(card=>[card.dataset.chart,$('h3',card).textContent]));
-  let mode='python',category='all',expanded=false,selectedChart='gantt',release;
+  let mode='python',category='all',selectedChart='gantt',release;
+  const pickerButtons=$$('[data-pick]');
+  const availableCharts=()=>charts.filter(c=>category==='all'||c.dataset.family===category);
   const extension=()=>mode==='matlab'?'emf':'png';
   const format=()=>extension().toUpperCase();
   const modeLabel=()=>mode==='matlab'?'MATLAB / EMF':'Python / PNG';
@@ -70,14 +70,27 @@
     charts.forEach(card=>{const slug=card.dataset.chart;$('img',card).src=preview(slug);$('.chart-format',card).textContent=modeLabel().toUpperCase();const link=$('.chart-download',card);link.href=original(slug);link.textContent=format()+' ↘';link.setAttribute('aria-label',`下载${titles[slug]}${format()}原图`);});
     updateCount();if(chartDialog.open)refreshDialog();
   }
-  function updateCount(){const count=charts.filter(c=>!c.hidden).length;const prefix=category==='all'&&!expanded?'精选':'';$('#collection-status').textContent=`${modeLabel()} · ${prefix}${count}类 / 共${charts.length}类图型`;}
+  function updateCount(){const available=availableCharts(),index=available.findIndex(c=>c.dataset.chart===selectedChart)+1;$('#collection-status').textContent=`${modeLabel()} · ${String(index).padStart(2,'0')} / ${String(available.length).padStart(2,'0')} · 共${charts.length}类` ;}
+  function selectChart(slug,focus=false){
+    selectedChart=slug;
+    charts.forEach(card=>{const active=card.dataset.chart===slug;card.hidden=!active;card.classList.toggle('is-selected',active);});
+    pickerButtons.forEach(button=>{const active=button.dataset.pick===slug;button.setAttribute('aria-pressed',String(active));button.tabIndex=active?0:-1;if(active){if(focus)button.focus({preventScroll:true});const picker=$('.atlas-picker'),r=button.getBoundingClientRect(),p=picker.getBoundingClientRect();if(matchMedia('(max-width:760px)').matches){const delta=r.left<p.left?r.left-p.left:r.right>p.right?r.right-p.right:0;if(delta)picker.scrollBy({left:delta,behavior:reduced?'auto':'smooth'});}else{const delta=r.top<p.top?r.top-p.top:r.bottom>p.bottom?r.bottom-p.bottom:0;if(delta)picker.scrollBy({top:delta,behavior:reduced?'auto':'smooth'});}}});
+    updateCount();if(chartDialog.open)refreshDialog();
+  }
+  function cycleChart(offset,focus=false){const current=availableCharts();const index=current.findIndex(c=>c.dataset.chart===selectedChart);selectChart(current[(index+offset+current.length)%current.length].dataset.chart,focus);}
   function filterCharts(){
-    charts.forEach(c=>c.hidden=category==='all'?(!expanded&&c.dataset.featured!=='true'):c.dataset.family!==category);
-    const more=$('#expand-gallery');more.parentElement.hidden=category!=='all';more.setAttribute('aria-expanded',String(expanded));more.innerHTML=expanded?'收起，查看精选6类 <span aria-hidden="true">−</span>':`展开全部${charts.length}类图型 <span aria-hidden="true">＋</span>`;updateCount();requestAnimationFrame(progress);
+    const current=availableCharts();
+    pickerButtons.forEach(b=>b.hidden=!current.some(c=>c.dataset.chart===b.dataset.pick));
+    selectChart(current.some(c=>c.dataset.chart===selectedChart)?selectedChart:current[0].dataset.chart);requestAnimationFrame(progress);
   }
   $$('[data-mode]').forEach(button=>button.addEventListener('click',()=>setMode(button.dataset.mode)));
   $$('[data-category]').forEach(button=>button.addEventListener('click',()=>{category=button.dataset.category;$$('[data-category]').forEach(b=>{const on=b===button;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});filterCharts();$('.gallery-toolbar').scrollIntoView({block:'start',behavior:'instant'});}));
-  $('#expand-gallery').addEventListener('click',()=>{expanded=!expanded;filterCharts();if(!expanded)$('#gallery').scrollIntoView({behavior:reduced?'auto':'smooth'});});
+  pickerButtons.forEach(button=>{
+    button.addEventListener('click',()=>selectChart(button.dataset.pick));
+    button.addEventListener('keydown',event=>{if(['ArrowDown','ArrowRight','ArrowUp','ArrowLeft','Home','End'].includes(event.key)){event.preventDefault();if(event.key==='Home')selectChart(availableCharts()[0].dataset.chart,true);else if(event.key==='End')selectChart(availableCharts().at(-1).dataset.chart,true);else cycleChart(['ArrowDown','ArrowRight'].includes(event.key)?1:-1,true);}});
+  });
+  $('#chart-prev').addEventListener('click',()=>cycleChart(-1));$('#chart-next').addEventListener('click',()=>cycleChart(1));
+  selectChart(selectedChart);
   $$('[data-use-mode]').forEach(button=>button.addEventListener('click',()=>{setMode(button.dataset.useMode);$('#gallery').scrollIntoView({behavior:reduced?'auto':'smooth'});$('.mode-switch [data-mode="'+mode+'"]').focus({preventScroll:true});}));
   $$('[data-open]').forEach(button=>button.addEventListener('click',()=>{selectedChart=button.dataset.open;refreshDialog();chartDialog.classList.remove('is-zoomed');$('#image-zoom').setAttribute('aria-pressed','false');$('#image-zoom').textContent='放大原图';chartDialog.showModal();document.body.style.overflow='hidden';}));
   $('#image-zoom').addEventListener('click',()=>{const active=chartDialog.classList.toggle('is-zoomed');$('#image-zoom').setAttribute('aria-pressed',String(active));$('#image-zoom').textContent=active?'适合屏幕':'放大原图';});
