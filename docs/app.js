@@ -49,20 +49,24 @@
   const chartDialog=$('#chart-dialog'),videoDialog=$('#video-dialog'),video=$('#demo-video');
   const charts=$$('.chart-card');
   const titles=Object.fromEntries(charts.map(card=>[card.dataset.chart,$('h3',card).textContent]));
-  let mode='python',category='all',selectedChart='gantt',release;
+  let mode='python',category='all',query='',selectedChart='gantt',release;
   const pickerButtons=$$('[data-pick]');
-  const availableCharts=()=>charts.filter(c=>category==='all'||c.dataset.family===category);
+  const searchText=Object.fromEntries(charts.map(c=>[c.dataset.chart,($('figcaption',c).textContent+' '+pickerButtons.find(b=>b.dataset.pick===c.dataset.chart).textContent).toLowerCase()]));
+  const availableCharts=()=>charts.filter(c=>(category==='all'||c.dataset.family===category)&&(!query||searchText[c.dataset.chart].includes(query)));
   const extension=()=>mode==='matlab'?'emf':'png';
   const format=()=>extension().toUpperCase();
   const modeLabel=()=>mode==='matlab'?'MATLAB / EMF':'Python / PNG';
   const original=slug=>`downloads/figures/${mode}/${slug}.${extension()}`;
   const preview=slug=>`assets/charts/${mode}-${slug}.webp`;
   function refreshDialog(){
-    $('#lightbox-image').src=preview(selectedChart);$('#lightbox-image').alt=titles[selectedChart]+'，'+modeLabel()+'模式';
+    if(!selectedChart)return;
+    const zoomed=chartDialog.classList.contains('is-zoomed');
+    $('#lightbox-image').src=zoomed?(mode==='python'?original(selectedChart):`assets/charts/detail/matlab-${selectedChart}.webp`):preview(selectedChart);$('#lightbox-image').alt=titles[selectedChart]+'，'+modeLabel()+'模式';
     $('#chart-dialog-title').textContent=titles[selectedChart];$('#dialog-mode-label').textContent=modeLabel().toUpperCase();
     $('#dialog-download').href=original(selectedChart);$('#dialog-download').textContent=`下载${format()}原图 ↘`;
     const extra=charts.find(c=>c.dataset.chart===selectedChart).dataset.extra==='true'?'_extra':'';
     $('#dialog-source').href=`https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/build_${mode}${extra}.${mode==='matlab'?'m':'py'}`;
+    $$('[data-dialog-step]').forEach(button=>button.disabled=availableCharts().length<2);
   }
   function setMode(value){
     if(!['python','matlab'].includes(value))return;mode=value;
@@ -70,30 +74,39 @@
     charts.forEach(card=>{const slug=card.dataset.chart;$('img',card).src=preview(slug);$('.chart-format',card).textContent=modeLabel().toUpperCase();const link=$('.chart-download',card);link.href=original(slug);link.textContent=format()+' ↘';link.setAttribute('aria-label',`下载${titles[slug]}${format()}原图`);});
     updateCount();if(chartDialog.open)refreshDialog();
   }
-  function updateCount(){const available=availableCharts(),index=available.findIndex(c=>c.dataset.chart===selectedChart)+1;$('#collection-status').textContent=`${modeLabel()} · ${String(index).padStart(2,'0')} / ${String(available.length).padStart(2,'0')} · 共${charts.length}类` ;}
+  function updateCount(){const available=availableCharts(),index=available.findIndex(c=>c.dataset.chart===selectedChart)+1;$('#collection-status').textContent=available.length?`${modeLabel()} · 第${index}张 / 筛选到${available.length}类 · 共${charts.length}类图型`:'没有匹配的图型';$('#chart-prev').disabled=available.length<2;$('#chart-next').disabled=available.length<2;}
+  function syncMobilePicker(){const select=$('#mobile-chart-picker');select.replaceChildren();availableCharts().forEach(c=>{const option=document.createElement('option');option.value=c.dataset.chart;option.textContent=titles[c.dataset.chart];select.append(option);});select.disabled=!select.options.length;}
   function selectChart(slug,focus=false){
     selectedChart=slug;
     charts.forEach(card=>{const active=card.dataset.chart===slug;card.hidden=!active;card.classList.toggle('is-selected',active);});
-    pickerButtons.forEach(button=>{const active=button.dataset.pick===slug;button.setAttribute('aria-pressed',String(active));button.tabIndex=active?0:-1;if(active){if(focus)button.focus({preventScroll:true});const picker=$('.atlas-picker'),r=button.getBoundingClientRect(),p=picker.getBoundingClientRect();if(matchMedia('(max-width:760px)').matches){const delta=r.left<p.left?r.left-p.left:r.right>p.right?r.right-p.right:0;if(delta)picker.scrollBy({left:delta,behavior:reduced?'auto':'smooth'});}else{const delta=r.top<p.top?r.top-p.top:r.bottom>p.bottom?r.bottom-p.bottom:0;if(delta)picker.scrollBy({top:delta,behavior:reduced?'auto':'smooth'});}}});
+    pickerButtons.forEach(button=>{const active=button.dataset.pick===slug;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;if(active&&matchMedia('(min-width:761px)').matches){if(focus)button.focus({preventScroll:true});const picker=$('.atlas-picker'),r=button.getBoundingClientRect(),p=picker.getBoundingClientRect();const delta=r.top<p.top?r.top-p.top:r.bottom>p.bottom?r.bottom-p.bottom:0;if(delta)picker.scrollBy({top:delta,behavior:reduced?'auto':'smooth'});}});
+    $('#mobile-chart-picker').value=slug||'';$('#atlas-empty').hidden=Boolean(slug);
     updateCount();if(chartDialog.open)refreshDialog();
   }
-  function cycleChart(offset,focus=false){const current=availableCharts();const index=current.findIndex(c=>c.dataset.chart===selectedChart);selectChart(current[(index+offset+current.length)%current.length].dataset.chart,focus);}
+  function cycleChart(offset,focus=false){const current=availableCharts();if(!current.length)return;const index=current.findIndex(c=>c.dataset.chart===selectedChart);selectChart(current[(index+offset+current.length)%current.length].dataset.chart,focus);}
   function filterCharts(){
     const current=availableCharts();
     pickerButtons.forEach(b=>b.hidden=!current.some(c=>c.dataset.chart===b.dataset.pick));
-    selectChart(current.some(c=>c.dataset.chart===selectedChart)?selectedChart:current[0].dataset.chart);requestAnimationFrame(progress);
+    syncMobilePicker();selectChart(current.some(c=>c.dataset.chart===selectedChart)?selectedChart:(current[0]?.dataset.chart||null));$('#clear-search').hidden=!query;requestAnimationFrame(progress);
   }
   $$('[data-mode]').forEach(button=>button.addEventListener('click',()=>setMode(button.dataset.mode)));
-  $$('[data-category]').forEach(button=>button.addEventListener('click',()=>{category=button.dataset.category;$$('[data-category]').forEach(b=>{const on=b===button;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});filterCharts();$('.gallery-toolbar').scrollIntoView({block:'start',behavior:'instant'});}));
+  $$('[data-category]').forEach(button=>button.addEventListener('click',()=>{category=button.dataset.category;$$('[data-category]').forEach(b=>{const on=b===button;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});filterCharts();}));
   pickerButtons.forEach(button=>{
     button.addEventListener('click',()=>selectChart(button.dataset.pick));
-    button.addEventListener('keydown',event=>{if(['ArrowDown','ArrowRight','ArrowUp','ArrowLeft','Home','End'].includes(event.key)){event.preventDefault();if(event.key==='Home')selectChart(availableCharts()[0].dataset.chart,true);else if(event.key==='End')selectChart(availableCharts().at(-1).dataset.chart,true);else cycleChart(['ArrowDown','ArrowRight'].includes(event.key)?1:-1,true);}});
+    button.addEventListener('keydown',event=>{if(['ArrowDown','ArrowRight','ArrowUp','ArrowLeft','Home','End'].includes(event.key)){event.preventDefault();const current=availableCharts();if(!current.length)return;if(event.key==='Home')selectChart(current[0].dataset.chart,true);else if(event.key==='End')selectChart(current.at(-1).dataset.chart,true);else cycleChart(['ArrowDown','ArrowRight'].includes(event.key)?1:-1,true);}});
   });
   $('#chart-prev').addEventListener('click',()=>cycleChart(-1));$('#chart-next').addEventListener('click',()=>cycleChart(1));
-  selectChart(selectedChart);
+  $('#chart-search').addEventListener('input',event=>{query=event.target.value.trim().toLowerCase();filterCharts();});
+  $('#clear-search').addEventListener('click',()=>{query='';$('#chart-search').value='';filterCharts();$('#chart-search').focus({preventScroll:true});});
+  $('#reset-atlas').addEventListener('click',()=>{query='';category='all';$('#chart-search').value='';$$('[data-category]').forEach(b=>{const active=b.dataset.category==='all';b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});filterCharts();});
+  $('#mobile-chart-picker').addEventListener('change',event=>selectChart(event.target.value));
+  filterCharts();
   $$('[data-use-mode]').forEach(button=>button.addEventListener('click',()=>{setMode(button.dataset.useMode);$('#gallery').scrollIntoView({behavior:reduced?'auto':'smooth'});$('.mode-switch [data-mode="'+mode+'"]').focus({preventScroll:true});}));
-  $$('[data-open]').forEach(button=>button.addEventListener('click',()=>{selectedChart=button.dataset.open;refreshDialog();chartDialog.classList.remove('is-zoomed');$('#image-zoom').setAttribute('aria-pressed','false');$('#image-zoom').textContent='放大原图';chartDialog.showModal();document.body.style.overflow='hidden';}));
-  $('#image-zoom').addEventListener('click',()=>{const active=chartDialog.classList.toggle('is-zoomed');$('#image-zoom').setAttribute('aria-pressed',String(active));$('#image-zoom').textContent=active?'适合屏幕':'放大原图';});
+  $$('[data-open]').forEach(button=>button.addEventListener('click',()=>{selectedChart=button.dataset.open;chartDialog.classList.remove('is-zoomed');refreshDialog();$('#image-zoom').setAttribute('aria-pressed','false');$('#image-zoom').textContent='放大查看';chartDialog.showModal();document.body.style.overflow='hidden';}));
+  function toggleZoom(){const active=chartDialog.classList.toggle('is-zoomed');$('#image-zoom').setAttribute('aria-pressed',String(active));$('#image-zoom').textContent=active?'适合屏幕':'放大查看';refreshDialog();}
+  $('#image-zoom').addEventListener('click',toggleZoom);$('#lightbox-image').addEventListener('click',toggleZoom);
+  $$('[data-dialog-step]').forEach(b=>b.addEventListener('click',()=>cycleChart(Number(b.dataset.dialogStep))));
+  chartDialog.addEventListener('keydown',event=>{if(!chartDialog.classList.contains('is-zoomed')&&(event.key==='ArrowLeft'||event.key==='ArrowRight')){event.preventDefault();cycleChart(event.key==='ArrowLeft'?-1:1);}});
   function openVideo(start){
     if(!videoDialog.open)videoDialog.showModal();document.body.style.overflow='hidden';
     if(Number.isFinite(start)){if(video.readyState>=1)video.currentTime=start;else video.addEventListener('loadedmetadata',()=>{video.currentTime=start;},{once:true});}

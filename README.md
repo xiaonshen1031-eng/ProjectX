@@ -56,3 +56,5 @@ python -m http.server 8769 --directory docs
 ## 许可
 
 ProjectX代码与演示图件采用[MIT许可](LICENSE)，Manrope字体采用[SIL Open Font License](docs/assets/fonts/OFL.txt)。
+
+网站中文采用本地加载的Noto Sans SC字形子集，依据[SIL Open Font License](docs/assets/fonts/NotoSansSC-OFL.txt)分发；字体构建脚本见`tools/prepare_webfont.py`。

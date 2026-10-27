@@ -28,7 +28,8 @@
           "sha256": "649a3a142b2b6ce2c35881c13633ba1955fe50e5df30c036d63fd85ae3ff72c7",
           "preview": "assets/charts/matlab-gantt.webp",
           "records": 2814,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-gantt.webp"
         }
       }
     },
@@ -55,7 +56,8 @@
           "sha256": "f64656d833702d1a8c7602486525672c17da2d527d52b70aae6dcc8b0ee5a33d",
           "preview": "assets/charts/matlab-sankey.webp",
           "records": 991,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-sankey.webp"
         }
       }
     },
@@ -82,7 +84,8 @@
           "sha256": "ab44b69834999aa739e72cdad41c747fa7eaaba54ecea2de85689d8e6b530d30",
           "preview": "assets/charts/matlab-raincloud.webp",
           "records": 22563,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-raincloud.webp"
         }
       }
     },
@@ -109,7 +112,8 @@
           "sha256": "2ba9c829d1b83a873c2c6e92fa9e193408f01ece907c1a26061b4a921c5aa772",
           "preview": "assets/charts/matlab-parallel.webp",
           "records": 1017,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-parallel.webp"
         }
       }
     },
@@ -136,7 +140,8 @@
           "sha256": "792df38d67e2328e0245c95aa1718facc37bffa9a918973a7dae599f52e47a3d",
           "preview": "assets/charts/matlab-spatial.webp",
           "records": 5393,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-spatial.webp"
         }
       }
     },
@@ -163,7 +168,8 @@
           "sha256": "c609fabd1cee6a7e9091d3171bd0ae6be822b0850ace82a8b7775a2ce5a2c648",
           "preview": "assets/charts/matlab-feasibility.webp",
           "records": 1848,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-feasibility.webp"
         }
       }
     },
@@ -190,7 +196,8 @@
           "sha256": "3b32fced99568cb9e965d35d6b90d43b9daa79d45f093690559a728130f6aa11",
           "preview": "assets/charts/matlab-trajectory.webp",
           "records": 933,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-trajectory.webp"
         }
       }
     },
@@ -217,7 +224,8 @@
           "sha256": "e20d434423733ae4412ae1f2a9b8026e237e1195fb04e77b47e291c58b26c025",
           "preview": "assets/charts/matlab-ridges.webp",
           "records": 899,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-ridges.webp"
         }
       }
     },
@@ -244,7 +252,8 @@
           "sha256": "78e3742d32e448d88344070bebb168ebd37f5073f95afba41b1f2c421947a75c",
           "preview": "assets/charts/matlab-chord.webp",
           "records": 1897,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-chord.webp"
         }
       }
     },
@@ -271,7 +280,8 @@
           "sha256": "687a6e7c3efe870d4d935edcece41f6365f67735e5e9f6f5cba4a3fced16b5b7",
           "preview": "assets/charts/matlab-cluster.webp",
           "records": 3360,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-cluster.webp"
         }
       }
     },
@@ -298,7 +308,8 @@
           "sha256": "ed4e5503663b1829c1dd0d36ac0d62d8868a81b12049a89274e19ca38f2d4631",
           "preview": "assets/charts/matlab-polar.webp",
           "records": 3450,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-polar.webp"
         }
       }
     },
@@ -325,7 +336,8 @@
           "sha256": "47af4ca456da0a2ee359348ebcf3a2d157be0e1dc5e5b66dfb0b55c69d546953",
           "preview": "assets/charts/matlab-calibration.webp",
           "records": 2064,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-calibration.webp"
         }
       }
     },
@@ -352,7 +364,8 @@
           "sha256": "daaff70852706c01d612cce29c411c3d8f04d606c99b5b69648f30cad92811a3",
           "preview": "assets/charts/matlab-spectrum.webp",
           "records": 11454,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-spectrum.webp"
         }
       }
     },
@@ -379,7 +392,8 @@
           "sha256": "8d8d52d289cc2d08b5bb5c726fc55bf28e998ab2a7a503295fb9ef8b725c1c49",
           "preview": "assets/charts/matlab-forest.webp",
           "records": 1593,
-          "embeddedRasterRecords": 0
+          "embeddedRasterRecords": 0,
+          "detailPreview": "assets/charts/detail/matlab-forest.webp"
         }
       }
     }

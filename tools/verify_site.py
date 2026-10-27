@@ -72,6 +72,7 @@ def main():
             else:
                 meta=inspect_emf(p);require(meta['records']>100,'Insufficient native EMF records')
                 require(meta['embeddedRasterRecords']==0,'Embedded raster layer in EMF demonstration')
+                require((DOCS/output['detailPreview']).is_file(),'Missing detailed EMF browser preview')
     video=manifest['video']
     for key in ('src','poster','captions'):require((DOCS/video[key]).is_file(),'Missing chart video resource')
     require(20<video['duration']<120,'Unexpected chart video duration')
