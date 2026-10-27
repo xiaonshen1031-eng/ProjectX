@@ -1,6 +1,6 @@
 # 项目结果可视化示例
 
-这里提供14类图型的两套实现：**MATLAB绘制EMF**、**Python绘制PNG**。每种图型用于表达一种或几种相互联系的结果关系。
+这里提供14类图型的中英文版本，以及两套实现：**MATLAB绘制EMF**、**Python绘制PNG**，共56份原图。每种图型用于表达一种或几种相互联系的结果关系。
 
 所有数值均由`build_python.py`与`build_python_extra.py`中的解析函数和固定随机种子独立生成。两个后端读取相同的图型数据。
 
@@ -25,17 +25,19 @@
 
 ```powershell
 python -m pip install -r skill/senior-projectx/requirements.txt
-python gallery/build_python.py
-python gallery/build_python_extra.py
-matlab -batch "addpath('gallery'); build_matlab; build_matlab_extra"
-python tools/prepare_gallery.py
+python gallery/build_bilingual.py
+matlab -batch "addpath('gallery'); build_matlab([],'zh'); build_matlab_extra([],'zh'); build_matlab([],'en'); build_matlab_extra([],'en')"
+python tools/prepare_bilingual_gallery.py
+python tools/audit_bilingual_fonts.py
 python tools/verify_site.py
 ```
 
-Python生成14张2400×1440 PNG及两份图型数据。MATLAB读取相同数据，通过Windows MATLAB原生`print -dmeta`导出14张EMF。`prepare_gallery.py`从实际PNG和EMF生成浏览器预览，并记录原图的格式、哈希和矢量对象检查结果。
+`build_bilingual.py`读取仓库中的两份独立示意数据，生成28张2400×1440 PNG。MATLAB读取相同数据，通过Windows MATLAB原生`print -dmeta -vector`导出28张EMF。`prepare_gallery.py`从实际PNG和EMF生成浏览器预览，并记录原图的格式、哈希和矢量对象检查结果。
 
 Python原图位于`docs/downloads/figures/python/`，MATLAB原图位于`docs/downloads/figures/matlab/`。网页使用等比例WebP预览，下载保留各自原生格式。新增8种图型的实现位于`build_python_extra.py`和`build_matlab_extra.m`，完整图型注册表位于`catalog.json`。
 
-EMF导出和预览需要Windows上的MATLAB及支持Windows元文件的Pillow。图中英文和数字使用Times New Roman。
+EMF导出和预览需要Windows上的MATLAB及支持Windows元文件的Pillow。中文使用微软雅黑加粗，英文、数字、单位与符号使用Times New Roman常规体。Python采用分别指定字体的文字段，MATLAB采用TeX字体段；字体核查同时检查Python实际字形和EMF中的原生字体记录。
 
 Copyright © NCEPU-Senior · Author: XiaoN
+
+语言与字体定义位于`figure-language.json`。Python中文版本通过`chart_language.py`处理混排，MATLAB中文版本通过`apply_figure_language.m`处理混排。英文图件保留原路径，中文图件存放于各绘图工具目录下的`zh/`；浏览器放大预览与原图下载随语言同步切换。

@@ -13,7 +13,7 @@ SLUGS=[chart['id'] for chart in CATALOG]
 def inspect_emf(file):
     payload=file.read_bytes()
     if payload[40:44]!=b' EMF':raise ValueError('Invalid EMF signature: '+file.name)
-    offset=0;records=0;embedded_raster=0
+    offset=0;records=0;embedded_raster=0;fonts=set()
     while offset+8<=len(payload):
         kind,size=struct.unpack_from('<II',payload,offset)
         if size<8 or offset+size>len(payload):raise ValueError('Invalid EMF record')
@@ -22,12 +22,18 @@ def inspect_emf(file):
             embedded_raster+=int(struct.unpack_from('<I',payload,offset+96)[0]>0)
         elif kind in {77,78,79,80,81,114,116}:
             embedded_raster+=1
+        if kind==82 and size>=104:
+            family=payload[offset+40:offset+104].decode('utf-16le').split('\x00')[0]
+            weight=struct.unpack_from('<i',payload,offset+28)[0];fonts.add((family,weight))
         offset+=size;records+=1
     if offset!=len(payload):raise ValueError('Incomplete EMF record sequence')
-    return {'records':records,'embeddedRasterRecords':embedded_raster}
+    return {'records':records,'embeddedRasterRecords':embedded_raster,'fonts':[{'family':name,'weight':weight} for name,weight in sorted(fonts)]}
 
 
 def main():
+    if all((ROOT/f'docs/downloads/figures/{backend}/zh/{slug}.{suffix}').is_file() for backend,suffix in [('python','png'),('matlab','emf')] for slug in SLUGS):
+        from prepare_bilingual_gallery import main as bilingual_main
+        return bilingual_main()
     previews=ROOT/'docs/assets/charts';previews.mkdir(parents=True,exist_ok=True)
     detail=previews/'detail';detail.mkdir(parents=True,exist_ok=True)
     manifest={'data':['gallery/demo-data.json','gallery/extra-data.json'],'source':'independent illustrative data','charts':[]}

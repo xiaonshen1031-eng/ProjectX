@@ -1,0 +1,34 @@
+{
+  "fontPolicy": {"chinese": "Microsoft YaHei", "chineseWeight": "bold", "latin": "Times New Roman", "latinWeight": "normal"},
+  "labels": [
+    ["10–90% envelope", "10–90%分布包络"], ["10-90% envelope", "10–90%分布包络"], ["Reference", "参考曲线"], ["Central profile", "中心曲线"], ["Upper bound", "上限边界"],
+    ["Signal / a.u.", "信号 / a.u."], ["Bound margin / a.u.", "边界余量 / a.u."], ["Time / h", "时间 / h"],
+    ["Illustrative response / a.u.", "响应值 / a.u."], ["Median", "中位数"], ["Condition", "条件"],
+    ["Pairwise weights", "成对权重"], ["Ribbon width follows the same matrix.", "弦带宽度与权重矩阵对应"],
+    ["Pearson correlation", "皮尔逊相关系数"], ["Spatial coordinate X", "空间坐标 X"], ["Spatial coordinate Y", "空间坐标 Y"], ["Normalized field", "归一化空间强度"],
+    ["Elliptic boundary", "椭圆边界"], ["Linear boundary", "线性边界"], ["Lower bound", "下限边界"], ["Feasible domain", "可行域"],
+    ["State variable u1", "状态变量 u1"], ["State variable u2", "状态变量 u2"], ["Displacement", "位移"],
+    ["Inputs", "输入"], ["Intermediate groups", "中间分组"], ["Outputs", "输出"], ["4 CONDITIONS", "4种条件"], ["Normalized response", "归一化响应"], ["Normalized value", "归一化指标"],
+    ["Ideal calibration", "理想校准线"], ["Binned fraction / 95% Wilson interval", "分箱频率 / 95% Wilson区间"],
+    ["Observed fraction", "观测频率"], ["Predicted probability", "预测概率"], ["Count", "样本数"], ["Density", "概率密度"], ["Label 0", "类别0"], ["Label 1", "类别1"],
+    ["Signal", "信号"], ["Time / s", "时间 / s"], ["Frequency / Hz", "频率 / Hz"], ["Energy", "能量"], ["Relative power / dB", "相对功率 / dB"],
+    ["Paired difference distribution", "配对差异分布"], ["Mean difference / 95% bootstrap CI", "均值差 / 95%自助法置信区间"], ["Aggregate power / a.u.", "聚合功率 / a.u."]
+  ],
+  "patterns": [["^Metric ([0-9]+)$", "指标$1"], ["^Group ([0-9]+)(.*)$", "组$1$2"]],
+  "charts": {
+    "trajectory": {"title": "Trajectory envelope and constraint diagnostics", "description": "Align reference and central trajectories with the distribution envelope, upper bound and remaining margin.", "tags": "Trajectory · Envelope · Constraint margin"},
+    "ridges": {"title": "Conditional ridgeline distributions", "description": "Compare distribution shape, location and dispersion across conditions using medians and interquartile ranges.", "tags": "Density · Median · Interquartile range"},
+    "chord": {"title": "Chord diagram and pairwise matrix", "description": "Connect the overall relationship structure with pairwise weights using consistent ribbon widths and matrix entries.", "tags": "Chord diagram · Relationship strength · Pairwise weights"},
+    "cluster": {"title": "Clustered correlation matrix", "description": "Keep the dendrogram and correlation matrix in the same object order to reveal groups, directions and strengths.", "tags": "Hierarchical clustering · Correlation · Consistent ordering"},
+    "spatial": {"title": "Spatial field and node network", "description": "Combine a continuous spatial field with node strengths and connections in a shared coordinate system.", "tags": "Spatial field · Nodes · Network overlay"},
+    "feasibility": {"title": "Feasible domain and state projections", "description": "Show multiple boundaries, projection paths and displacement to explain how states enter the feasible region.", "tags": "Contours · Feasible boundary · Projection paths"},
+    "sankey": {"title": "Multi-stage Sankey flows", "description": "Track flows and composition across successive stages while preserving the corresponding totals.", "tags": "Stage transitions · Composition · Flow conservation"},
+    "raincloud": {"title": "Raincloud distributions and intervals", "description": "Compare density, individual observations, quartiles and tail ranges within the same view.", "tags": "Distribution shape · Observations · Interval statistics"},
+    "polar": {"title": "Circular temporal profiles", "description": "Compare periodic variation across four conditions along a shared circular time axis.", "tags": "Periodicity · Layered conditions · Circular profiles"},
+    "parallel": {"title": "Multi-metric parallel coordinates", "description": "Connect multiple metrics on a common scale to compare group structure and within-group variability.", "tags": "Multiple metrics · Groups · Distribution envelopes"},
+    "calibration": {"title": "Calibration and discrimination diagnostics", "description": "Combine calibration intervals, bin counts and class-conditional probability distributions.", "tags": "Calibration intervals · Bin counts · Probability distributions"},
+    "spectrum": {"title": "Time-frequency structure and band energy", "description": "Align the original signal, time-frequency structure and integrated spectral energy.", "tags": "Signal · Time-frequency structure · Spectral energy"},
+    "forest": {"title": "Paired differences and effect-size forest", "description": "Compare paired difference distributions, means and confidence intervals across matched conditions.", "tags": "Paired differences · Conditional distributions · Interval estimates"},
+    "gantt": {"title": "Resource schedules and power decomposition", "description": "Connect availability windows and individual assignments with aggregate group power.", "tags": "Time windows · Resource allocation · Power composition"}
+  }
+}

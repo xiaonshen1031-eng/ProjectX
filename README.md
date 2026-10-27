@@ -23,7 +23,7 @@ Copyright © NCEPU-Senior · Author: XiaoN
 
 ## 结果可视化
 
-图表用于表达项目结果之间的关系。网站展示14类图型，每类均提供两套源码与原图：**MATLAB绘制EMF**、**Python绘制PNG**。
+图表用于表达项目结果之间的关系。网站展示14类图型，可切换**中文 / English**，同时支持**MATLAB绘制EMF**、**Python绘制PNG**，共56份原图。中文标注采用微软雅黑加粗，英文、数字与单位采用Times New Roman常规体。
 
 | 用途 | 图型 |
 | --- | --- |

@@ -4,6 +4,14 @@
     "gallery/extra-data.json"
   ],
   "source": "independent illustrative data",
+  "languages": [
+    "zh",
+    "en"
+  ],
+  "fontPolicy": {
+    "chinese": "Microsoft YaHei Bold",
+    "latinAndNumerals": "Times New Roman Regular"
+  },
   "charts": [
     {
       "id": "gantt",
@@ -13,6 +21,62 @@
       "tags": "时间窗 · 资源分配 · 功率构成",
       "extra": true,
       "featured": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/gantt.png",
+            "format": "PNG",
+            "bytes": 106627,
+            "sha256": "8fdbc0b1b32de97a4c04b9428fd3130cc7313ebee94cfc43eab095b4675b8d8a",
+            "preview": "assets/charts/python-gantt.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/gantt.emf",
+            "format": "EMF",
+            "bytes": 91912,
+            "sha256": "6d68c5eb6700c94b2033bc5815bb96790ebceb8874b5eaaca6745c9206739e2b",
+            "preview": "assets/charts/matlab-gantt.webp",
+            "records": 2814,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-gantt.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/gantt.png",
+            "format": "PNG",
+            "bytes": 104338,
+            "sha256": "50dc378e67dcb9064969620ed60df2995a50070d93eed527c457374f88e51f45",
+            "preview": "assets/charts/zh/python-gantt.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/gantt.emf",
+            "format": "EMF",
+            "bytes": 96976,
+            "sha256": "cb4076b6a11891434a956163316d6ecfae73c8f7da66dc7319fb2ed7bac77bac",
+            "preview": "assets/charts/zh/matlab-gantt.webp",
+            "records": 2864,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-gantt.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/gantt.png",
@@ -25,10 +89,16 @@
           "path": "downloads/figures/matlab/gantt.emf",
           "format": "EMF",
           "bytes": 91912,
-          "sha256": "649a3a142b2b6ce2c35881c13633ba1955fe50e5df30c036d63fd85ae3ff72c7",
+          "sha256": "6d68c5eb6700c94b2033bc5815bb96790ebceb8874b5eaaca6745c9206739e2b",
           "preview": "assets/charts/matlab-gantt.webp",
           "records": 2814,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-gantt.webp"
         }
       }
@@ -41,6 +111,62 @@
       "tags": "阶段流向 · 构成 · 总量对应",
       "extra": true,
       "featured": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/sankey.png",
+            "format": "PNG",
+            "bytes": 262274,
+            "sha256": "5884f0343e323a01c21194ed30966ee73df5692b607e61fb063c19631d147ee6",
+            "preview": "assets/charts/python-sankey.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/sankey.emf",
+            "format": "EMF",
+            "bytes": 80320,
+            "sha256": "aa0db4e4ebb67d3d999fb06672ca136c7fe27e0421b2de0f4a18572d40316f67",
+            "preview": "assets/charts/matlab-sankey.webp",
+            "records": 993,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-sankey.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/sankey.png",
+            "format": "PNG",
+            "bytes": 258830,
+            "sha256": "b6486f152cc837c22a7001fbd833f824a97eb431f531d5698dce8572a95f6e0f",
+            "preview": "assets/charts/zh/python-sankey.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/sankey.emf",
+            "format": "EMF",
+            "bytes": 81012,
+            "sha256": "4fc01f1e584511ac2827423928a593fa2b64d4b2a7f4d5358819334e896ee4e2",
+            "preview": "assets/charts/zh/matlab-sankey.webp",
+            "records": 996,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-sankey.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/sankey.png",
@@ -52,11 +178,17 @@
         "matlab": {
           "path": "downloads/figures/matlab/sankey.emf",
           "format": "EMF",
-          "bytes": 80284,
-          "sha256": "f64656d833702d1a8c7602486525672c17da2d527d52b70aae6dcc8b0ee5a33d",
+          "bytes": 80320,
+          "sha256": "aa0db4e4ebb67d3d999fb06672ca136c7fe27e0421b2de0f4a18572d40316f67",
           "preview": "assets/charts/matlab-sankey.webp",
-          "records": 991,
+          "records": 993,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-sankey.webp"
         }
       }
@@ -69,6 +201,62 @@
       "tags": "分布形态 · 原始点 · 区间统计",
       "extra": true,
       "featured": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/raincloud.png",
+            "format": "PNG",
+            "bytes": 80343,
+            "sha256": "baf4f0130b9503719f0d63507798033d009fdaaabecf73b984c380100f44c8a3",
+            "preview": "assets/charts/python-raincloud.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/raincloud.emf",
+            "format": "EMF",
+            "bytes": 677264,
+            "sha256": "6a3f94768ea8fcfbc2976d7183c222983c9b16f1cf16d0474d968f037bb4db44",
+            "preview": "assets/charts/matlab-raincloud.webp",
+            "records": 22563,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-raincloud.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/raincloud.png",
+            "format": "PNG",
+            "bytes": 77802,
+            "sha256": "8fce8eb2e8dd26c2d043b9638dc9a3cad8a7148645824f2cc4c1e6441d64f9f7",
+            "preview": "assets/charts/zh/python-raincloud.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/raincloud.emf",
+            "format": "EMF",
+            "bytes": 677892,
+            "sha256": "02841514faa58f8dede5a98b03a43f261e41911b1014c6201a85f795e1e5a412",
+            "preview": "assets/charts/zh/matlab-raincloud.webp",
+            "records": 22572,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-raincloud.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/raincloud.png",
@@ -81,10 +269,16 @@
           "path": "downloads/figures/matlab/raincloud.emf",
           "format": "EMF",
           "bytes": 677264,
-          "sha256": "ab44b69834999aa739e72cdad41c747fa7eaaba54ecea2de85689d8e6b530d30",
+          "sha256": "6a3f94768ea8fcfbc2976d7183c222983c9b16f1cf16d0474d968f037bb4db44",
           "preview": "assets/charts/matlab-raincloud.webp",
           "records": 22563,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-raincloud.webp"
         }
       }
@@ -97,6 +291,62 @@
       "tags": "多指标 · 方案群组 · 分布包络",
       "extra": true,
       "featured": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/parallel.png",
+            "format": "PNG",
+            "bytes": 925280,
+            "sha256": "b904b0a3d5875d8d5a58ffac8435f526f05859906ff93b65377ecacb1ca0502c",
+            "preview": "assets/charts/python-parallel.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/parallel.emf",
+            "format": "EMF",
+            "bytes": 39716,
+            "sha256": "4209d5774a876ec92992eaed9b3626a92595312cf1539789a88da2a4ea22f7db",
+            "preview": "assets/charts/matlab-parallel.webp",
+            "records": 1019,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-parallel.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/parallel.png",
+            "format": "PNG",
+            "bytes": 924938,
+            "sha256": "8aa9635e94136928515ffc564d8a8a7e87dc3e235bb03ebe9103ae80ade19215",
+            "preview": "assets/charts/zh/python-parallel.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/parallel.emf",
+            "format": "EMF",
+            "bytes": 49204,
+            "sha256": "a45db9b7a280e1c245edd2e2ec1811d4a3cfe859a040c7acb6b109d09d1ab7eb",
+            "preview": "assets/charts/zh/matlab-parallel.webp",
+            "records": 1106,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-parallel.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/parallel.png",
@@ -108,11 +358,17 @@
         "matlab": {
           "path": "downloads/figures/matlab/parallel.emf",
           "format": "EMF",
-          "bytes": 39680,
-          "sha256": "2ba9c829d1b83a873c2c6e92fa9e193408f01ece907c1a26061b4a921c5aa772",
+          "bytes": 39716,
+          "sha256": "4209d5774a876ec92992eaed9b3626a92595312cf1539789a88da2a4ea22f7db",
           "preview": "assets/charts/matlab-parallel.webp",
-          "records": 1017,
+          "records": 1019,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-parallel.webp"
         }
       }
@@ -125,6 +381,62 @@
       "tags": "空间分布 · 节点 · 网络叠加",
       "extra": false,
       "featured": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/spatial.png",
+            "format": "PNG",
+            "bytes": 337613,
+            "sha256": "bf1db23c67c4326a08e57aee7dfc7f42b3ab01a99360b4adb25f832ea969040b",
+            "preview": "assets/charts/python-spatial.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/spatial.emf",
+            "format": "EMF",
+            "bytes": 181688,
+            "sha256": "b0cb72a107e43fcc5b54a1084d523a77ca692c7525ea20c3a080a65a82110d99",
+            "preview": "assets/charts/matlab-spatial.webp",
+            "records": 5393,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-spatial.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/spatial.png",
+            "format": "PNG",
+            "bytes": 333120,
+            "sha256": "d7b52b7dc82558f31fcf00fd0b158bcd54b17c2ccfc7bed7606be23eaea2fae7",
+            "preview": "assets/charts/zh/python-spatial.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/spatial.emf",
+            "format": "EMF",
+            "bytes": 181400,
+            "sha256": "2741933419faf5a30db14afe995c32dc424a330201a194ae793659cff12b9333",
+            "preview": "assets/charts/zh/matlab-spatial.webp",
+            "records": 5389,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-spatial.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/spatial.png",
@@ -137,10 +449,16 @@
           "path": "downloads/figures/matlab/spatial.emf",
           "format": "EMF",
           "bytes": 181688,
-          "sha256": "792df38d67e2328e0245c95aa1718facc37bffa9a918973a7dae599f52e47a3d",
+          "sha256": "b0cb72a107e43fcc5b54a1084d523a77ca692c7525ea20c3a080a65a82110d99",
           "preview": "assets/charts/matlab-spatial.webp",
           "records": 5393,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-spatial.webp"
         }
       }
@@ -153,6 +471,62 @@
       "tags": "等值线 · 可行边界 · 投影路径",
       "extra": false,
       "featured": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/feasibility.png",
+            "format": "PNG",
+            "bytes": 254393,
+            "sha256": "f85822357191ce31a78cf58fa8637da36146400ff2acb5237e4f84e5bcdde08a",
+            "preview": "assets/charts/python-feasibility.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/feasibility.emf",
+            "format": "EMF",
+            "bytes": 106504,
+            "sha256": "6d169c9ef39718fd2b0945119433054d6e4cb70d34d66146ce02ad12c15a0ba4",
+            "preview": "assets/charts/matlab-feasibility.webp",
+            "records": 1850,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-feasibility.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/feasibility.png",
+            "format": "PNG",
+            "bytes": 250643,
+            "sha256": "4a588aed2d6aed3c0665b9388129d6bc4091c0cb40e18945378f54159caecb23",
+            "preview": "assets/charts/zh/python-feasibility.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/feasibility.emf",
+            "format": "EMF",
+            "bytes": 107156,
+            "sha256": "2f1bac17537ce77d88a549d5368aff24cd0b9815a261e46889487bd314f89f83",
+            "preview": "assets/charts/zh/matlab-feasibility.webp",
+            "records": 1860,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-feasibility.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/feasibility.png",
@@ -164,11 +538,17 @@
         "matlab": {
           "path": "downloads/figures/matlab/feasibility.emf",
           "format": "EMF",
-          "bytes": 106468,
-          "sha256": "c609fabd1cee6a7e9091d3171bd0ae6be822b0850ace82a8b7775a2ce5a2c648",
+          "bytes": 106504,
+          "sha256": "6d169c9ef39718fd2b0945119433054d6e4cb70d34d66146ce02ad12c15a0ba4",
           "preview": "assets/charts/matlab-feasibility.webp",
-          "records": 1848,
+          "records": 1850,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-feasibility.webp"
         }
       }
@@ -181,6 +561,62 @@
       "tags": "时序包络 · 边界 · 余量",
       "extra": false,
       "featured": false,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/trajectory.png",
+            "format": "PNG",
+            "bytes": 160750,
+            "sha256": "28743b945cf9e33e0953888a8c696af686d95d672811d452fcecaea5aded46d3",
+            "preview": "assets/charts/python-trajectory.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/trajectory.emf",
+            "format": "EMF",
+            "bytes": 53820,
+            "sha256": "1b75e5e05f1a06a0f4ebf3710e5074d1af640f3e122bd92f12a783daa12aa7c4",
+            "preview": "assets/charts/matlab-trajectory.webp",
+            "records": 935,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-trajectory.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/trajectory.png",
+            "format": "PNG",
+            "bytes": 160370,
+            "sha256": "d27e8732d15089305cb6de5973050aa19fce61ab7e663db368d17767788c162b",
+            "preview": "assets/charts/zh/python-trajectory.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/trajectory.emf",
+            "format": "EMF",
+            "bytes": 55868,
+            "sha256": "c2c00de945878ff23fe5167dfc89ba99bd38d48184436c5a6e69c90ae3de72a9",
+            "preview": "assets/charts/zh/matlab-trajectory.webp",
+            "records": 969,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-trajectory.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/trajectory.png",
@@ -192,11 +628,17 @@
         "matlab": {
           "path": "downloads/figures/matlab/trajectory.emf",
           "format": "EMF",
-          "bytes": 53784,
-          "sha256": "3b32fced99568cb9e965d35d6b90d43b9daa79d45f093690559a728130f6aa11",
+          "bytes": 53820,
+          "sha256": "1b75e5e05f1a06a0f4ebf3710e5074d1af640f3e122bd92f12a783daa12aa7c4",
           "preview": "assets/charts/matlab-trajectory.webp",
-          "records": 933,
+          "records": 935,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-trajectory.webp"
         }
       }
@@ -209,6 +651,62 @@
       "tags": "密度 · 中位数 · 四分位距",
       "extra": false,
       "featured": false,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/ridges.png",
+            "format": "PNG",
+            "bytes": 148172,
+            "sha256": "46d89a3a3934559d59a4b840f769ac5455a63592e392fc3df769cb80443feec6",
+            "preview": "assets/charts/python-ridges.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/ridges.emf",
+            "format": "EMF",
+            "bytes": 100556,
+            "sha256": "2bb5d675dac3ae967134d7ac7770d5e29c39f2c123ccabf350cffcdc6f0e443b",
+            "preview": "assets/charts/matlab-ridges.webp",
+            "records": 899,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-ridges.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/ridges.png",
+            "format": "PNG",
+            "bytes": 145702,
+            "sha256": "80b8f6c2852a1e0fcd4765c4a2de7fa371e4d2242d85e7ebef53079eff0bcac1",
+            "preview": "assets/charts/zh/python-ridges.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/ridges.emf",
+            "format": "EMF",
+            "bytes": 102120,
+            "sha256": "c44683d118c9e00de6210525618ecd338eb650b05d03b44cc43b93aa1035e80e",
+            "preview": "assets/charts/zh/matlab-ridges.webp",
+            "records": 912,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-ridges.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/ridges.png",
@@ -221,10 +719,16 @@
           "path": "downloads/figures/matlab/ridges.emf",
           "format": "EMF",
           "bytes": 100556,
-          "sha256": "e20d434423733ae4412ae1f2a9b8026e237e1195fb04e77b47e291c58b26c025",
+          "sha256": "2bb5d675dac3ae967134d7ac7770d5e29c39f2c123ccabf350cffcdc6f0e443b",
           "preview": "assets/charts/matlab-ridges.webp",
           "records": 899,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-ridges.webp"
         }
       }
@@ -237,6 +741,62 @@
       "tags": "弦带 · 联系强度 · 成对关系",
       "extra": false,
       "featured": false,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/chord.png",
+            "format": "PNG",
+            "bytes": 250157,
+            "sha256": "5ef21ac3763211713baf464abe3141add35f0601433ba4adba7eb8767d3da166",
+            "preview": "assets/charts/python-chord.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/chord.emf",
+            "format": "EMF",
+            "bytes": 147252,
+            "sha256": "c6f4853ab6d0caa87433f0cbe1f68655f4ad7b61c8d36e35e0600300682df3f1",
+            "preview": "assets/charts/matlab-chord.webp",
+            "records": 1897,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-chord.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/chord.png",
+            "format": "PNG",
+            "bytes": 249324,
+            "sha256": "c487c17f2fe4eca2195aac95b3a028e524904a6d458ea6cb9b995bd7426f565e",
+            "preview": "assets/charts/zh/python-chord.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/chord.emf",
+            "format": "EMF",
+            "bytes": 146904,
+            "sha256": "66d471e13e724a67af68cbbe44d345aae16152545310f3f84ffe7632456bce2e",
+            "preview": "assets/charts/zh/matlab-chord.webp",
+            "records": 1897,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-chord.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/chord.png",
@@ -249,10 +809,16 @@
           "path": "downloads/figures/matlab/chord.emf",
           "format": "EMF",
           "bytes": 147252,
-          "sha256": "78e3742d32e448d88344070bebb168ebd37f5073f95afba41b1f2c421947a75c",
+          "sha256": "c6f4853ab6d0caa87433f0cbe1f68655f4ad7b61c8d36e35e0600300682df3f1",
           "preview": "assets/charts/matlab-chord.webp",
           "records": 1897,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-chord.webp"
         }
       }
@@ -265,6 +831,62 @@
       "tags": "层级聚类 · 相关系数 · 同序排列",
       "extra": false,
       "featured": false,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/cluster.png",
+            "format": "PNG",
+            "bytes": 117638,
+            "sha256": "ddf76d9af56ac982170079a9a4fc80a1e16b2f82d8eed9ef41df8adf74aa5bb3",
+            "preview": "assets/charts/python-cluster.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/cluster.emf",
+            "format": "EMF",
+            "bytes": 112988,
+            "sha256": "d15c6a05763fa2c599941ee4617a8681ce824a90ac7fb39da92cf6e9ac8aab38",
+            "preview": "assets/charts/matlab-cluster.webp",
+            "records": 3360,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-cluster.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/cluster.png",
+            "format": "PNG",
+            "bytes": 120170,
+            "sha256": "fde698d76b7bd07f09508477b7d3f8e2b034589eac3a5c8e57cd773db202ff12",
+            "preview": "assets/charts/zh/python-cluster.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/cluster.emf",
+            "format": "EMF",
+            "bytes": 112204,
+            "sha256": "eadf7bd622d1ce8b5580d5142b3a3489487266b973db10abac710a724493c53d",
+            "preview": "assets/charts/zh/matlab-cluster.webp",
+            "records": 3349,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-cluster.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/cluster.png",
@@ -277,10 +899,16 @@
           "path": "downloads/figures/matlab/cluster.emf",
           "format": "EMF",
           "bytes": 112988,
-          "sha256": "687a6e7c3efe870d4d935edcece41f6365f67735e5e9f6f5cba4a3fced16b5b7",
+          "sha256": "d15c6a05763fa2c599941ee4617a8681ce824a90ac7fb39da92cf6e9ac8aab38",
           "preview": "assets/charts/matlab-cluster.webp",
           "records": 3360,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-cluster.webp"
         }
       }
@@ -293,6 +921,62 @@
       "tags": "周期结构 · 条件分层 · 环形图谱",
       "extra": true,
       "featured": false,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/polar.png",
+            "format": "PNG",
+            "bytes": 228840,
+            "sha256": "87ed2b4cb9cf45e7c869d834d15b4c56a77ebaa811f27a2e197f316742f8abcd",
+            "preview": "assets/charts/python-polar.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/polar.emf",
+            "format": "EMF",
+            "bytes": 158096,
+            "sha256": "5001a504b04a3eaadcfa153cac93a11b9b085e8e578048b5f4b8d1ab75caf23b",
+            "preview": "assets/charts/matlab-polar.webp",
+            "records": 3450,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-polar.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/polar.png",
+            "format": "PNG",
+            "bytes": 224597,
+            "sha256": "fd92fbf66cec26d104350125c7537f49723ea66186141aedcb5c96764c8346fe",
+            "preview": "assets/charts/zh/python-polar.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/polar.emf",
+            "format": "EMF",
+            "bytes": 158116,
+            "sha256": "5fbd489a7be1d4cffdff9f07483df56c1a9dbc026517aa30ae21e48a0345e7fb",
+            "preview": "assets/charts/zh/matlab-polar.webp",
+            "records": 3447,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-polar.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/polar.png",
@@ -305,10 +989,16 @@
           "path": "downloads/figures/matlab/polar.emf",
           "format": "EMF",
           "bytes": 158096,
-          "sha256": "ed4e5503663b1829c1dd0d36ac0d62d8868a81b12049a89274e19ca38f2d4631",
+          "sha256": "5001a504b04a3eaadcfa153cac93a11b9b085e8e578048b5f4b8d1ab75caf23b",
           "preview": "assets/charts/matlab-polar.webp",
           "records": 3450,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-polar.webp"
         }
       }
@@ -321,6 +1011,62 @@
       "tags": "校准区间 · 样本量 · 概率分布",
       "extra": true,
       "featured": false,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/calibration.png",
+            "format": "PNG",
+            "bytes": 175730,
+            "sha256": "97238c6d33d8235c61b41a8742b76cc8d886e49eef211590f119e854bfa6eaf0",
+            "preview": "assets/charts/python-calibration.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/calibration.emf",
+            "format": "EMF",
+            "bytes": 92460,
+            "sha256": "df5e06f3c8b1f9826fa92e802319fee0bb52b06030b52332f3ca4dc33c71ac4a",
+            "preview": "assets/charts/matlab-calibration.webp",
+            "records": 2064,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-calibration.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/calibration.png",
+            "format": "PNG",
+            "bytes": 180824,
+            "sha256": "b3c3da03d09b1228e512d8678828f21b848d61ea65a0fcc9027d97b2770de234",
+            "preview": "assets/charts/zh/python-calibration.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/calibration.emf",
+            "format": "EMF",
+            "bytes": 95096,
+            "sha256": "9d6dcad0aa53571c4319fe71e82d6329a7476a91f32efd3fbeebfec256612d85",
+            "preview": "assets/charts/zh/matlab-calibration.webp",
+            "records": 2089,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-calibration.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/calibration.png",
@@ -333,10 +1079,16 @@
           "path": "downloads/figures/matlab/calibration.emf",
           "format": "EMF",
           "bytes": 92460,
-          "sha256": "47af4ca456da0a2ee359348ebcf3a2d157be0e1dc5e5b66dfb0b55c69d546953",
+          "sha256": "df5e06f3c8b1f9826fa92e802319fee0bb52b06030b52332f3ca4dc33c71ac4a",
           "preview": "assets/charts/matlab-calibration.webp",
           "records": 2064,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-calibration.webp"
         }
       }
@@ -349,6 +1101,62 @@
       "tags": "信号 · 时频分布 · 频带能量",
       "extra": true,
       "featured": false,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/spectrum.png",
+            "format": "PNG",
+            "bytes": 189096,
+            "sha256": "82f57d585c66cec912c6037463daeb1662b088449233e247c22b0969c9ded39b",
+            "preview": "assets/charts/python-spectrum.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/spectrum.emf",
+            "format": "EMF",
+            "bytes": 351108,
+            "sha256": "e6a02b94ca47e08156ddafee07a44bf5a791546c2ae81303423cef63fbd0d009",
+            "preview": "assets/charts/matlab-spectrum.webp",
+            "records": 11456,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-spectrum.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/spectrum.png",
+            "format": "PNG",
+            "bytes": 186425,
+            "sha256": "329e64cbcd138a1aedff030371a104a8b8a55392f20be81a45d9c77da31bf619",
+            "preview": "assets/charts/zh/python-spectrum.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/spectrum.emf",
+            "format": "EMF",
+            "bytes": 352856,
+            "sha256": "55f320af200d45aee529b74d035aaaa67a687018aec8172e4e614107e7926784",
+            "preview": "assets/charts/zh/matlab-spectrum.webp",
+            "records": 11474,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-spectrum.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/spectrum.png",
@@ -360,11 +1168,17 @@
         "matlab": {
           "path": "downloads/figures/matlab/spectrum.emf",
           "format": "EMF",
-          "bytes": 351072,
-          "sha256": "daaff70852706c01d612cce29c411c3d8f04d606c99b5b69648f30cad92811a3",
+          "bytes": 351108,
+          "sha256": "e6a02b94ca47e08156ddafee07a44bf5a791546c2ae81303423cef63fbd0d009",
           "preview": "assets/charts/matlab-spectrum.webp",
-          "records": 11454,
+          "records": 11456,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-spectrum.webp"
         }
       }
@@ -377,6 +1191,62 @@
       "tags": "配对差异 · 条件分布 · 区间估计",
       "extra": true,
       "featured": false,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/forest.png",
+            "format": "PNG",
+            "bytes": 95884,
+            "sha256": "de646e771efcbd1de9c91390d2241dbec596e52d7cf1a5249125eab795fb1287",
+            "preview": "assets/charts/python-forest.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/forest.emf",
+            "format": "EMF",
+            "bytes": 159116,
+            "sha256": "3cb6fdd35464e6747e1308bc8b4b10257879cc8a16fdb6af0fdb84af6f8360e2",
+            "preview": "assets/charts/matlab-forest.webp",
+            "records": 1593,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-forest.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/forest.png",
+            "format": "PNG",
+            "bytes": 94598,
+            "sha256": "2f183317fb16322e4f1cfd1afd188c676f27ebcef70e2f10aca9e419f418feaa",
+            "preview": "assets/charts/zh/python-forest.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/forest.emf",
+            "format": "EMF",
+            "bytes": 160844,
+            "sha256": "338c403887fde858d6be6a495ea677f99e508e2214d92651a95d50abf78d3225",
+            "preview": "assets/charts/zh/matlab-forest.webp",
+            "records": 1613,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-forest.webp"
+          }
+        }
+      },
       "outputs": {
         "python": {
           "path": "downloads/figures/python/forest.png",
@@ -389,10 +1259,16 @@
           "path": "downloads/figures/matlab/forest.emf",
           "format": "EMF",
           "bytes": 159116,
-          "sha256": "8d8d52d289cc2d08b5bb5c726fc55bf28e998ab2a7a503295fb9ef8b725c1c49",
+          "sha256": "3cb6fdd35464e6747e1308bc8b4b10257879cc8a16fdb6af0fdb84af6f8360e2",
           "preview": "assets/charts/matlab-forest.webp",
           "records": 1593,
           "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
           "detailPreview": "assets/charts/detail/matlab-forest.webp"
         }
       }

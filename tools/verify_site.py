@@ -63,20 +63,25 @@ def main():
     catalog=json.loads((ROOT/'gallery/catalog.json').read_text(encoding='utf-8'))['charts']
     require(len(catalog)==14,'Expected fourteen chart types')
     require([c['id'] for c in gallery['charts']]==[c['id'] for c in catalog],'Chart catalog mismatch')
+    require(set(gallery['languages'])=={'zh','en'},'Missing figure language')
     for chart in gallery['charts']:
-        for backend in ('python','matlab'):
-            output=chart['outputs'][backend];p=DOCS/output['path']
-            require(p.is_file() and (DOCS/output['preview']).is_file(),'Missing chart output')
-            require(hashlib.sha256(p.read_bytes()).hexdigest()==output['sha256'],'Chart output hash mismatch')
-            if backend=='python':require(p.read_bytes()[:8]==b'\x89PNG\r\n\x1a\n','Invalid PNG signature')
-            else:
-                meta=inspect_emf(p);require(meta['records']>100,'Insufficient native EMF records')
-                require(meta['embeddedRasterRecords']==0,'Embedded raster layer in EMF demonstration')
-                require((DOCS/output['detailPreview']).is_file(),'Missing detailed EMF browser preview')
+        for language in ('zh','en'):
+            for backend in ('python','matlab'):
+                output=chart['languages'][language][backend];p=DOCS/output['path']
+                require(p.is_file() and (DOCS/output['preview']).is_file(),'Missing chart output')
+                require(hashlib.sha256(p.read_bytes()).hexdigest()==output['sha256'],'Chart output hash mismatch')
+                if backend=='python':require(p.read_bytes()[:8]==b'\x89PNG\r\n\x1a\n','Invalid PNG signature')
+                else:
+                    meta=inspect_emf(p);require(meta['records']>100,'Insufficient native EMF records')
+                    require(meta['embeddedRasterRecords']==0,'Embedded raster layer in EMF demonstration')
+                    require((DOCS/output['detailPreview']).is_file(),'Missing detailed EMF browser preview')
+                    require(any(f['family']=='Times New Roman' and f['weight']==400 for f in meta['fonts']),'Missing regular Times New Roman in EMF')
+                    if language=='zh':require(any(f['family'] in {'Microsoft YaHei','微软雅黑'} and f['weight']>=700 for f in meta['fonts']),'Missing bold Microsoft YaHei in Chinese EMF')
+                    else:require(all(f['family']=='Times New Roman' and f['weight']==400 for f in meta['fonts']),'Unexpected font in English EMF')
     video=manifest['video']
     for key in ('src','poster','captions'):require((DOCS/video[key]).is_file(),'Missing chart video resource')
     require(20<video['duration']<120,'Unexpected chart video duration')
-    print(json.dumps({'status':'pass','chartFamilies':len(catalog),'nativeOutputs':len(catalog)*2,'siteAssets':len(assets),'documentArtifacts':0,'skillSha256':manifest['sha256']},indent=2))
+    print(json.dumps({'status':'pass','chartFamilies':len(catalog),'languages':2,'nativeOutputs':len(catalog)*4,'siteAssets':len(assets),'documentArtifacts':0,'skillSha256':manifest['sha256']},indent=2))
 
 
 if __name__=='__main__':main()

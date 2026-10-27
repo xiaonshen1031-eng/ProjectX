@@ -1,9 +1,11 @@
-function build_matlab(selected)
+function build_matlab(selected,language)
 % Six independent chart demonstrations, exported natively as Windows EMF.
 % Input: analytic / seeded illustrative data from build_python.py.
 % No project document or client data is read by this generator.
 root = fileparts(fileparts(mfilename('fullpath')));
 out = fullfile(root,'docs','downloads','figures','matlab');
+if nargin<2,language='en';end
+if strcmp(language,'zh'),out=fullfile(out,'zh');end
 if ~exist(out,'dir'), mkdir(out); end
 data = jsondecode(fileread(fullfile(root,'gallery','demo-data.json')));
 set(groot,'DefaultFigureVisible','off','DefaultTextInterpreter','none', ...
@@ -11,12 +13,13 @@ set(groot,'DefaultFigureVisible','off','DefaultTextInterpreter','none', ...
 names = {'trajectory','ridges','chord','cluster','spatial','feasibility'};
 builders = {@trajectory,@ridges,@chord,@cluster,@spatial,@feasibility};
 for k = 1:numel(names)
-    if nargin>0 && ~any(strcmp(cellstr(selected),names{k})),continue;end
+    if nargin>0 && ~isempty(selected) && ~any(strcmp(cellstr(selected),names{k})),continue;end
     fig = builders{k}(data.(names{k}));
     drawnow;
-    print(fig,fullfile(out,[names{k} '.emf']),'-dmeta');
+    apply_figure_language(fig,language);
+    print(fig,fullfile(out,[names{k} '.emf']),'-dmeta','-vector');
     close(fig);
-    fprintf('MATLAB EMF: %s\n',names{k});
+    fprintf('MATLAB EMF: %s %s\n',language,names{k});
 end
 end
 

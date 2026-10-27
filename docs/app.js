@@ -49,32 +49,46 @@
   const chartDialog=$('#chart-dialog'),videoDialog=$('#video-dialog'),video=$('#demo-video');
   const charts=$$('.chart-card');
   const titles=Object.fromEntries(charts.map(card=>[card.dataset.chart,$('h3',card).textContent]));
-  let mode='python',category='all',query='',selectedChart='gantt',release;
+  const chartMetadata=Object.fromEntries(charts.map(c=>[c.dataset.chart,{zh:{title:c.dataset.titleZh,description:c.dataset.descriptionZh,tags:c.dataset.tagsZh},en:{title:c.dataset.titleEn,description:c.dataset.descriptionEn,tags:c.dataset.tagsEn}}]));
+  let mode='python',language='zh',category='all',query='',selectedChart='gantt',release;
+  try{const saved=localStorage.getItem('projectx-figure-language');if(['zh','en'].includes(saved))language=saved;}catch{}
   const pickerButtons=$$('[data-pick]');
-  const searchText=Object.fromEntries(charts.map(c=>[c.dataset.chart,($('figcaption',c).textContent+' '+pickerButtons.find(b=>b.dataset.pick===c.dataset.chart).textContent).toLowerCase()]));
+  const searchText=Object.fromEntries(charts.map(c=>[c.dataset.chart,($('figcaption',c).textContent+' '+pickerButtons.find(b=>b.dataset.pick===c.dataset.chart).textContent+' '+Object.values(chartMetadata[c.dataset.chart].en).join(' ')).toLowerCase()]));
   const availableCharts=()=>charts.filter(c=>(category==='all'||c.dataset.family===category)&&(!query||searchText[c.dataset.chart].includes(query)));
   const extension=()=>mode==='matlab'?'emf':'png';
   const format=()=>extension().toUpperCase();
   const modeLabel=()=>mode==='matlab'?'MATLAB / EMF':'Python / PNG';
-  const original=slug=>`downloads/figures/${mode}/${slug}.${extension()}`;
-  const preview=slug=>`assets/charts/${mode}-${slug}.webp`;
+  const languageLabel=()=>language==='zh'?'中文':'英文';
+  const original=slug=>`downloads/figures/${mode}/${language==='zh'?'zh/':''}${slug}.${extension()}`;
+  const preview=slug=>`assets/charts/${language==='zh'?'zh/':''}${mode}-${slug}.webp`;
   function refreshDialog(){
     if(!selectedChart)return;
     const zoomed=chartDialog.classList.contains('is-zoomed');
-    $('#lightbox-image').src=zoomed?(mode==='python'?original(selectedChart):`assets/charts/detail/matlab-${selectedChart}.webp`):preview(selectedChart);$('#lightbox-image').alt=titles[selectedChart]+'，'+modeLabel()+'模式';
-    $('#chart-dialog-title').textContent=titles[selectedChart];$('#dialog-mode-label').textContent=modeLabel().toUpperCase();
-    $('#dialog-download').href=original(selectedChart);$('#dialog-download').textContent=`下载${format()}原图 ↘`;
+    $('#lightbox-image').src=zoomed?(mode==='python'?original(selectedChart):`assets/charts/detail/${language==='zh'?'zh/':''}matlab-${selectedChart}.webp`):preview(selectedChart);$('#lightbox-image').alt=titles[selectedChart]+'，'+languageLabel()+'，'+modeLabel()+'模式';
+    chartDialog.dataset.figureLang=language;$('#chart-dialog-title').textContent=titles[selectedChart];$('#dialog-mode-label').textContent=languageLabel()+' · '+modeLabel();
+    $('#dialog-download').href=original(selectedChart);$('#dialog-download').textContent=`下载${languageLabel()}${format()}原图 ↘`;$('#dialog-download').download=`${selectedChart}-${language}.${extension()}`;
     const extra=charts.find(c=>c.dataset.chart===selectedChart).dataset.extra==='true'?'_extra':'';
-    $('#dialog-source').href=`https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/build_${mode}${extra}.${mode==='matlab'?'m':'py'}`;
+    $('#dialog-source').href=`https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/${mode==='python'?'build_bilingual.py':'build_matlab'+extra+'.m'}`;
+    $('#dialog-backend').value=mode;$('#dialog-language').value=language;
     $$('[data-dialog-step]').forEach(button=>button.disabled=availableCharts().length<2);
   }
   function setMode(value){
     if(!['python','matlab'].includes(value))return;mode=value;
     $$('[data-mode]').forEach(b=>{const on=b.dataset.mode===mode;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});
-    charts.forEach(card=>{const slug=card.dataset.chart;$('img',card).src=preview(slug);$('.chart-format',card).textContent=modeLabel().toUpperCase();const link=$('.chart-download',card);link.href=original(slug);link.textContent=format()+' ↘';link.setAttribute('aria-label',`下载${titles[slug]}${format()}原图`);});
+    refreshCards();
     updateCount();if(chartDialog.open)refreshDialog();
   }
-  function updateCount(){const available=availableCharts(),index=available.findIndex(c=>c.dataset.chart===selectedChart)+1;$('#collection-status').textContent=available.length?`${modeLabel()} · 第${index}张 / 筛选到${available.length}类 · 共${charts.length}类图型`:'没有匹配的图型';$('#chart-prev').disabled=available.length<2;$('#chart-next').disabled=available.length<2;}
+  function refreshCards(){
+    const familyEn={time:'Time and scheduling',distribution:'Distributions',relation:'Relations and composition',space:'Space and constraints',evaluation:'Evaluation'};
+    charts.forEach(card=>{const slug=card.dataset.chart,meta=chartMetadata[slug][language];titles[slug]=meta.title;card.dataset.figureLang=language;card.lang=language==='zh'?'zh-CN':'en';$('h3',card).textContent=meta.title;$('figcaption>p',card).textContent=meta.description;$('.chart-tags',card).textContent=meta.tags;$('img',card).src=preview(slug);$('img',card).alt=language==='zh'?meta.title+'，中文':meta.title+' — English figure';$('[data-open]',card).setAttribute('aria-label',language==='zh'?'查看'+meta.title+'大图':'View '+meta.title+' full size');$('.chart-format',card).textContent=modeLabel();const link=$('.chart-download',card);link.href=original(slug);link.textContent=(language==='zh'?'中文 ':'EN ')+format()+' ↘';link.download=`${slug}-${language}.${extension()}`;link.setAttribute('aria-label',`下载${languageLabel()}${meta.title}${format()}原图`);const picker=pickerButtons.find(p=>p.dataset.pick===slug);$('strong',picker).textContent=meta.title;$('small',picker).textContent=language==='zh'?{time:'时序与调度',distribution:'分布比较',relation:'关联与构成',space:'空间与约束',evaluation:'评估对比'}[card.dataset.family]:familyEn[card.dataset.family];});
+    $('.atlas-picker').dataset.figureLang=language;$('#gallery').dataset.figureLang=language;
+  }
+  function setLanguage(value){
+    if(!['zh','en'].includes(value))return;language=value;
+    $$('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===language)));
+    refreshCards();syncMobilePicker();$('#mobile-chart-picker').value=selectedChart||'';updateCount();if(chartDialog.open)refreshDialog();try{localStorage.setItem('projectx-figure-language',language);}catch{}
+  }
+  function updateCount(){const available=availableCharts(),index=available.findIndex(c=>c.dataset.chart===selectedChart)+1;$('#collection-status').textContent=available.length?`${languageLabel()} · ${modeLabel()} · 第${index}张 / 筛选到${available.length}类 · 共${charts.length}类图型`:'没有匹配的图型';$('#chart-prev').disabled=available.length<2;$('#chart-next').disabled=available.length<2;}
   function syncMobilePicker(){const select=$('#mobile-chart-picker');select.replaceChildren();availableCharts().forEach(c=>{const option=document.createElement('option');option.value=c.dataset.chart;option.textContent=titles[c.dataset.chart];select.append(option);});select.disabled=!select.options.length;}
   function selectChart(slug,focus=false){
     selectedChart=slug;
@@ -100,13 +114,17 @@
   $('#clear-search').addEventListener('click',()=>{query='';$('#chart-search').value='';filterCharts();$('#chart-search').focus({preventScroll:true});});
   $('#reset-atlas').addEventListener('click',()=>{query='';category='all';$('#chart-search').value='';$$('[data-category]').forEach(b=>{const active=b.dataset.category==='all';b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});filterCharts();});
   $('#mobile-chart-picker').addEventListener('change',event=>selectChart(event.target.value));
+  $$('[data-lang]').forEach(button=>button.addEventListener('click',()=>setLanguage(button.dataset.lang)));
+  $('#dialog-backend').addEventListener('change',event=>setMode(event.target.value));
+  $('#dialog-language').addEventListener('change',event=>setLanguage(event.target.value));
+  setLanguage(language);
   filterCharts();
   $$('[data-use-mode]').forEach(button=>button.addEventListener('click',()=>{setMode(button.dataset.useMode);$('#gallery').scrollIntoView({behavior:reduced?'auto':'smooth'});$('.mode-switch [data-mode="'+mode+'"]').focus({preventScroll:true});}));
   $$('[data-open]').forEach(button=>button.addEventListener('click',()=>{selectedChart=button.dataset.open;chartDialog.classList.remove('is-zoomed');refreshDialog();$('#image-zoom').setAttribute('aria-pressed','false');$('#image-zoom').textContent='放大查看';chartDialog.showModal();document.body.style.overflow='hidden';}));
   function toggleZoom(){const active=chartDialog.classList.toggle('is-zoomed');$('#image-zoom').setAttribute('aria-pressed',String(active));$('#image-zoom').textContent=active?'适合屏幕':'放大查看';refreshDialog();}
   $('#image-zoom').addEventListener('click',toggleZoom);$('#lightbox-image').addEventListener('click',toggleZoom);
   $$('[data-dialog-step]').forEach(b=>b.addEventListener('click',()=>cycleChart(Number(b.dataset.dialogStep))));
-  chartDialog.addEventListener('keydown',event=>{if(!chartDialog.classList.contains('is-zoomed')&&(event.key==='ArrowLeft'||event.key==='ArrowRight')){event.preventDefault();cycleChart(event.key==='ArrowLeft'?-1:1);}});
+  chartDialog.addEventListener('keydown',event=>{if(event.target.closest('select,input,textarea'))return;if(!chartDialog.classList.contains('is-zoomed')&&(event.key==='ArrowLeft'||event.key==='ArrowRight')){event.preventDefault();cycleChart(event.key==='ArrowLeft'?-1:1);}});
   function openVideo(start){
     if(!videoDialog.open)videoDialog.showModal();document.body.style.overflow='hidden';
     if(Number.isFinite(start)){if(video.readyState>=1)video.currentTime=start;else video.addEventListener('loadedmetadata',()=>{video.currentTime=start;},{once:true});}

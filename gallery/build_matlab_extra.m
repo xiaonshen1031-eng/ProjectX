@@ -1,15 +1,18 @@
-function build_matlab_extra(selected)
+function build_matlab_extra(selected,language)
 % Eight additional chart families from independent illustrative data.
 root=fileparts(fileparts(mfilename('fullpath')));
-out=fullfile(root,'docs','downloads','figures','matlab');if ~exist(out,'dir'),mkdir(out);end
+out=fullfile(root,'docs','downloads','figures','matlab');
+if nargin<2,language='en';end
+if strcmp(language,'zh'),out=fullfile(out,'zh');end
+if ~exist(out,'dir'),mkdir(out);end
 d=jsondecode(fileread(fullfile(root,'gallery','extra-data.json')));
 set(groot,'DefaultFigureVisible','off','DefaultTextInterpreter','none','DefaultAxesTickLabelInterpreter','none','DefaultLegendInterpreter','none');
 names={'sankey','raincloud','polar','parallel','calibration','spectrum','forest','gantt'};
 builders={@sankey,@raincloud,@polar,@parallel,@calibration,@spectrum,@forest,@gantt};
 for k=1:numel(names)
-    if nargin>0 && ~any(strcmp(cellstr(selected),names{k})),continue;end
-    f=builders{k}(d.(names{k}));drawnow;print(f,fullfile(out,[names{k} '.emf']),'-dmeta','-vector');close(f);
-    fprintf('MATLAB EMF: %s\n',names{k});
+    if nargin>0 && ~isempty(selected) && ~any(strcmp(cellstr(selected),names{k})),continue;end
+    f=builders{k}(d.(names{k}));drawnow;apply_figure_language(f,language);print(f,fullfile(out,[names{k} '.emf']),'-dmeta','-vector');close(f);
+    fprintf('MATLAB EMF: %s %s\n',language,names{k});
 end
 end
 
