@@ -19,6 +19,11 @@ try {
     $deck.Close(); $deck = $null
     $deck = $ppt.Presentations.Open($copy, $false, $false, $false)
     $pages = @()
+    $width = [double]$deck.PageSetup.SlideWidth
+    $height = [double]$deck.PageSetup.SlideHeight
+    $scale = [Math]::Min(1600 / $width, 900 / $height)
+    $exportWidth = [int][Math]::Round($width * $scale)
+    $exportHeight = [int][Math]::Round($height * $scale)
     foreach ($slide in $deck.Slides) {
         $charts = 0; $tables = 0; $native = 0; $texts = 0
         foreach ($shape in $slide.Shapes) {
@@ -30,7 +35,7 @@ try {
             }
         }
         $image = Join-Path $target ('slide_{0:00}.png' -f $slide.SlideIndex)
-        $slide.Export($image, 'PNG', 1600, 900)
+        $slide.Export($image, 'PNG', $exportWidth, $exportHeight)
         $pages += [ordered]@{ slide=[int]$slide.SlideIndex; charts=$charts; tables=$tables; mathtype=$native; text_shapes=$texts; image=[System.IO.Path]::GetFileName($image) }
     }
     # SaveAs PDF avoids optional-argument COM marshaling differences in PS 5.1.
@@ -42,8 +47,10 @@ try {
         source_sha256=(Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash.ToLowerInvariant()
         output_sha256=(Get-FileHash -LiteralPath $copy -Algorithm SHA256).Hash.ToLowerInvariant()
         slide_count=[int]$deck.Slides.Count
-        width_pt=[double]$deck.PageSetup.SlideWidth
-        height_pt=[double]$deck.PageSetup.SlideHeight
+        width_pt=$width
+        height_pt=$height
+        export_width_px=$exportWidth
+        export_height_px=$exportHeight
         slides=$pages
     }
     $result | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath (Join-Path $target 'ppt_roundtrip.json') -Encoding UTF8

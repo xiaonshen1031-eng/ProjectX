@@ -4,7 +4,7 @@
 
 ProjectX是面向委托研究与工程技术项目的Skill，配合能够读取文件、运行脚本的研究助手使用。从任务书、已有数据与客户模板开始，衔接建模计算、结果分析、技术报告和模板PPT。
 
-[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.1.0.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [可视化源码](gallery/README.md)
+[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能 v1.2.1](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.2.1.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [可视化源码](gallery/README.md)
 
 Copyright © NCEPU-Senior · Author: XiaoN
 
@@ -20,6 +20,8 @@ Copyright © NCEPU-Senior · Author: XiaoN
 | 成果交付 | 按模板整理报告与汇报，检查公式、图表和页面 | 技术报告、PPT、图件与计算材料 |
 
 报告工作流包括正文、黑色三线表、MathType居中编号公式和参考文献处理；PPT工作流包括学习客户模板的语言与排版、组织模型与算例、检查可编辑对象和页面。技能还包含经验维护与回归检查要求。具体计算与Office交付使用本地已配置的工具。
+
+v1.2.1 继承基于 NPS Research Paper 3.2.4 Project 分支的升级，补齐分配图源数据和最终稿审阅记录的校验。新模板可从实际数据复绘配对区间、容量阈值和流程图。Word 可按图题换图、校核引文字段和保护局部修订中的原生公式。PPT 按当前模板比例导出，局部改版可比对原生图表数据及工作簿。中文检查增加了对并列堆叠、图表复述和段落衔接的判断。测试范围见[版本验证](skill/senior-projectx/references/release-validation.md)。
 
 ## 结果可视化
 
@@ -41,7 +43,7 @@ Copyright © NCEPU-Senior · Author: XiaoN
 
 > 请使用Senior-ProjectX，先阅读我的项目任务书、已有数据和客户模板，梳理我负责部分的研究对象、模型输入与输出，再完成建模计算、对比分析和结果阐释。图表按问题选择，使用MATLAB导出EMF或Python导出PNG，最后按模板整理技术报告、PPT与计算源码。
 
-完整技能说明见[SKILL.md](skill/senior-projectx/SKILL.md)。Python绘图使用科学计算与绘图库；MATLAB的EMF导出使用Windows MATLAB。原生Office与MathType处理使用已配置的本地环境。
+完整技能说明见[SKILL.md](skill/senior-projectx/SKILL.md)。Python 工具需要 3.10 或更新版本，依赖见 [requirements.txt](skill/senior-projectx/requirements.txt)。MATLAB 的 EMF 导出使用 Windows MATLAB。原生 Office 和 MathType 处理使用已配置的本地环境。
 
 ## 网站源码
 

@@ -50,6 +50,16 @@ Captions identify the object, condition, and visual encoding without repeating t
 
 Conclusions answer the commissioned question and connect the established technical findings without replaying the full analysis or adding an automatic limitations checklist.
 
+## 中文工程算例
+
+以下为教学数据。某制冷设备可降低用电功率 30 kW，降载期间温度按 0.2 °C/min 上升，运行上限为 30 °C。研究要判断它能否提供 20 min 服务。
+
+**任务和方法。** 用温度上限减去起始温度得到可用热裕度。热裕度除以升温速率得到达限时刻。实际服务时长取达限时间与 20 min 窗口的较小值，按 30 kW 对服务时间积分。
+
+**结果分析。** 起始温度为 24 °C 时，设备在窗口内可连续降载 20 min，减少用电 10 kWh。起始温度为 28 °C 时，第 10 min 即达到温度限值，减少用电 5 kWh。维持 20 min 至少需要 4 °C 热裕度，因此在上述升温率和限值下，可把起始温度不高于 26 °C 的设备计入该项服务。28 °C 工况可按 10 min 能力安排。温度、减载功率按时间对齐绘图，限值和窗口一并标出。
+
+如果数据只给出两组降载时长，而未提供温升观测或模型，正文只比较该条件下的服务时长及电量。热裕度可作为待验证因素，不能直接给出 26 °C 门槛。与设备实测数据的关系取决于可用证据。
+
 ## Automated screen
 
-`check_writing_quality.py` reports paragraph location, original text, reason, and contextual advice. `--language auto` selects Chinese when the body contains substantial Chinese text; use an explicit language for mixed reports. Select `--manuscript-mode project` and use `--require-clean` for final DOCX: unresolved candidates require rewriting and rescanning, or a source-bound scientific-content review with a specific reason. Confirmed rhetorical defects cannot be waived. Explicit placeholders and confirmed source contamination also block delivery. Complete a full manual semantic reading of current body, captions, table text and conclusions; the advisory draft command, a high screen score or zero regex matches cannot substitute for that reading or permit unresolved final prose.
+`check_writing_quality.py` reports paragraph location, original text, reason, and contextual advice. Select an explicit language for mixed reports. Use `--manuscript-mode project --require-clean` for final DOCX and follow [the current-text review rules](writing-and-release.md#只读检查与复核). Review the actual report for relations, evidence and textual continuity after resolving the candidates.

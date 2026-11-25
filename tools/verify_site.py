@@ -4,7 +4,7 @@ from html.parser import HTMLParser
 from urllib.parse import urlsplit,unquote
 from zipfile import ZipFile
 import hashlib,json,re,struct
-from build_release import source_bytes
+from build_release import source_bytes, source_files
 from prepare_gallery import inspect_emf
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -55,6 +55,9 @@ def main():
     require(hashlib.sha256(package.read_bytes()).hexdigest()==manifest['sha256'],'Skill hash mismatch')
     with ZipFile(package) as archive:
         require(archive.testzip() is None,'Corrupt skill archive')
+        expected={f.relative_to(ROOT/'skill').as_posix() for f in source_files(ROOT/'skill/senior-projectx')}
+        names=archive.namelist()
+        require(len(names)==len(expected) and set(names)==expected,'Skill archive inventory mismatch')
         for name in archive.namelist():
             require(name.startswith('senior-projectx/') and '..' not in Path(name).parts,'Invalid skill path')
             source=ROOT/'skill'/name

@@ -11,7 +11,7 @@ from pathlib import Path
 
 from docx import Document
 
-from manuscript_prose_rules import editorial_screen, read_reviews
+from manuscript_prose_rules import ARTIFACT_NUMBER, ARTIFACT_RE, editorial_screen, read_reviews
 
 
 PROMPT_RESIDUE = [
@@ -208,17 +208,17 @@ MECHANISM_WORDS = re.compile(
     r"sensitivity|consistent|inconsistent|boundary|constraint|trade-off)\b",
     re.IGNORECASE,
 )
-FIG_TAB_REF = re.compile(r"(?:\b(?:Figure|Fig\.|Table)\s+\d+\b|(?:图|表)\s*\d+)", re.IGNORECASE)
+FIG_TAB_REF = ARTIFACT_RE
 FIG_CAPTION_RE = re.compile(
-    r"^(?:(?:Figure|Fig\.)\s+\d+|图\s*\d+)"
-    r"(?:\s*[\.:：]\s*|\s+(?!(?:shows?|presents?|illustrates?|reports?|depicts?|indicates?|demonstrates?|"
-    r"显示|表明|给出|展示)\b))",
+    rf"^(?:(?:Figure|Fig\.)\s+|图\s*){ARTIFACT_NUMBER}"
+    r"(?:\s*[:：.]\s*|\s+(?=\S)(?!(?:shows?|presents?|illustrates?|reports?|depicts?|indicates?|demonstrates?)\b|"
+    r"中|的|显示|表明|给出|展示))",
     re.IGNORECASE,
 )
 TAB_CAPTION_RE = re.compile(
-    r"^(?:Table\s+\d+|表\s*\d+)"
-    r"(?:\s*[\.:：]\s*|\s+(?!(?:shows?|presents?|reports?|lists?|summarizes?|"
-    r"显示|表明|给出|列出|汇总)\b))",
+    rf"^(?:Table\s+|表\s*){ARTIFACT_NUMBER}"
+    r"(?:\s*[:：.]\s*|\s+(?=\S)(?!(?:shows?|presents?|reports?|lists?|summarizes?)\b|"
+    r"中|的|显示|表明|给出|列出|汇总))",
     re.IGNORECASE,
 )
 
@@ -1145,7 +1145,7 @@ def main() -> int:
     parser.add_argument("--evidence-role-map", default="", help="Optional JSON with artifacts[].id/role/claimed_as metadata.")
     parser.add_argument("--allow-acronym", action="append", default=[], help="Venue/domain-standard acronym to exclude from undefined-acronym diagnostics. Can be repeated.")
     parser.add_argument("--require-clean", action="store_true", help="Journal/Conference/Project final gate: reject unresolved editorial candidates or invalid review decisions. The ordinary draft command remains advisory.")
-    parser.add_argument("--review-decisions", default="", help="JSON reviews with candidate_id, decision=scientific_content and a specific scientific reason; rewritten text must be rescanned.")
+    parser.add_argument("--review-decisions", default="", help="JSON decisions keyed by current candidate_id. Use scientific_content for a concrete technical use, or required_disclosure with a specific reason and source quote for explicitly requested record status.")
     args = parser.parse_args()
     role_map = load_evidence_role_map(Path(args.evidence_role_map).resolve()) if args.evidence_role_map else None
     result = inspect_writing(

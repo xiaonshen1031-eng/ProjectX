@@ -36,6 +36,14 @@ Use the document's established caption style and declared equation backend. For 
 
 Existing native media should remain intact. For a narrowly patched DOCX, compare only affected package parts and the existing OLE/media payloads needed to demonstrate preservation. A relationship/media inventory is useful when there is a concrete risk of lost formulas or unintended image substitution; it is not a universal checksum requirement.
 
+Use the bounded replacement helper when the authorized figure is one inline picture in the paragraph immediately above a uniquely matching, complete caption in the main story. Prepare a CSV with caption, file_path and optional width_cm. Relative paths resolve from the CSV. The helper supports PNG, JPEG, TIFF and EMF. It preserves the present width when width_cm is omitted and derives height from the verified image dimensions. Use a native editor for layouts with crop, rotation, floating or grouped objects, MathType overlays, or captions inside tables.
+
+~~~powershell
+python scripts/replace_docx_figures.py report.docx replacements.csv report_revised.docx
+~~~
+
+The helper creates a new file and retargets the selected drawing without deleting another picture that shares the previous asset. Confirm the resulting layout in Word. See [figure display repair](figure-display-repair.md) when a single renderer produces clipping, substitution or glyph loss.
+
 ## Renumber captions and references together
 
 Determine whether captions and references are static text, `SEQ`/`REF` fields, bookmarks or a mixture. Keep native field relationships when present and update their displayed results through Word when needed.

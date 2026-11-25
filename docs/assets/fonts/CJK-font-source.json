@@ -2,7 +2,7 @@
   "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/notosanssc/NotoSansSC%5Bwght%5D.ttf",
   "license": "SIL Open Font License 1.1",
   "licenseFile": "NotoSansSC-OFL.txt",
-  "subset": "Characters used in the public index.html, app.js and video captions",
-  "characters": 501,
-  "bytes": 133160
+  "subset": "Characters used in public HTML, JavaScript, CSS and video captions",
+  "characters": 474,
+  "bytes": 125228
 }

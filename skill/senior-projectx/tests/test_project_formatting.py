@@ -145,6 +145,11 @@ class ProjectFormattingTests(unittest.TestCase):
             for token in ["PRIVATE_INTERNAL_PATH", "JSON 指针", "章节 brief", "证据链", "success 布尔", "复核职责"]:
                 self.assertNotIn(token, text)
             self.assertIn("合成", text)  # Do not erase the factual source classification.
+            hard_breaks = doc.element.xpath(".//w:br[@w:type='page']|.//w:pageBreakBefore")
+            self.assertFalse(hard_breaks, "The allocation example should flow across pages")
+            result_captions = [p for p in doc.paragraphs if p.text.startswith(("图1 ", "图2 "))]
+            self.assertEqual(len(result_captions), 2)
+            self.assertTrue(all(p.paragraph_format.keep_with_next for p in result_captions))
             self.assertEqual(built["status"], "conversion_pending")
             source = json.loads(inventory.read_text(encoding="utf-8"))
             self.assertTrue(any(f["placement"] == "inline" for f in source["formulas"]))

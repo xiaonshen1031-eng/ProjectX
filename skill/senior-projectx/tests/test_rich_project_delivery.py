@@ -4,6 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from zipfile import ZipFile
+import pandas as pd
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / 'scripts'))
@@ -50,10 +51,24 @@ class RichProjectDeliveryTests(unittest.TestCase):
             atlas = manifest['artifacts'][-1]
             self.assertEqual(sum('allocation_' in path for path in atlas['source']), 6)
             missing = root / 'data/results/scenarios/allocation_0.80.csv'
-            missing.write_bytes(missing.read_bytes() + b'\n')
+            complete = missing.read_bytes()
+            trace = pd.read_csv(missing)
+            nonzero = trace.charge_kw.idxmax()
+            incomplete_output = root / 'figure/incomplete'
+            trace.drop(index=nonzero).to_csv(missing, index=False)
+            with self.assertRaisesRegex(ValueError, 'every vehicle and period'):
+                report.build_figures(*args[:-1], incomplete_output)
+            self.assertFalse(incomplete_output.exists())
+            trace.loc[nonzero, 'charge_kw'] += 1
+            trace.to_csv(missing, index=False)
+            with self.assertRaisesRegex(ValueError, 'reported mean capacity margin'):
+                report.build_figures(*args[:-1], incomplete_output)
+            self.assertFalse(incomplete_output.exists())
+            missing.write_bytes(complete + b'\n')
             self.assertEqual(policy.audit(manifest)['status'], 'fail')
             missing.unlink()
-            with self.assertRaises(FileNotFoundError): report.build_figures(*args)
+            with self.assertRaises(FileNotFoundError): report.build_figures(*args[:-1], incomplete_output)
+            self.assertFalse(incomplete_output.exists())
 
     def test_additive_primitive_requires_real_component_definition(self):
         layer = {'role': 'additive_composition', 'encoding': 'stacked_bar', 'evidence_source': 'allocation.csv',

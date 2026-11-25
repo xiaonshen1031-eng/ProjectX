@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "purpose": "Reusable bright role colors for engineering report figures. Customer templates and accepted figures control any existing mapping.",
+  "default_profile": "ink_bright",
+  "colors": {
+    "ink": "#131419",
+    "paper": "#FFFFFF",
+    "grid": "#DADAE2",
+    "jade": "#00A878",
+    "cobalt": "#2452DC",
+    "iris": "#5836CD",
+    "lilac": "#A878EB",
+    "raspberry": "#BD1751",
+    "sun": "#F3C329",
+    "rose": "#E765A2",
+    "jade_wash": "#E6F8F2",
+    "cobalt_wash": "#EAF0FF",
+    "iris_wash": "#F1EEFF",
+    "raspberry_wash": "#FFF1F5",
+    "sun_wash": "#FFF7DC"
+  },
+  "categorical_order": [
+    "jade",
+    "cobalt",
+    "lilac",
+    "iris",
+    "raspberry",
+    "sun",
+    "rose"
+  ],
+  "signed_stops": [
+    [
+      0.0,
+      "#3E2494"
+    ],
+    [
+      0.25,
+      "#8D76E3"
+    ],
+    [
+      0.43,
+      "#DCD4FC"
+    ],
+    [
+      0.5,
+      "#FFFFFF"
+    ],
+    [
+      0.76,
+      "#ED829F"
+    ],
+    [
+      1.0,
+      "#A71E4F"
+    ]
+  ],
+  "profiles": {
+    "ink_bright": {
+      "structure": "#131419",
+      "observation": "#2452DC",
+      "state": "#00A878",
+      "physical_path": "#BD1751",
+      "update": "#5836CD",
+      "attention": "#F3C329",
+      "sequential": "viridis",
+      "signed": "RdBu_r"
+    },
+    "limit_and_release": {
+      "structure": "#131419",
+      "observation": "#5836CD",
+      "state": "#00A878",
+      "physical_path": "#BD1751",
+      "update": "#2452DC",
+      "attention": "#F3C329",
+      "sequential": "viridis",
+      "signed": "RdBu_r"
+    }
+  },
+  "selection_rules": [
+    "Choose a small role-specific subset. A module number alone is not a color meaning.",
+    "Primary frames, text and connectors use structure. Color identifies scientific marks or the interiors of meaningful objects.",
+    "Use chromatic or open interiors for data marks, ink outlines and readable direct labels. Yellow or pale fills need an ink edge; use ink text against them.",
+    "Give categories marker, line or direct-label redundancy. Select sequential normalization for ordered magnitude and a meaningful signed pivot for differences.",
+    "Do not apply a palette to natural-color photographs or observational RGB pixels. A scalar physical field may use a documented shared physical display scale.",
+    "For new figures use the role palette when neither project identity nor the data define color. Keep previously accepted mappings when revising only content or export."
+  ]
+}

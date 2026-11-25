@@ -4,7 +4,7 @@
 
 Distinguish a conceptual mechanism, a method workflow, a verified result and an export/insertion task before selecting tools. Introduction mechanisms explain the research problem through the actual system; workflows expose method operations; result figures show outcomes supported by saved evidence. A local decision or safety-boundary verification belongs to the result class, even if it contains actions and successor states.
 
-Use `editable-diagram-playbook.md` for native overview/workflow/principle figures and connector repairs. Use `advanced-figure-workflow.md` plus one relevant plotting backend for results. Use `word-figure-integration.md` for an accepted user-edited source, EMF conversion, manuscript insertion and synchronized figure numbering. Do not demand Python/MATLAB for a requested VSDX diagram or redesign an accepted source just to export it.
+Use [Figure craft and replay](figure-craft-and-replay.md) for new figures and substantive redesign. Use `editable-diagram-playbook.md` for native overview/workflow/principle figures and connector repairs. Use `advanced-figure-workflow.md` plus one relevant plotting backend for results. Use `word-figure-integration.md` for an accepted user-edited source, EMF conversion, manuscript insertion and synchronized figure numbering. [Figure display repair](figure-display-repair.md) covers font, clipping and renderer defects.
 
 Use the task's current source, scientific question, final physical size and frozen revision constraints as the compact working contract. Existing notes or the per-figure mapping are sufficient; create no unused forms. Rendering, source inspection and editability tests must refer to that same saved revision.
 

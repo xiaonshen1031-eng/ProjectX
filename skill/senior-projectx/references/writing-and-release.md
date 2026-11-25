@@ -1,92 +1,64 @@
-# Technical report prose and final delivery
+# 技术报告写作与定稿
 
-Use this reference for continuous Chinese technical analysis. Current customer structure, language and format remain authoritative.
+按客户任务书和已确认的提纲行文。先读本段、相邻段落及对应的图、表或计算结果。保留已经说清技术关系的措辞。若问题出在模型、数据或计算上，先定位错误，再修订依赖该结论的正文。
 
-## Six defects that must be resolved before final delivery
+## 回答工程问题
 
-Every final manuscript and client report must contain no confirmed instance of the six defects below: experimental-report language (实验报告式语言), AI formulaic language (AI化语言), stacked language (堆叠式语言), redundancy (冗余语言), defensive prose (防御性表述) and mechanical prose (机械性表述). One occurrence is sufficient to require correction; low density does not excuse it. Apply the requirements to the abstract or executive summary, body, captions, table headings/cells/notes, conclusions, recommendations and scientific or technical appendices. A response letter and an internal research record are distinct artifacts with different purposes.
+每一节先确定读者要据此做的判断。比较受端供电时，交代各方案所用负荷时序、通道边界及供电条件。解释某个设备为什么少供时，把它的状态变化接到控制信号、持续时间或恢复限制上。看到不同结果源中的数值差异，先核对单位、时间窗、对象和比较基准。原因尚未确立时，给出可比事实及结论的适用范围。
 
-1. **Defensive prose.** Remove self-denial, apology, reassuring qualifications and sentences that introduce a capability and immediately deny the same capability. Do not append `we do not claim`, `should not be interpreted as`, `this does not undermine`, `although ... cannot ... still`, or their Chinese equivalents to protect an overstated claim. Rewrite the original claim to match the actual formulation and result. State genuine scientific conditions and observed adverse results directly where their interpretation requires them. A mathematical impossibility, feasibility restriction or factual evaluation setting is scientific content.
-2. **AI formulaic prose.** Remove stock praise, empty significance claims, invented slogan-like names, decorative quotation marks and sequence words doing the work of an argument. `首先/其次/最后`, `First/Second/Finally`, `证据链`, vague `核心价值`, and `provides valuable insights` must not remain as generic manuscript scaffolding. Use an established technical term or a defined mathematical operation. A term quoted from a cited standard, a defined new operator or actual numbered algorithm steps is different content and may be retained after contextual review.
-3. **Redundant prose.** Give each detailed scientific finding one principal analysis location. Do not interpret the same table values or figure pattern repeatedly under new synonyms. Methods specify the protocol; Results interpret the observations; the abstract and conclusion synthesize the supported capability. These distinct roles can refer to the same result without repeating its full analysis. Preserve a later passage when it adds a new condition, inference, discrepancy or consequence.
-4. **Stacked/cumulative phrasing.** Rewrite near-synonymous properties, abstract noun strings and chains such as `X and Y and Z`, `X, Y, Z and/or W`. Explain which quantity changes which operation or outcome. Keep scientifically necessary index sets, tensor dimensions, constraints and measured properties; make conjunction and alternatives exact. A short sentence with a concrete input/output relationship is preferable to a larger inventory of capabilities.
-5. **Mechanical prose and discontinuity.** Sentences and adjacent paragraphs must carry a scientific or engineering object or relation forward. Use a definition to introduce its derived quantity, an equation to explain its input/output, a discrepancy to motivate the next calculation, or a result to support a bounded inference. A connector such as `Furthermore` or `在此基础上` cannot supply a missing relation. Repeated paragraph skeletons and ordinal openings cannot replace that relation. Read the previous, current and following paragraph together; repair the relationship itself rather than changing transition words.
-6. **Experimental/process report language.** Keep run chronology, tuning diaries, desired win thresholds, author confirmations, pending cloud transfers, source-file inventories, checkpoint/checksum receipts, revision comments and audit status in an external JSON or Markdown record. Final prose receives the actual scientific protocol and verified finding. A paragraph explaining why an artifact passes an internal criterion is a research record, not result analysis. Replace empty agenda/report openings such as `This experiment is intended to`, `The purpose of this diagnostic is`, `本次实验`, `为验证有效性` and an unsupported `实验结果表明` with the actual object, observation and interpretation. A substantive experiment-design description belongs in Methods; a commissioned technical report still uses its accepted engineering structure and tone.
+| 需要说明的问题 | 对应的依据 |
+| --- | --- |
+| 指标有何变化 | 同口径的对照值、差值及对象。用表格保存完整结果，正文选能改变判断的量。 |
+| 哪项约束起作用 | 可行域、状态轨迹、触界时刻或只改变该条件的对照。多个条件同时变化时，报告联合变化或仍可拆分的证据。 |
+| 结果能否指导调用 | 服务窗口、功率和电量要求、绑定约束及适用工况。运行方案还需核对窗后恢复或可能出现的新峰。 |
+| 指标随工况如何变化 | 分情景对照或样本分布。不同种子衡量拟合波动，对已有结果重抽样衡量样本波动，分别据此解释。 |
 
-No automatic edit may delete unfavorable observations, mathematical constraints, uncertainty, source attribution, required disclosures or reproducibility-critical scientific details. A reviewer may retain a flagged phrase only because its present use is concrete scientific content, not because a rhetorical defect is preferred or convenient. Anti-template screening is not a claim about AI authorship.
+没有联合目标时，按各指标说明不同决策代价。保留负结果、误差和数据覆盖条件。在它们影响推断的位置写清一次。变化原因可由推导、同步测量或受控比较支持。仅有同向变化时，说明关联到了哪个状态或时段，原因留在可检验假设层面。资料待回收是工作状态，不能代替比较的协议、实际数值和推断。客户明确要求的可用性说明应据实放在对应栏目。
 
-## Editing examples
+## 六类常见问题
 
-Examples illustrate editing operations; their values are hypothetical and must not become paper results.
+对摘要、正文、题注、表内文字、表注、结论、建议和技术附录逐段判断。这些类型是诊断线索，判定依据是当前用法。
 
-| Defect | Before | Scientifically valid revision |
-| --- | --- | --- |
-| Defensive self-denial | `The method supports reliable operation, but it cannot provide evidence for operational decisions.` | If only forecasts were evaluated: `The method predicts hourly station load under the evaluated demand conditions.` Remove the unsupported operational claim at its source. |
-| Reassurance after adverse evidence | `Although the method loses at H24, this does not undermine its usefulness.` | `At H24, the baseline has lower MAE; the additional error is concentrated after the demand transition.` Include the concentration statement only when the residual data support it. |
-| Chinese self-defense | `虽然模型不能描述所有波动，但仍具有一定参考价值。` | `模型状态由日尺度负荷构成，状态方程描述日尺度变化。` State actual modeled resolution without a reassuring evaluation. |
-| Empty language and invented label | `首先构建“证据驱动核心闭环”，其次全面提升鲁棒性。` | `式（8）的残差统计量用于更新融合权重。更新后的权重用于下一预测时刻。` Use only the actual implemented dependency. |
-| Noun accumulation | `The module improves accuracy, robustness, reliability, stability, and generalization.` | Report the measured error change, then explain a distinct perturbation result if one exists. Do not claim unmeasured properties. |
-| Table replay | A paragraph reproduces all rows of Table 4, followed by another paragraph explaining the same ranks. | Keep Table 4's exact matrix, use one decisive magnitude or exception, and explain the corresponding mechanism once. |
-| Disconnected sentences | `The predictor uses a 24-step input. Communication restoration is important.` | If no scientific dependency exists, move the second statement to its actual context. If predictor output enters a restoration decision, define that input explicitly. Do not invent a connection. |
-| Tuning diary | `The configuration was tuned until routing achieved 3/4 wins and passed acceptance.` | Keep the trial history and target in the experiment record. In the paper, state the actual selection objective in Methods and verified paired errors in Results. |
-| File/audit receipt | `The figure was regenerated, saved, and hash verified.` | Remove the receipt from the manuscript and keep it in the internal record only when it serves a real consumer. |
+| 问题 | 修订办法 |
+| --- | --- |
+| 实验报告式 | 把“本次实验旨在验证有效性”改为实际对照、观察结果和工程后果。对象、初始条件及求解方法集中在复算需要的位置。运行顺序、调参记录和文件核验归入实际需要的工作记录。 |
+| AI 套话 | 删除“构建证据闭环”“提供重要支撑”等空转表述。写出谁接收哪种数据，计算量如何进入约束或评价。法规和标准中的准确术语可按其定义使用。 |
+| 堆叠 | 读清“负荷形态和调节能力与运行风险以及恢复特征”中各项之间的关系。可先说明负荷峰时，再写该小时的可调功率及回补条件。索引集、独立约束及测量对象的必要并列应完整保留。 |
+| 冗余 | 给每个现象一个完整分析位置。结论复用同一结果时要给出项目判断。若另一处新增了条件、缺口、推断或应用，它仍有独立作用。 |
+| 防御性 | 去掉对自身价值的安抚或评价，按实际工况说明观测值、不可行条件或必要的范围。边界内外的不同表现和真实不利结果是分析内容。 |
+| 机械割裂 | 找到一段的输出如何变成下一段的输入。例：“式（5）给出每小时可转移电量。排程按该电量修正原始曲线，并将回补放入恢复窗口。” 关系未建立时，换连接词也不能改善可读性。 |
 
-These sentences preserve normal science and do not require defensive framing:
+先恢复实际依赖，再调整句长。常用术语可以稳定复现。技术名词的准确性优先于换词。定稿时保留原有数值、符号、单位、分母、条件、图表指向和来源。按客户批准的固定替换段落修改时，确认授权范围及正文内的公式、引文和图表关联，再用 [固定修订完整性指南](fixed-revision-integrity.md) 核查。
 
-- `The input contains batch, horizon, and channel dimensions.`
-- `The allocation satisfies energy balance and capacity constraints.`
-- `The formulation uses a DC feasibility model.`
-- `The horizon is 24 h and the calibration window precedes the test interval.`
-- `The paired test uses a heteroskedasticity and autocorrelation consistent variance estimate.`
-- `At H24, baseline MAE is lower than the ensemble MAE.`
-- `The controller receives matured forecast errors at the next update.`
+## 从算例解释到决定
 
-Keep the condition, direction, units, denominator, uncertainty and citation referent unchanged when revising. When evidence establishes an association, avoid turning the interpretation into a causal proof.
+方法说明已知量、计算关系和输出的去向。结果从对照观察入手，突出决定结论的数值及其条件，再解释状态或限制为何造成该变化。将多子图的结果放回同一个问题，区分条件、时间和对象。题注负责识别图形，正文负责解释图中的关系。
 
-## Single analysis location and paragraph continuity
+工作记录可保存求解过程、模型选择过程、检查结果和客户反馈。正文保留重现计算所需的数据来源、对象覆盖、采样规则、筛选条件、损失、对照、误差、不确定性及数据缺测等事实。归因和结论仍须由可核对的数据、模型或对照支撑。按需参照 [中英文写作指南](bilingual-writing-playbook.md) 中的工程算例。
 
-Before drafting, identify the scientific question answered by a subsection. Choose the full analysis location for each result. A table holds exact numerical comparisons; a figure represents distributions, temporal structure, geometry or mechanisms; prose explains the relation and its consequence. Do not use all three to narrate the same values.
-
-Read each paragraph with both neighbors. Identify the shared quantity and what happens to it: definition, transformation, estimation, comparison or inference. If the next paragraph changes topic, state the actual relationship or place the material in the correct subsection. If the data cannot support a proposed mechanism, retain the observed pattern and the supported interpretation rather than inventing attribution or appending an unsupported-evidence defense.
-
-A short cross-reference can reconnect a previously established relationship. It should add the relationship needed here, not reproduce the earlier analysis. Detailed symbol explanations belong after a coherent equation group; unchanged definitions need not be repeated after every formula.
-
-## Scientific protocol versus experiment sidecar
-
-Keep in the manuscript when needed for interpretation or reproduction: data source and population, temporal partitions, sampling resolution, preprocessing, candidate set, objective, calibration/selection rule, hyperparameters that define the algorithm, seed design, hardware for reported runtime, loss direction, statistical test, dependence correction, sample size, uncertainty and exact measurement scope. Put those details in the appropriate data/setup, Methodology or metrics section once.
-
-Put in an external JSON/MD record: individual job launches, console output, trial-by-trial tuning history, desired win counts, run progress, pending files, author confirmation history, formatting/conversion logs, audit decisions, checksum receipts, prompt instructions and reviewer issue status. A scientific assertion must be justified by actual current evidence; moving its execution history outside the paper does not change that assertion.
-
-Do not move a necessary unfavorable result outside the paper merely because it is inconvenient. Report the observed comparison directly. Do not add a boilerplate limitations or future-work paragraph to every result, and do not require the conclusion to list missing experiments. A required venue disclosure or a material scientific applicability condition remains in its proper location.
-
-Create a sidecar only when real records or review decisions need to be retained; do not generate empty ledgers or merge them into the submission manuscript.
-
-## Read-only screen and final gate
-
-Use the Project screen on the current report:
+## 只读检查与复核
 
 ```powershell
-python scripts/check_writing_quality.py report.docx --manuscript-mode project --language chinese --require-clean --json-out review/writing.json
+python scripts/check_writing_quality.py report.docx --manuscript-mode project --language chinese --json-out review/writing.json
+python scripts/check_writing_quality.py report.docx --manuscript-mode project --language chinese --require-clean --review-decisions review/editorial_decisions.json --json-out review/writing.json
 ```
 
-The first call locates candidates, including single-sentence defects and neighboring paragraphs. Read their text and context. Rewrite confirmed defects in the source and rerun the screen. Do not waive a defect by marking it `rewritten` while it is still detected. A genuine scientific use can be retained with a source-bound decision:
+先看候选对应的上下文和依据。确认有问题时修改源稿后重扫。对实际定义、必要并列或有效技术限制造成的误报，可为当前 `candidate_id` 提交 `scientific_content` 判断及具体理由。例如“并列项分别定义换流器上限、变压器额定容量和线路热限值，三项分别约束可行域。” 候选绑定当前文本、位置、上下文及有关证据。原句或关联证据变化后须重新判断。
 
 ```json
 {
   "reviews": [
     {
-      "candidate_id": "copy the current candidate_id from writing.json",
+      "candidate_id": "对应当前扫描结果",
       "decision": "scientific_content",
-      "reason": "The conjunction lists three independently enforced capacity constraints; removing it would change the feasible set."
+      "reason": "运行温度和容量是分别测量的状态变量，共同限定该工况的可行域。"
     }
   ]
 }
 ```
 
-Candidate identifiers bind the exact current text, location and neighboring context. Changed text or context requires fresh review. Old decisions cannot approve a new candidate. The final gate returns nonzero for unresolved candidates, malformed decisions, definite contamination or source-read failures in technical reports. Calls without `--require-clean` remain advisory draft screens for CLI compatibility; that behavior is not permission to deliver unresolved prose.
+标有 `rewrite_required` 的明确修辞或内部恢复状态须改源文。用户或客户明确要求回答原日志的留存、存放或可用性时，可为对应内部状态候选提交 `required_disclosure`。记录 `requirement_source`、`requirement_quote` 和针对实际记录的说明理由。来源使用可读的本地 UTF-8 文件，相对路径以审读决定文件所在目录解析。引用须确实要求说明同一种记录，读完整句判断请求是否定还是肯定。“是否保留”与“请不要说明是否保留”授权不同。审读者核实该要求的适用性，工具只核对当前可读来源中的原句和对象。标题“说明”或“披露”本身不足以确认要求。
 
-The DOCX reader excludes bibliography entries and resumes language screening in an English or Chinese technical appendix. An inline `Abstract:` or `摘要：` label remains summary prose, even when a heading style was applied to the whole paragraph. Numeric table replay is a context-review candidate when at least six distinct literal values match one actual table and cover at least 75% of the paragraph's distinct numeric values. A few decisive quantitative anchors, new derived quantities and ordinary numerical protocol details are not automatically table replay. The candidate binds the actual table text; a changed table requires a fresh decision. Ordinary literal TeX tables are screened from their actual cells, separately from captions and code. Read rendered macro-generated tables and nonliteral equivalences manually.
+正文至少六个不同字面数值复现同一实际表格，且这些数值覆盖本段不同字面数值的四分之三时，工具提示复述风险。清晰的日历标记和图表编号不作为指标值。人工核对同一结果是否已在别处解释，是否新增了单位转换、差值推导或例外。附录中的技术分析仍需审读。
 
-Complete allocation-example delivery additionally screens its current DOCX through `audit_project_delivery.py`; a past clean writing report cannot approve a changed document. Use the current customer structure throughout.
-
-The screen cannot prove semantic continuity or find every paraphrased repetition. Final delivery also requires a full manual semantic reading of the current text, covering all six defects, all distinct figure panels and the actual scientific or engineering dependencies. Read captions and table text as well as body paragraphs, and compare abstract/summary, Results and conclusion for repeated analysis. A high legacy screen score or zero regex matches cannot replace that pass or override unresolved candidates.
+常规扫描给出提示。最终命令发现未处理的候选、无效审读理由或明确占位内容时返回非零状态。完整分配算例的 `audit_project_delivery.py` 会重新检查实际 DOCX。候选清零后仍要逐处阅读最新版，检查条件、数据方向、图文对应及解释是否成立。分数与关键词结果不能证明因果关系、写作来源或工程结论。

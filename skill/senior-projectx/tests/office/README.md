@@ -18,6 +18,7 @@ powershell -ExecutionPolicy Bypass -File scripts/project_office_smoke.ps1 -Sourc
 
 4. 从同一个源稿独立转换第二份DOCX。逐公式比较有序MTEF并检查预览、实际Word页面和目标含义。版式调整后用 `rebind_formula_receipt.py` 证明对象内容及预览不变，再绑定最终文件。
 5. 用 Word 导出实际PDF，将全部页面渲染为图片并阅读。可使用当前环境的文档渲染工具；没有LibreOffice时可使用已验证的Word导出与Poppler路线，无需安装另一个Office套件。
+   `project_word_roundtrip.ps1` 在副本中依次刷新 SEQ 和 REF，重开后检查字段结果与上标，记录复开件与 PDF 的哈希。默认更新范围之外的字段按具体任务更新。需要保留当前字段缓存时使用 `-NoFieldRefresh`，仍检查 Word 另存与页面。对数字引文或无文献引注的副本，可结合 [Word 定稿指南](../../references/word-pagination-and-citation-release.md) 检查缓存结构。
 6. 通过 `prepare_review_evidence.py --help` 所列参数准备实际审阅记录，再用 `audit_native_mathtype.py` 和 `mathtype_authenticity.py` 复核。未实际完成的含义、页面或编辑检查保持待审状态。
 7. PowerPoint保存重开并逐页导出，检查图例一行、标题与图名位置、原比例、连接线端点和最终字号。测试副本里编辑原生文本、图表数据、表格单元格及MathType对象并保存，关闭重开检查，再恢复测试值。图表工作簿需能打开；对象数量不等于可编辑性。
 

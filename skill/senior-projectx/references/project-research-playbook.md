@@ -30,12 +30,12 @@ Start from the mathematical structure. State knowns, unknowns, controls, state, 
 
 The built-in solver contracts are narrow:
 
-- `solve-allocation`: continuous multi-period charging LP. It does not accept integer requirements.
+- `solve-allocation`: continuous multi-period charging LP. Availability uses zero-based positions in the ordered period table, with the departure position excluded. The output preserves the actual period identifier. `termination` distinguishes an optimal result, certified infeasibility and an unresolved solve. The older `status` field remains available for existing callers.
 - `bounded-sum`: exact greedy solver for a continuous linear objective with one total-sum equality and independent lower/upper bounds.
 - `replay-dag`: timing replay for a caller-supplied topological and resource order. It evaluates that order and never claims optimal scheduling.
 - Project-specific scripts: declare inputs, outputs, units, solver assumptions, and validation functions in the task contract.
 
-Retain an infeasible or adverse result when input and model checks show it is real. Identify conflicting capacities, windows, bounds, or required inputs. Do not switch the contracted problem automatically.
+Retain an infeasible or adverse result when input and model checks establish it. Tie the explanation to specific capacities, windows, bounds or missing inputs. Report an interrupted solve as unresolved. A minimum capacity margin is taken over the actual modeled periods, so a positive minimum represents available headroom throughout the modeled horizon.
 
 ## Independent validation
 
@@ -160,5 +160,9 @@ Check effective styles and direct overrides, not just style names: body/table si
 Final checks are separate: technical/numerical consistency; connected paragraph-level reading; effective Word/table/figure typography; native formula content plus centered numbered rendering; and reference metadata/first-citation order. Passing one does not establish the others. Keep checking records and recoverable prior versions outside the final handoff folder. Deliver one clearly identified current report rather than a pile of iterative variants, without deleting user source files or accepted assets.
 
 `scripts/audit_project_delivery.py` also applies the shared final language gate directly to the current DOCX. It rejects unresolved editorial candidates, invalid review decisions and definite text contamination without a separate language flag. Use its optional `--review-decisions` only for current-text-bound substantive scientific or engineering content. An older writing JSON cannot approve a changed report; complete the whole-text semantic reading as well.
+
+The allocation example uses one complete vehicle-by-period matrix per case. Keep the zero-charge rows. The figure builder checks each saved scenario against the corresponding mean capacity margin before it writes images.
+
+For the allocation-example delivery audit, record `docx_sha256` and `pdf_sha256` for the DOCX and PDF of the inspected version. Native Word export records these as `reopened_sha256` and `pdf_sha256`. Record the pages actually inspected and their `page_images`. Relative image paths start at the visual-review JSON directory.
 
 Project图件采用 [信息量与图型规则](project-figure-policy.md)，取消简单柱线和稀疏散点默认输出。曲线和可加色块可以作为真实工程诊断中的信息层，装饰和重复子图不构成信息增量。

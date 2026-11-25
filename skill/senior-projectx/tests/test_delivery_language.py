@@ -47,7 +47,8 @@ class ProjectDeliveryLanguageTests(unittest.TestCase):
             figures=self.record("figures.json", {"artifacts": []}),
             docx=self.docx, pdf=self.pdf, mathtype_evidence=None,
             visual_review=self.record("visual.json", {"pdf_sha256": hashlib.sha256(self.pdf.read_bytes()).hexdigest(),
-                "reviewer": "unit-test-fixture", "reviewed_pages": [1], "page_images": [str(screenshot)], "status": "pass"}),
+                "docx_sha256": hashlib.sha256(self.docx.read_bytes()).hexdigest(),
+                "reviewer": "unit-test-fixture", "reviewed_pages": [1], "page_images": [screenshot.name], "status": "pass"}),
         )
 
     def tearDown(self):
@@ -89,8 +90,17 @@ class ProjectDeliveryLanguageTests(unittest.TestCase):
         self.write_docx("首先构建证据链，全面提升模型鲁棒性。")
         self.assertEqual(delivery.audit(self.args)["status"], "fail")
 
+    def test_reviewed_pdf_cannot_approve_another_clean_docx(self):
+        self.assertEqual(delivery.audit(self.args)["status"], "pass")
+        self.write_docx("物理容量限定充电功率，能量平衡约束车辆的交付需求。")
+        result = delivery.audit(self.args)
+        self.assertEqual(result["errors"], ["Visual review is not bound to the current DOCX SHA-256"])
+
     def test_concrete_scientific_information_constraint_can_be_reviewed(self):
         self.write_docx("The model cannot update before a forecast error matures.")
+        visual = delivery.load(self.args.visual_review)
+        visual["docx_sha256"] = hashlib.sha256(self.docx.read_bytes()).hexdigest()
+        self.record("visual.json", visual)
         result = writing.inspect_writing(self.docx, manuscript_mode="project", language="chinese")
         self.args.review_decisions = self.record("review.json", {"reviews": [
             {"candidate_id": c["candidate_id"], "decision": "scientific_content",

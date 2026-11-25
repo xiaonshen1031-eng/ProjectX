@@ -47,7 +47,7 @@ def audit(args) -> dict:
     errors.extend(plot_policy["errors"])
     roles = set()
     for figure in figures.get("artifacts", []):
-        path = Path(figure.get("path", ""))
+        path = args.figures.parent / Path(figure.get("path", ""))
         if not path.is_file() or path.stat().st_size == 0: errors.append(f"Missing figure: {path}")
         role = figure.get("role", "")
         if not role: errors.append(f"Figure lacks a technical role: {figure.get('id')}")
@@ -105,12 +105,14 @@ def audit(args) -> dict:
     review = load(args.visual_review)
     if args.pdf.is_file() and not visual_review_matches_pdf(review, args.pdf):
         errors.append("Visual review is not bound to the current PDF SHA-256")
+    if args.docx.is_file() and str(review.get("docx_sha256", "")).lower() != file_hash(args.docx):
+        errors.append("Visual review is not bound to the current DOCX SHA-256")
     reviewed = sorted(set(int(v) for v in review.get("reviewed_pages", [])))
     if review.get("reviewer") in {None, "", "generator"}:
         errors.append("Visual review must identify the inspecting agent or person")
     if reviewed != list(range(1, page_count + 1)):
         errors.append("Visual review does not cover every PDF page")
-    screenshots = [Path(v) for v in review.get("page_images", [])]
+    screenshots = [args.visual_review.parent / Path(v) for v in review.get("page_images", [])]
     if len(screenshots) != page_count or any(not p.is_file() for p in screenshots):
         errors.append("Visual review page images are incomplete")
     if review.get("status") != "pass": errors.append("Visual page review did not pass")

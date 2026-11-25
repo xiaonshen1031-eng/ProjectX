@@ -15,6 +15,22 @@ import re
 
 
 RULES = (
+    ("experimental_process_leakage", re.compile(
+        r"\b(?:this|the|their)\s+(?:cross[- ]source\s+discrepancy|checkpoint\s+correspondence|"
+        r"(?:original\s+)?(?:checkpoint|log|file)\s+(?:mapping|recovery|verification))\s+"
+        r"(?:is|remains?)\s+(?:unresolved|pending|unverified)\b|"
+        r"\b(?:original|old|archival|cloud)\s+(?:run\s+)?(?:checkpoints?|logs?|source files?)\b"
+        r".{0,65}\b(?:unavailable|missing|lost|not recovered|cannot be recovered)\b|"
+        r"(?:检查点|原始日志|原运行日志|云端日志|源文件)(?:对应关系|映射|恢复|核查)?.{0,20}"
+        r"(?:尚未解决|仍未解决|尚未恢复|仍待确认|待核验|无法恢复)|"
+        r"(?:跨来源|跨源)(?:数值)?差异.{0,15}(?:尚未解决|仍未解决|仍待确认)", re.I),
+     "Keep archival-recovery and verification status in the author record. In clean prose state the actual reported values, comparison unit and supported scope. Preserve material discrepancies and mandatory availability disclosures; do not invent their causes or remove the conflicting values."),
+    ("self_evaluative_prose", re.compile(
+        r"\b(?:our|this|the present)\s+(?:research|study|work|contribution)\s+(?:is|remains?)\s+"
+        r"(?:weak|unconvincing|of little value|not novel|only incremental)\b|"
+        r"\b(?:our|the proposed)\s+(?:method|model|approach)\s+(?:performs? poorly|is inferior)\b|"
+        r"(?:本文|本研究|我们的研究|所提方法).{0,12}(?:价值不大|创新性不足|缺乏创新|表现很差|表现不好|研究薄弱)", re.I),
+     "Replace a verdict about the study's worth with the exact evaluated comparison and its scientific consequence. Preserve adverse values, conditions and source attribution; do not substitute promotional praise."),
     ("defensive_prose", re.compile(
         r"\b(?:we do not claim|should not be interpreted as|this does not undermine|"
         r"does not affect the validity|despite this limitation|remains valid despite|"
@@ -72,7 +88,7 @@ RULES = (
         r"this figure does not replace|the purpose of this diagnostic is)\b|"
         r"(?:按(?:照)?(?:用户|审稿人|提示词)(?:的)?要求|本次生成|在修改过程中|作者确认|"
         r"尚未(?:同步|回传|完成)|后续归档|冻结状态|审查门禁|阻断项|证据链|证据角色|"
-        r"回归测试通过|校验通过|完成状态|调参记录|运行日志|实验验收)|"
+        r"回归测试通过|校验通过|完成状态|调参记录|实验验收)|"
         r"(?:hash|checksum|digest)[ -]*(?:verified|verification passed|check passed)|"
         r"(?:SHA[- ]?256|MD5)\s*[:=]\s*[0-9a-f]{32,64}\b|"
         r"[A-Za-z]:[\\/](?:Users|科研)[^\s}]*", re.I),
@@ -99,12 +115,241 @@ RULES = (
         r"为(?:了)?验证.{0,35}(?:有效性|优越性|性能)|(?:实验|测试)结果表明|"
         r"(?:本次|本节)(?:实验|测试).{0,25}(?:验证|证明|展示|表明)", re.I),
      "State the measured finding or engineering relationship directly. Put the necessary comparison design in Methods; remove effectiveness-verification and experimental-report narration."),
+    ("experimental_report_prose", re.compile(
+        r"\b(?:the|these|our)\s+(?:experimental\s+)?(?:results|findings)\s+(?:are|can be)\s+"
+        r"(?:shown|seen|found|presented)\s+in\s+(?:Figure|Fig\.|Table)\s*\d+(?:[.\-‑–]\d+)*\s*[.!]|"
+        r"(?:^|[。！？]\s*)(?:相关|相应|上述)?(?:实验|测试|对比)?结果(?:如|见|展示于|呈现于)"
+        r"(?:图|表)\s*\d+(?:[.\-‑–]\d+)*\s*[。.]", re.I),
+     "A location-only sentence adds no scientific relationship. Explain what the cited quantity changes, or attach the reference directly to the finding; retain substantive captions and definitions."),
+    ("experimental_report_prose", re.compile(
+        r"\b(?:these|the (?:above|foregoing)) (?:results|findings) (?:further )?"
+        r"(?:confirm|demonstrate|validate|verify) (?:the )?"
+        r"(?:effectiveness|superiority|feasibility|robustness) of (?:the )?"
+        r"(?:(?:proposed|presented|developed) )?(?:method|model|approach|algorithm|framework)\s*(?:[.!?]|$)|"
+        r"(?:上述|以上|这些|该)(?:结果|现象|对比)(?:进一步|充分|再次)?(?:验证|证实|证明|表明)(?:了)?"
+        r"(?:所提(?:出的)?|本文(?:所)?提出的|该)(?:方法|模型|算法|框架)的"
+        r"(?:有效性|优越性|可行性|鲁棒性)\s*(?:[。！？]|$)", re.I),
+     "Replace a generic validation conclusion with the compared quantity, evaluated condition and supported consequence. Keep a specific feasibility or uncertainty statement where it changes interpretation."),
     ("experimental_process_leakage", re.compile(
         r"\b(?:the|this) (?:figure|plot|manuscript|document)\b.{0,50}\b(?:regenerated|"
         r"reformatted|saved as|exported to|converted to|verification passed)\b|"
         r"(?:图片|图像|文档|稿件).{0,30}(?:重新生成|重新排版|另存为|已导出|已转换)", re.I),
      "Keep figure generation, document formatting and saved-file receipts in the production sidecar; the caption and body describe scientific content."),
 )
+
+# These phrases are rhetorical framing, unlike a mathematical negation such
+# as "does not imply" or a timed information constraint. A review reason may
+# explain a genuine scientific use, but cannot approve this live framing.
+REWRITE_ONLY_RE = re.compile(
+    r"\b(?:we do not claim|this does not undermine|"
+    r"despite this limitation|remains valid despite|just a simple|only an incremental)\b|"
+    r"\bdoes not affect the validity of\s+(?:our|this|the present|the proposed|the)\s+"
+    r"(?:research|study|work|method|model|approach|contribution|framework)\b|"
+    r"(?:虽然|尽管).{0,90}(?:不能|无法|不足|局限).{0,90}(?:但|仍).{0,20}(?:价值|有用|有效)|"
+    r"(?:本文|本研究)(?:不声称)|这并不影响.{0,20}(?:有效性|研究价值)|"
+    r"(?:我们的研究|本研究|本文).{0,12}(?:价值不大|创新性不足|缺乏创新|研究薄弱)", re.I)
+
+# Match operational artifacts together with an operational state, not the
+# words "log", "checkpoint" or a mathematical negation on their own. These
+# cases cannot be approved by an impressive-sounding scientific review reason.
+INTERNAL_ARTIFACT_EN = (
+    r"(?:\b(?:run|training|experiment(?:al)?|job)\s+(?:logs?|artifacts?|records?|traces?)\b|"
+    r"\b(?:original|old|archival|cloud|internal)\s+(?:run\s+)?(?:checkpoints?|source\s+files?)\b|"
+    r"\bcheckpoint\s+(?:correspondence|mapping|matching|recovery|verification)\b|"
+    r"\b(?:cross[- ]source\s+discrepancy)\b)"
+)
+GENERIC_RECORD_EN = r"\b(?:original|old|archival|internal|historical)\s+(?:records?|artifacts?)\b"
+INTERNAL_CONTEXT_EN = re.compile(r"\b(?:training|checkpoints?|jobs?|cloud|run logs?)\b", re.I)
+INTERNAL_STATE_EN = (
+    r"(?:\s+(?:is|are|was|were|remains?|remained|have been|has been)\s+"
+    r"(?:(?:still|currently|temporarily|now|already)\s+)*"
+    r"(?:unavailable|inaccessible|lost|deleted|unverified|unresolved|pending|"
+    r"not\s+(?:yet\s+)?(?:retained|kept|recovered|accessible|available|verified|reconciled|backed up)|"
+    r"no longer\s+(?:accessible|available|retained)|"
+    r"missing(?=\s*(?:[.;,]|$|from\b|after\b|since\b|because\b|so\b)))\b|"
+    r"\s+(?:have|has|had)\s+not\s+(?:yet\s+)?been\s+(?:recovered|retained|verified|backed up)\b|"
+    r"\s+(?:cannot|can\s+not|could\s+not)\s+be\s+"
+    r"(?:accessed|retrieved|recovered|located|verified|reconciled|matched)\b|"
+    r"\s+(?:disappeared|went\s+missing)\b)"
+)
+
+
+def _internal_status_pattern(artifact: str) -> re.Pattern:
+    return re.compile(
+        artifact + INTERNAL_STATE_EN + r"|"
+        r"\b(?:cannot|could not|unable to|failed to)\s+"
+        r"(?:retrieve|recover|obtain|access|verify|reconcile|locate|match)\b.{0,65}" + artifact + r"|"
+        r"\b(?:we|the authors?)\s+(?:lack|lacked|have\s+no)\s+access\s+to\s+"
+        r"(?:(?:the|our|original)\s+){0,3}" + artifact + r"|"
+        r"\b(?:we|the authors?)\s+(?:are|were)\s+(?:(?:still|currently|now)\s+)?"
+        r"(?:recovering|retrieving|reconstructing|reconciling|searching for)\b.{0,55}" + artifact,
+        re.I)
+
+
+INTERNAL_STATUS_EN = _internal_status_pattern(INTERNAL_ARTIFACT_EN)
+GENERIC_RECORD_STATUS_EN = _internal_status_pattern(GENERIC_RECORD_EN)
+INTERNAL_ARTIFACT_ZH = (
+    r"(?:原始运行日志|原(?:始)?训练(?:日志|记录|产物)|历史训练记录|旧运行记录|"
+    r"云端(?:实验|运行)?(?:日志|记录|检查点)|训练产物|内部(?:实验|运行)?(?:日志|记录)|"
+    r"实验运行日志|检查点(?:的)?(?:对应关系|映射|核对|匹配|恢复))"
+)
+INTERNAL_STATE_ZH = (
+    r"(?:尚未解决|仍未解决|尚未恢复|仍待确认|待核验|待核对|无法核验|无法核对|"
+    r"无法恢复|不可访问|不可用|无法获取|无法调取|暂不可查|丢失|未保留|未恢复|"
+    r"尚未找回|正在恢复|正在找回|尚未回传|待同步|待找回)"
+)
+INTERNAL_STATUS_ZH = re.compile(
+    INTERNAL_ARTIFACT_ZH + r".{0,22}" + INTERNAL_STATE_ZH + r"|"
+    r"(?:无法获取|无法调取|无法恢复|正在恢复|正在找回).{0,15}" + INTERNAL_ARTIFACT_ZH + r"|"
+    r"(?:运行日志|原始日志).{0,12}(?:尚未恢复|正在恢复|待回传|待核对|待归档|仍在找回|待找回)")
+RESTRICTED_RELEASE_EN = re.compile(
+    r"(?:" + INTERNAL_ARTIFACT_EN + r"|" + GENERIC_RECORD_EN + r")"
+    r"\s+(?:is|are|was|were)\s+"
+    r"(?:(?:unavailable|inaccessible|not available)\s+(?:for public (?:release|sharing|access)|to the public|to external users)|"
+    r"not publicly available)\s+"
+    r"(?:under|due to|because of|pursuant to)\s+(?:(?:the|a|an)\s+)?"
+    r"(?:data[- ]use agreement|licen[cs]e|privacy policy|privacy agreement|ethics policy|consent agreement|institutional policy|contract)\b",
+    re.I)
+
+# A model's information set is scientific content, even when it excludes
+# training logs. Keep this exception local to the complete input-condition
+# clause; an archive-loss explanation or an author-access problem is different.
+SCIENTIFIC_INPUT_ACCESS_EN = re.compile(
+    INTERNAL_ARTIFACT_EN + r"\s+(?:is|are)\s+"
+    r"(?:unavailable|inaccessible|not\s+(?:available|accessible))\s+to\s+"
+    r"(?:(?:the|a|an|our)\s+)?(?:classifier|predictor|controller|estimator|router|agent|model|algorithm)"
+    r"\s+(?:at|during)\s+(?:deployment|inference|prediction|forecast\s+issuance|decision\s+time)"
+    r"(?=\s*[,;.!?]|\s*$)", re.I)
+INPUT_ARCHIVE_FAILURE_EN = re.compile(
+    r"\b(?:they|these|those|the\s+(?:logs?|records?|artifacts?|traces?))\s+"
+    r"(?:(?:are|were|have\s+been|had\s+been)\s+)?"
+    r"(?:lost|deleted|destroyed|missing|not\s+retained|not\s+recovered|unrecovered)\b|"
+    r"\b(?:we|the\s+authors?)\s+(?:cannot|could\s+not|failed\s+to)\s+"
+    r"(?:recover|retrieve|locate|access)\s+(?:them|these|those)\b", re.I)
+
+
+def internal_status_spans(text: str) -> list[tuple[int, int]]:
+    """Locate clear recovery/status prose, including paraphrases and heading tricks.
+
+    A real data-access restriction is context-reviewable. It must name the
+    access action and its actual policy in the same sentence; adding a generic
+    disclosure heading or a privacy sentence cannot approve an unrelated log
+    recovery status. Scientific uses of logs/checkpoints are not matched alone.
+    """
+    spans = []
+    cursor = 0
+    for sentence in sentences(text):
+        offset = text.find(sentence, cursor)
+        cursor = offset + len(sentence)
+        matches = list(INTERNAL_STATUS_EN.finditer(sentence)) + list(INTERNAL_STATUS_ZH.finditer(sentence))
+        if INTERNAL_CONTEXT_EN.search(sentence):
+            matches += list(GENERIC_RECORD_STATUS_EN.finditer(sentence))
+        restricted = list(RESTRICTED_RELEASE_EN.finditer(sentence))
+        restricted += [condition for condition in SCIENTIFIC_INPUT_ACCESS_EN.finditer(sentence)
+                       if not INPUT_ARCHIVE_FAILURE_EN.search(sentence[condition.end():])]
+        for match in matches:
+            # A policy concerning unrelated data cannot excuse lost artifacts.
+            # Only an access restriction or complete model-input condition
+            # containing this exact span is scientific availability content.
+            # Lost/deleted/recovery states never match either exception.
+            if any(r.start() <= match.start() and r.end() >= match.end() for r in restricted):
+                continue
+            spans.append((offset + match.start(), offset + match.end()))
+    return sorted(set(spans))
+
+
+def definite_internal_status(text: str) -> bool:
+    return bool(internal_status_spans(text))
+
+
+RECORD_SUBJECT_EN = (r"(?:(?:the|these|those|our|your|original|raw|training|run|job|experimental|all)\s+){0,6}"
+                     r"(?:logs?|records?|checkpoints?|artifacts?|traces?|source\s+files?)")
+RECORD_STATE_EN = r"(?:retained|kept|stored|saved|preserved|archived|deleted|lost|destroyed|available|accessible|publicly available)\b"
+RECORD_LOCATION_EN = r"(?:stored|kept|archived|saved|located)\b"
+RECORD_REQUEST_PATTERNS = (
+    re.compile(r"\b(?:have|has|had|were|are|was|is)\s+" + RECORD_SUBJECT_EN + r"\s+(?:been\s+)?(?:not\s+)?" + RECORD_STATE_EN, re.I),
+    re.compile(r"\b(?:state|disclose|report|confirm|indicate|specify|clarify)\s+(?:whether|if)\s+"
+               + RECORD_SUBJECT_EN + r"\s+(?:have|has|had|were|are|was|is)\s+(?:been\s+)?(?:not\s+)?" + RECORD_STATE_EN, re.I),
+    re.compile(r"\b(?:state|disclose|report|confirm|indicate|specify|clarify)\s+where\s+"
+               + RECORD_SUBJECT_EN + r"\s+(?:were|are|was|is)\s+" + RECORD_LOCATION_EN, re.I),
+    re.compile(r"\bwhere\s+(?:were|are|was|is)\s+" + RECORD_SUBJECT_EN
+               + r"(?:\s+" + RECORD_LOCATION_EN + r")?\s*[?.]", re.I),
+    re.compile(r"\b(?:state|provide|disclose|report|describe)\s+(?:the\s+)?"
+               r"(?:retention status|availability|storage location|access conditions|location|whereabouts)\s+of\s+"
+               + RECORD_SUBJECT_EN, re.I),
+    re.compile(r"\b(?:how|where)\s+(?:can|may)\s+(?:we|readers|reviewers|one)\s+"
+               r"(?:access|obtain|retrieve|download)\s+" + RECORD_SUBJECT_EN, re.I),
+    re.compile(r"\b(?:please\s+)?(?:provide|share|release)\s+" + RECORD_SUBJECT_EN
+               + r"\s*(?:[.!?]|for inspection\b|to the reviewers\b)", re.I),
+    re.compile(r"(?<![无不未])(?:请|须|必须|要求|应当?|需).{0,8}(?:说明|披露|报告|确认).{0,18}"
+               r"(?:日志|记录|检查点|实验产物|源文件)(?:是否|有无)(?:被)?"
+               r"(?:保留|留存|保存|归档|销毁|丢失|可用|可访问|公开|可提供)"),
+    re.compile(r"(?<![无不未])(?:请|须|必须|要求|应当?|需).{0,8}(?:说明|披露|报告|提供|确认).{0,18}"
+               r"(?:日志|记录|检查点|实验产物|源文件)(?:的)?"
+               r"(?:保存位置|存放地点|存放位置|留存状态|访问方式|可用性|可访问性)"),
+)
+RECORD_REQUEST_CONTINUATION = re.compile(
+    r"\b(?:and|or)\s+(?:whether|if)\s+" + RECORD_SUBJECT_EN
+    + r"\s+(?:have|has|had|were|are|was|is)\s+(?:been\s+)?(?:not\s+)?" + RECORD_STATE_EN, re.I)
+
+
+def record_objects(text: str) -> set[str]:
+    groups = {
+        "log": r"\blogs?\b|日志", "record": r"\brecords?\b|记录",
+        "checkpoint": r"\bcheckpoints?\b|检查点", "artifact": r"\bartifacts?\b|实验产物|训练产物",
+        "source_file": r"\bsource\s+files?\b|源文件",
+        "trace": r"\btraces?\b|作业轨迹|运行轨迹",
+    }
+    return {kind for kind, pattern in groups.items() if re.search(pattern, text, re.I)}
+
+
+def requested_record_objects(quote: str) -> set[str]:
+    """Require a record-subject retention/access/location predicate, not keywords."""
+    request = re.search(r"\b(?:please|must|required|shall|whether|state|disclose|report|provide)\b|[?？]|请|必须|要求|应|需|说明|披露", quote, re.I)
+    if not request:
+        return set()
+    asked = set()
+    matches = [(match, False) for pattern in RECORD_REQUEST_PATTERNS for match in pattern.finditer(quote)]
+    matches += [(match, True) for match in RECORD_REQUEST_CONTINUATION.finditer(quote)]
+    affirmative = []
+    for match, continuation in sorted(matches, key=lambda item: item[0].start()):
+        prefix = re.split(r"[.!?。！？;；\n]|\b(?:but|however|whereas)\b|但是|然而", quote[:match.start()], flags=re.I)[-1]
+        clause_start = match.start() - len(prefix)
+        if continuation and not any(start >= clause_start for start in affirmative):
+            continue
+        # Negation of the request differs from asking whether a record was
+        # not retained. Inspect only the governing request, not its payload.
+        if re.search(r"(?:\b(?:do\s+not|don't|must\s+not|shall\s+not|should\s+not|need\s+not|"
+                     r"not\s+required\s+to|no\s+(?:need|requirement)\s+to|avoid|omit|exclude)\b)"
+                     r"(?:\W+\w+){0,6}\W*$", prefix, re.I):
+            continue
+        chinese_request = re.match(r".*?(?:说明|披露|报告|提供|确认)", match.group())
+        if chinese_request and re.search(r"请(?:勿|不要|别)|不必|无需|不得|禁止|不要求", chinese_request.group()):
+            continue
+        asked.update(record_objects(match.group()))
+        affirmative.append(match.start())
+    return asked
+
+
+def requirement_quote_contexts(source: str, quote: str) -> list[str]:
+    """Read the full source sentence containing each exact quote occurrence.
+
+    A short excerpt cannot drop a governing 'do not'. Repeated excerpts with
+    conflicting instructions need an unambiguous fuller quotation and review.
+    This is a local correspondence check, not an authority or intent parser.
+    """
+    source = " ".join(source.split())
+    quote = " ".join(quote.split())
+    contexts = []
+    for match in re.finditer(re.escape(quote), source):
+        before = list(re.finditer(r"[.!?。！？;；]", source[:match.start()]))
+        start = before[-1].end() if before else 0
+        end = match.end()
+        if source[end-1] not in '.!?。！？;；':
+            after = re.search(r"[.!?。！？;；]", source[end:])
+            end = end + after.end() if after else len(source)
+        contexts.append(source[start:end].strip())
+    return contexts
 
 QUOTE_RE = re.compile(
     r"(?:提出|构建|形成|称为|打造|引入)(?:了)?[“\"]([^”\"]{2,35})[”\"]|"
@@ -121,7 +366,9 @@ CHINESE_ABSTRACT_STACK_RE = re.compile(
 )
 CONNECTOR_RE = re.compile(r"^(?:Moreover|Furthermore|Additionally|Therefore|Consequently|Finally|"
                           r"此外|因此|在此基础上|进一步|随后|最后)[,，]?", re.I)
-ARTIFACT_RE = re.compile(r"\b(?:Figure|Fig\.|Table)\s*\d+[a-z]?\b|(?:图|表)\s*\d+", re.I)
+ARTIFACT_NUMBER = r"\d+(?:[.\-‑–]\d+)*[a-z]?(?!\d|[.\-‑–]\d)"
+ARTIFACT_RE = re.compile(rf"(?:\b(?:Figure|Fig\.|Table)|图|表)\s*{ARTIFACT_NUMBER}", re.I)
+CHINESE_COORDINATION_RE = re.compile(r"(?<=[\u3400-\u9fff])\s*(?:以及|和(?!谐|平)|(?<!参)与)\s*(?=[\u3400-\u9fff])")
 STOPWORDS = set("a an the and or of to in on for from with by at as is are was were be been being "
                 "it its this that these those which who their they them such also can may could would "
                 "have has had do does did than more most each all both one two three first second "
@@ -179,19 +426,25 @@ def normalized(text: str) -> str:
 
 
 TABLE_NUMBER_RE = re.compile(
-    r"(?<![\w.])[-+−]?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][-+]?\d+)?"
-    r"\s*(?:\\?%)?(?!\w|\.\d)"
+    r"(?<![A-Za-z0-9_.])[-+−]?(?:\d+(?:\.\d+)?|\.\d+)(?:[eE][-+]?\d+)?"
+    r"(?![A-Za-z0-9_]|\.\d)(?:\s*\\?%)?"
+)
+CALENDAR_RE = re.compile(
+    r"(?<!\d)(?:(?:19|20|21)\d{2}\s*年(?:\s*\d{1,2}\s*月(?:\s*\d{1,2}\s*[日号])?)?|"
+    r"\d{1,2}\s*月\s*\d{1,2}\s*[日号])(?:\s*\d{1,2}\s*时(?:\s*\d{1,2}\s*分)?)?|"
+    r"(?<!\d)(?:19|20|21)\d{2}[-/]\d{1,2}[-/]\d{1,2}(?!\d)|"
+    r"(?<![\d:])(?:[01]\d|2[0-3]):[0-5]\d(?::[0-5]\d)?(?![\d:])"
 )
 
 
 def numeric_values(text: str) -> set[str]:
-    """Comparable literal values, excluding citations, artifact IDs and H24-like labels.
+    """Comparable literal values, excluding citations, artifact IDs and calendar labels.
 
     Decimal normalization equates 1.110 with 1.11, but never guesses rounding,
     units, percentage scaling, scientific symbols or calculated equivalence.
     """
     text = re.sub(r"\[\s*\d+(?:\s*[,;–-]\s*\d+)*\s*\]", "", text)
-    text = ARTIFACT_RE.sub("", text)
+    text = CALENDAR_RE.sub(" ", ARTIFACT_RE.sub(" ", text))
     values = set()
     for match in TABLE_NUMBER_RE.finditer(text):
         token = match.group().strip().replace("−", "-")
@@ -235,12 +488,60 @@ def specific_scientific_reason(reason: object, candidate: dict) -> bool:
                     r"已审读|通过|科学内容|保留)(?:[\s.!。]*)", reason.strip(), re.I):
         return False
     anchors = substantive_tokens(candidate["original_text"] + " " + candidate.get("related_text", ""))
-    relation = re.search(r"\b(?:defines?|definition|denotes?|specifies?|states?|because|constraint|"
-                         r"condition|conjunction|alternatives?|dimensions?|variables?|measured|"
-                         r"observed|compared|compares?|cited|source|operator|equation|feasible|"
-                         r"information|inputs?|outputs?|assumption|disclosure|requires?|estimates?)\b|"
+    relation = re.search(r"\b(?:defines?|defined|definitions?|denotes?|specifies?|specified|states?|stated|because|constraints?|"
+                         r"conditions?|conjunctions?|alternatives?|dimensions?|variables?|measured|measurements?|"
+                         r"observed|observations?|compared|compares?|comparisons?|contrasts?|relates?|related|relations?|relationships?|"
+                         r"balances?|balanced|balancing|constrains?|constrained|cited|sources?|operators?|equations?|feasible|"
+                         r"information|inputs?|outputs?|assumptions?|disclosures?|requires?|requirements?|estimates?|estimated)\b|"
                          r"定义|条件|约束|变量|维度|输入|输出|比较|观测|测量|公式|引用|文献|来源|算子|假设|披露", reason, re.I)
     return bool(relation and anchors & substantive_tokens(reason))
+
+
+def required_record_disclosure(entry: dict, candidate: dict) -> tuple[bool, str]:
+    """Check a narrow, externally required record-status answer.
+
+    This verifies current source/quote correspondence, not source authenticity
+    or whether the venue actually requires the disclosure; those remain manual
+    checks. General scientific objections are not record-retention requests.
+    """
+    if (candidate.get("type") != "experimental_process_leakage"
+            or not definite_internal_status(candidate.get("original_text", ""))):
+        return False, "required_disclosure is restricted to record/status disclosure, not rhetorical framing"
+    reason = entry.get("reason", "")
+    if not specific_scientific_reason(reason, candidate):
+        return False, "required_disclosure needs a specific reason linking the current record fact to its disclosure requirement"
+    quote = entry.get("requirement_quote", "")
+    source = entry.get("requirement_source", "")
+    if not isinstance(quote, str) or len(quote.strip()) < 8 or not isinstance(source, str) or not source.strip():
+        return False, "required_disclosure needs requirement_source and an exact requirement_quote"
+    try:
+        path = Path(source)
+        if not path.is_absolute() or not path.is_file() or path.stat().st_size > 2_000_000:
+            return False, "requirement_source must be a readable local source file (absolute or resolved by read_reviews)"
+        text = path.read_text(encoding="utf-8-sig")
+    except (OSError, UnicodeError, ValueError):
+        return False, "requirement_source cannot be read as the stated UTF-8 source"
+    compact = lambda value: " ".join(value.split())
+    if compact(quote) not in compact(text):
+        return False, "requirement_quote does not match the current requirement_source"
+    asked = requested_record_objects(quote)
+    for context in requirement_quote_contexts(text, quote):
+        asked.intersection_update(requested_record_objects(context))
+    if not asked:
+        return False, "the quoted source must explicitly request record retention, location or availability; a general scientific objection is insufficient"
+    text = candidate["original_text"]
+    spans = internal_status_spans(text)
+    for start, end in spans:
+        objects = record_objects(text[start:end])
+        if not objects or not objects.issubset(asked):
+            return False, "the record requirement does not cover every status in this candidate; separate the requested answer from other operational status"
+    residual = list(text)
+    for start, end in spans:
+        residual[start:end] = ' ' * (end - start)
+    residual = ''.join(residual)
+    if any(pattern.search(residual) for kind, pattern, _ in RULES if kind == "experimental_process_leakage"):
+        return False, "required_disclosure covers only the requested record-status clause; separate or rewrite the additional process/production prose"
+    return True, ""
 
 
 def editorial_screen(blocks: list[dict], branch: str, reviews: dict | None = None) -> dict:
@@ -273,6 +574,10 @@ def editorial_screen(blocks: list[dict], branch: str, reviews: dict | None = Non
                 "section": block.get("section", ""), "original_text": block["text"],
                 "context_before": before, "context_after": after, "reason": reason,
                 "severity": "requires_context_review", "review_status": "unresolved"}
+        if (kind == "self_evaluative_prose"
+                or (kind == "defensive_prose" and REWRITE_ONLY_RE.search(block["text"]))
+                or (kind == "experimental_process_leakage" and definite_internal_status(block["text"]))):
+            item["review_policy"] = "rewrite_required"
         for field in ("file", "line", "paragraph", "table", "row", "cell"):
             if field in block:
                 item[field] = block[field]
@@ -284,10 +589,13 @@ def editorial_screen(blocks: list[dict], branch: str, reviews: dict | None = Non
 
     for block in prose:
         text = block["text"]
-        disclosure = bool(re.search(r"(?:disclosure|statement.*(?:AI|language models)|AI.*use)", block.get("section", ""), re.I))
+        # Pure operational status remains a live defect even under a heading
+        # named "Disclosure". Genuine required access statements are handled
+        # by the sentence-level policy exception above, not by heading alone.
+        if definite_internal_status(text):
+            add(block, "experimental_process_leakage",
+                "Rewrite internal log/artifact recovery and verification status as the actual comparison, protocol and supported scope. Keep operational recovery records separately; retain material discrepancies and required access disclosures without inventing their causes.")
         for kind, pattern, advice in RULES:
-            if disclosure and kind == "experimental_process_leakage":
-                continue
             if pattern.search(text):
                 add(block, kind, advice)
         if QUOTE_RE.search(text):
@@ -297,7 +605,8 @@ def editorial_screen(blocks: list[dict], branch: str, reviews: dict | None = Non
         for sentence in sentences(text):
             coordination = len(re.findall(r"\b(?:and|or)\b", sentence, re.I))
             properties = len(ABSTRACT_WORDS.findall(sentence))
-            if re.search(r"\band\s*/\s*or\b", sentence, re.I) or coordination >= 3 or properties >= 3:
+            chinese_coordination = len(CHINESE_COORDINATION_RE.findall(sentence))
+            if re.search(r"\band\s*/\s*or\b", sentence, re.I) or max(coordination, chinese_coordination, properties) >= 3:
                 add(block, "coordination_stacking", "Inspect each coordinated item for a distinct technical role. Express the dependency directly and specify conjunction or alternatives; keep necessary sets, constraints and measured properties.")
             if text.count("—") >= 2 and len(re.findall(r"[\u3400-\u9fff]", text)) >= 10:
                 add(block, "ai_formulaic_prose", "Repeated em-dash chains replace syntax. State the input/output, condition or cause explicitly; mathematical minus signs and numeric ranges remain valid.")
@@ -375,7 +684,7 @@ def editorial_screen(blocks: list[dict], branch: str, reviews: dict | None = Non
         errors.append("reviews must be a list of source-bound decisions")
         review_items = []
     for entry in review_items:
-        if not isinstance(entry, dict) or not entry.get("candidate_id"):
+        if not isinstance(entry, dict) or not isinstance(entry.get("candidate_id"), str) or not entry["candidate_id"].strip():
             errors.append("each review requires candidate_id, decision and a scientific reason")
             continue
         if entry["candidate_id"] in review_map:
@@ -388,7 +697,18 @@ def editorial_screen(blocks: list[dict], branch: str, reviews: dict | None = Non
         if not decision:
             continue
         reason = decision.get("reason", "")
-        if decision.get("decision") == "scientific_content" and specific_scientific_reason(reason, candidate):
+        if decision.get("decision") == "required_disclosure":
+            accepted, error = required_record_disclosure(decision, candidate)
+            if accepted:
+                candidate["review_status"] = "retained_required_disclosure"
+                candidate["review_reason"] = reason.strip()
+                candidate["requirement_source"] = decision["requirement_source"]
+                candidate["requirement_quote"] = decision["requirement_quote"]
+            else:
+                errors.append("candidate " + candidate["candidate_id"] + ": " + error)
+        elif candidate.get("review_policy") == "rewrite_required":
+            errors.append("candidate " + candidate["candidate_id"] + ": explicit rhetorical framing or internal operational status must be rewritten in the source; a scientific-content reason cannot waive its live wording")
+        elif decision.get("decision") == "scientific_content" and specific_scientific_reason(reason, candidate):
             candidate["review_status"] = "retained_scientific_content"
             candidate["review_reason"] = reason.strip()
         else:
@@ -408,4 +728,11 @@ def read_reviews(path: str | Path | None) -> dict | None:
     value = json.loads(Path(path).read_text(encoding="utf-8-sig"))
     if not isinstance(value, dict):
         raise ValueError("editorial review decisions must be a JSON object")
+    # Requirement files travel with the review decision file, not the process
+    # working directory. Inline callers can supply absolute requirement paths.
+    for entry in value.get("reviews", []) if isinstance(value.get("reviews", []), list) else []:
+        if isinstance(entry, dict) and isinstance(entry.get("requirement_source"), str):
+            source = Path(entry["requirement_source"])
+            if not source.is_absolute():
+                entry["requirement_source"] = str((Path(path).resolve().parent / source).resolve())
     return value

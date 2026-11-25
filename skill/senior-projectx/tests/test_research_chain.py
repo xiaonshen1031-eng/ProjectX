@@ -1,6 +1,8 @@
 from __future__ import annotations
 import hashlib, json, sys, tempfile, unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 import pandas as pd
 from docx import Document
 ROOT = Path(__file__).resolve().parent.parent
@@ -68,9 +70,34 @@ class DataSolveAndLineageTests(unittest.TestCase):
         validation = project.validate_allocation(self.periods, self.vehicles, self.config, allocation, result_path)
         self.assertEqual(validation["status"], "pass")
         self.assertLess(validation["maximum_energy_residual_kwh"], 1e-7)
+        self.assertAlmostEqual(validation["minimum_capacity_margin_kw"], 1.0)
+        self.assertEqual(validation["tightest_period"], 1)
+        self.assertEqual(result["tightest_period"], validation["tightest_period"])
         bad = json.loads(self.config.read_text()); bad["integer_required"] = True; self.config.write_text(json.dumps(bad), encoding="utf-8")
         with self.assertRaisesRegex(ValueError, "continuous LPs only"):
             project.solve_allocation(self.periods, self.vehicles, self.config, self.root / "bad.csv")
+
+    def test_terminal_state_distinguishes_infeasibility_from_unresolved(self):
+        vehicles = pd.read_csv(self.vehicles)
+        vehicles.loc[0, "energy_kwh"] = 100
+        vehicles.to_csv(self.vehicles, index=False)
+        result = project.solve_allocation(self.periods, self.vehicles, self.config, self.root / "high.csv")
+        self.assertEqual(result["status"], "infeasible_or_failed")
+        self.assertEqual(result["termination"], "infeasible")
+        stopped = SimpleNamespace(success=False, status=1, message="iteration limit")
+        with patch.object(project, "linprog", return_value=stopped):
+            result = project.solve_allocation(self.periods, self.vehicles, self.config, self.root / "limit.csv")
+        self.assertEqual(result["termination"], "unresolved")
+
+    def test_nonfinite_reported_objective_does_not_pass(self):
+        allocation = self.root / "allocation.csv"
+        result = project.solve_allocation(self.periods, self.vehicles, self.config, allocation)
+        result["objective"] = float("nan")
+        result_path = self.root / "result.json"
+        project.write_json(result_path, result)
+        validation = project.validate_allocation(self.periods, self.vehicles, self.config, allocation, result_path)
+        self.assertEqual(validation["status"], "fail")
+        self.assertFalse(validation["checks"]["reported_objective"])
 
     def test_structured_solver_boundaries(self):
         solved = project.bounded_sum_linear([2, 1], [0, 0], [2, 3], 4)

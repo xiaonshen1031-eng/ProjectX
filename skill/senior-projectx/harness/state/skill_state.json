@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "skill_version": "1.1.0",
-  "last_modified": "2026-10-25T12:27:03+08:00",
+  "skill_version": "1.2.1",
+  "last_modified": "2026-11-25T23:11:36+08:00",
   "last_regression": {
-    "eval_id": "senior_projectx_1_1_0_portable_distribution",
+    "eval_id": "release-1.2.1-source",
     "status": "pass",
-    "timestamp": "2026-10-25T12:27:03+08:00"
+    "timestamp": "2026-11-25T23:11:36+08:00"
   },
   "preferences": {
     "results_should_use_scientific_narrative_not_report_style": {
@@ -271,6 +271,18 @@
       "previous_version": "1.0.0",
       "timestamp": "2026-10-25T12:07:39+08:00",
       "summary": "补齐Project经验维护和回归；兼容有序公式清单；修复Word模板和纯公式表格转换；加入原生Office流程与编辑检查；升级图型规则、模板、生成器和来源校验。"
+    },
+    {
+      "version": "1.2.0",
+      "previous_version": "1.1.0",
+      "timestamp": "2026-11-25T22:57:21+08:00",
+      "summary": "对照 NPS Project 3.2.4 升级证据图、中文分析、Word 局部修订与原生编号、客户模板汇报及计算复核。"
+    },
+    {
+      "version": "1.2.1",
+      "previous_version": "1.2.0",
+      "timestamp": "2026-11-25T23:11:36+08:00",
+      "summary": "上线前补齐分配图数据完整性、最终 Word/PDF 审阅对应检查和便携包依赖。"
     }
   ]
 }

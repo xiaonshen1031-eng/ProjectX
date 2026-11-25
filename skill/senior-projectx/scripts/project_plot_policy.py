@@ -10,6 +10,8 @@ from validate_figure_manifest import validate_publication_encoding, declared_lay
 
 def audit(data: dict, base_dir: Path | None = None) -> dict:
     errors = []
+    if not isinstance(data, dict):
+        return {'status': 'fail', 'errors': ['manifest must be an object']}
     artifacts = data.get('artifacts')
     if not isinstance(artifacts, list) or not artifacts:
         return {'status': 'fail', 'errors': ['artifacts must be a nonempty list']}
@@ -22,21 +24,28 @@ def audit(data: dict, base_dir: Path | None = None) -> dict:
             errors.append(where + ': artifact must be an object'); continue
         if not item.get('plot_type') or not item.get('question'):
             errors.append(where + ': plot_type and scientific question are required')
-        validate_publication_encoding(item, where, errors)
+        validate_publication_encoding(item, where, errors, allow_project_direct=True)
         sources = item.get('source', [])
-        if not isinstance(sources, list) or not sources:
+        if not isinstance(sources, list) or not sources or not all(isinstance(raw, str) and raw.strip() for raw in sources):
             errors.append(where + ': saved data sources are required'); continue
+        hashes = item.get('source_sha256')
+        if not isinstance(hashes, dict):
+            errors.append(where + ': source_sha256 must map source paths to hashes')
+            hashes = {}
         for raw in sources:
             path = resolve(raw)
             if not path.is_file():
                 errors.append(where + ': source missing: ' + str(raw)); continue
-            expected = item.get('source_sha256', {}).get(str(raw))
+            expected = hashes.get(raw)
             if not expected or hashlib.sha256(path.read_bytes()).hexdigest() != expected:
                 errors.append(where + ': source hash missing or stale: ' + str(raw))
         for location, raw in declared_layer_paths(item, where):
             if not isinstance(raw, str) or raw not in sources:
                 errors.append(location + ': layer source must name a bound source file')
-        path = resolve(item.get('path', ''))
+        raw_path = item.get('path')
+        if not isinstance(raw_path, str) or not raw_path.strip():
+            errors.append(where + ': rendered figure path is required'); continue
+        path = resolve(raw_path)
         if not path.is_file() or item.get('sha256') != hashlib.sha256(path.read_bytes()).hexdigest():
             errors.append(where + ': rendered figure missing or hash stale')
     return {'status': 'pass' if not errors else 'fail', 'errors': errors, 'figure_count': len(artifacts)}

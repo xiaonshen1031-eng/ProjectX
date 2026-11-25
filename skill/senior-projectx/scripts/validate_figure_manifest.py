@@ -44,10 +44,13 @@ def prohibited_publication_type(kind: str) -> bool:
     return "pareto" in kind and "3d" not in kind and "three_dimensional" not in kind
 
 
+def manuscript_mode(data: dict[str, Any]) -> str:
+    return normalized_type(data.get("manuscript_mode", data.get("branch", data.get("document_type", "project"))))
+
+
 def publication_policy(data: dict[str, Any], errors: list[str]) -> bool:
     # All routes share the same minimum scientific-information rule.
-    value = data.get("manuscript_mode", data.get("branch", data.get("document_type", "project")))
-    mode = normalized_type(value)
+    mode = manuscript_mode(data)
     if mode in {"project", "project_word"}:
         return True
     if mode not in {"journal", "journal_word", "journal_latex", "revision_package",
@@ -56,7 +59,8 @@ def publication_policy(data: dict[str, Any], errors: list[str]) -> bool:
     return True
 
 
-def validate_publication_encoding(fig: dict[str, Any], prefix: str, errors: list[str]) -> None:
+def validate_publication_encoding(fig: dict[str, Any], prefix: str, errors: list[str], *,
+                                  allow_project_direct: bool = False) -> None:
     """Validate declared encodings; pixels still require scientific visual review."""
     def validate_layers(node: dict[str, Any], where: str) -> None:
         kind = normalized_type(node.get("plot_type", ""))
@@ -88,6 +92,15 @@ def validate_publication_encoding(fig: dict[str, Any], prefix: str, errors: list
     def inspect(node: dict[str, Any], where: str, *, layer: bool = False) -> None:
         validate_layers(node, where)
         role = normalized_type(node.get("role", ""))
+        direct = node.get("direct_view")
+        direct_allowed = (
+            allow_project_direct and not layer and isinstance(direct, dict)
+            and direct.get("authority") in ("customer_template", "user_request")
+            and all(isinstance(direct.get(key), str) and populated(direct[key])
+                    for key in ("requirement", "reading_task"))
+        )
+        if direct is not None and not direct_allowed:
+            errors.append(f"{where}: direct_view needs a scoped customer template or user request and a specific requirement and reading_task.")
         for field in ("plot_type", "chart_type", "encoding"):
             if field not in node:
                 continue
@@ -96,9 +109,11 @@ def validate_publication_encoding(fig: dict[str, Any], prefix: str, errors: list
             line_primitive = layer and field == "encoding" and kind in {"line", "line_chart"} and role in PRIMITIVE_LINE_ROLES
             composition_primitive = layer and field == "encoding" and kind in {"bar", "stacked_bar"} and role == "additive_composition"
             point_primitive = layer and field == "encoding" and kind in {"scatter", "scatter_plot"} and role in {"conditional_distribution", "paired_effect", "conditional_response"}
-            if prohibited_publication_type(kind) and not (line_primitive or composition_primitive or point_primitive):
+            requested = direct_allowed and kind in PROHIBITED_PUBLICATION_TYPES and "pareto" not in kind
+            if prohibited_publication_type(kind) and not (line_primitive or composition_primitive or point_primitive or requested):
                 errors.append(f"{where}: prohibited {field}={node[field]!r}; use a scientific diagnostic or table. CUSTOM, decoration and multi-panel wrapping cannot waive this rule.")
-        if node.get("is_simple_bar") is True or node.get("is_simple_line") is True or node.get("is_2d_pareto") is True:
+        if node.get("is_2d_pareto") is True or (not direct_allowed and any(
+                node.get(flag) is True for flag in ("is_simple_bar", "is_simple_line"))):
             errors.append(f"{where}: declared simple bar/line or two-dimensional Pareto encoding is prohibited for this figure policy.")
         node_kind = normalized_type(node.get("plot_type", ""))
         if node_kind in {"stacked_bar", "stacked_contribution", "additive_composition", "error_regime_composition"}:
@@ -191,7 +206,8 @@ def validate_figure_manifest(data: dict[str, Any], base_dir: Path | None = None)
         numbers.append(num)
         prefix = f"Figure {num}"
         if publication:
-            validate_publication_encoding(fig, prefix, errors)
+            validate_publication_encoding(fig, prefix, errors,
+                                          allow_project_direct=manuscript_mode(data) in {"project", "project_word"})
         # Per-figure contracts override the legacy global contract. No backend
         # implicitly adds editable MATLAB or Word formats.
         required_formats = format_set(fig.get("required_formats", data.get("required_formats")), f"{prefix}: required_formats", errors)

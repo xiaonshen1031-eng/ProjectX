@@ -17,12 +17,20 @@ python scripts/check_reference_format.py report.docx --metadata
 
 ## Word图件与公式
 
-`replace_docx_figures.py` 只在确实需要替换已有图件时使用，执行前核对定位规则与图题；保留其他媒体、公式和正文。`audit_docx_submission.py` 检查媒体、对象、引文标记和声明的公式后端，MathType验证依赖实际原生内容和当前文件的渲染重开记录。
+`replace_docx_figures.py` 用于有确切图题定位的图件替换，执行前打开基线页核对槽位。`audit_docx_submission.py` 检查媒体、对象及声明的公式后端。原生公式本体、保存重开、显示字号和实际页面各有对应的验证。
 
 `project_equation_layout.py` 只调整普通单栏正文中的原生公式与编号布局，不转换公式、不核定其数学含义。具体边界见 [研究与交付指南](project-research-playbook.md)。最终文件保存、关闭、重开后导出PDF，检查全部实际页面，尤其公式位置、图例、字体、三线表、分节和图题。
+
+局部断页、分节、页码和数字引文处理按 [Word 分页与引文](word-pagination-and-citation-release.md) 检查。需要核对已批准的替换内容，按 [定点修订与对象保全](fixed-revision-integrity.md) 比较源稿和拟交付稿。客户明确指定不设参考文献时采用相应引文检查配置。
+
+## 客户模板汇报
+
+按 [汇报制作与复核](project-presentation-playbook.md) 查看实际导出页。全页比例、每个图名及图例、连接线、文本容纳和图表数据要分别核对。`audit_pptx_evidence.py` 读出局部布局修订前后的数据类对象差异，Office 保存重开和编辑持久性另作实际检查。
 
 ## 完整研究与局部修订
 
 `audit_project_delivery.py` 面向配套的连续分配算例，检查数据、求解、独立校核、图件、公式、PDF及当前DOCX语言。对于其他模型，按同类检查原则适配，不能为通过算例工具而伪造最优求解状态或无关输入。纯文字或格式修订复用未受影响的数值依据，同时核对最终文件中的改动和原生对象保存。
+
+样例的视觉审阅记录绑定实际导出的 Word 和 PDF。复核完成后记录 `docx_sha256`、`pdf_sha256`、`reviewer`、`reviewed_pages`、`page_images` 和 `status`。页面图片的相对路径以记录所在目录为基准。改动 Word 后，重新导出并检查受影响的页面，再更新对应的哈希和审阅结果。
 
 `build_delivery_package.py` 按明确的输入清单组合代码、图件和数据，仅在用户需要可复用成果包时使用。内部检查、源数据与最终成果分开保存；交付一个当前版本，不加入多个迭代稿、缓存或私人路径。

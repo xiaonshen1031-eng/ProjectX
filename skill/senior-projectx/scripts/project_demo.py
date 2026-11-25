@@ -73,13 +73,16 @@ def sensitivity(root: Path) -> dict:
         result_path = scenario_dir / f"result_{scale:.2f}.json"
         result = solve_allocation(root / "data/periods.csv", vehicles_path, root / "model/allocation.json", allocation_path)
         write_json(result_path, result)
+        status = result["termination"]
         if result["status"] == "optimal":
             validation = validate_allocation(root / "data/periods.csv", vehicles_path, root / "model/allocation.json", allocation_path, result_path)
+            if validation["status"] != "pass":
+                raise ValueError(f"Independent allocation check failed at demand scale {scale:.2f}")
             objective = result["objective"]; margin = validation["minimum_capacity_margin_kw"]
             mean_margin = float(sum(result["capacity_margin_kw"]) / len(result["capacity_margin_kw"]))
         else:
             objective = float("nan"); margin = float("nan"); mean_margin = float("nan")
-        rows.append({"demand_scale": scale, "status": result["status"], "objective": objective,
+        rows.append({"demand_scale": scale, "status": status, "objective": objective,
                      "minimum_margin_kw": margin, "mean_margin_kw": mean_margin})
     output = root / "data/results/sensitivity.csv"; pd.DataFrame(rows).to_csv(output, index=False, encoding="utf-8-sig")
     return {"status": "ok", "scenarios": len(rows), "output": str(output)}

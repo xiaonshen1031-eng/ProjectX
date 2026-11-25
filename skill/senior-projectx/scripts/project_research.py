@@ -244,6 +244,8 @@ def _allocation_problem(periods: pd.DataFrame, vehicles: pd.DataFrame, config: d
         raise ValueError("Periods missing fields: " + ", ".join(missing))
     if missing := sorted(required_vehicles - set(vehicles.columns)):
         raise ValueError("Vehicles missing fields: " + ", ".join(missing))
+    if periods.empty or vehicles.empty:
+        raise ValueError("The allocation model requires periods and vehicles")
     if (periods["duration_h"] <= 0).any() or (vehicles[["energy_kwh", "max_charge_kw"]] < 0).any().any():
         raise ValueError("Durations must be positive; energy and power must be nonnegative")
     headroom = periods["capacity_kw"].to_numpy(float) - periods["base_load_kw"].to_numpy(float)
@@ -290,6 +292,7 @@ def solve_allocation(periods_path: Path, vehicles_path: Path, config_path: Path,
         "solver": "scipy.optimize.linprog(method='highs')",
         "mathematical_scope": "continuous linear program",
         "status": "optimal" if solved.success else "infeasible_or_failed",
+        "termination": "optimal" if solved.success else "infeasible" if solved.status == 2 else "unresolved",
         "solver_status": int(solved.status),
         "solver_message": solved.message,
         "periods_path": str(periods_path),
@@ -317,6 +320,7 @@ def solve_allocation(periods_path: Path, vehicles_path: Path, config_path: Path,
         "period_total_charge_kw": total.tolist(),
         "headroom_kw": headroom.tolist(),
         "capacity_margin_kw": (headroom - total).tolist(),
+        "tightest_period": int(periods.period.iloc[int(np.argmin(headroom - total))]),
         "vehicle_delivered_energy_kwh": {str(v): float(e) for v, e in zip(vehicles.vehicle_id, energy)},
         "maximum_capacity_violation_kw": float(max(0.0, np.max(total - headroom))),
         "maximum_energy_residual_kwh": float(np.max(np.abs(energy - vehicles.energy_kwh.to_numpy(float)))),
@@ -331,6 +335,8 @@ def validate_allocation(periods_path: Path, vehicles_path: Path, config_path: Pa
     required = {"vehicle_id", "period", "charge_kw"}
     if required - set(allocation.columns):
         raise ValueError("Allocation missing required columns")
+    if not np.all(np.isfinite(pd.to_numeric(allocation.charge_kw, errors="coerce"))):
+        raise ValueError("Allocation charge_kw must be finite for every reported pair")
     expected_pairs = {(str(v), int(t)) for v in vehicles.vehicle_id for t in periods.period}
     observed_pairs = {(str(r.vehicle_id), int(r.period)) for r in allocation.itertuples()}
     errors = []
@@ -365,7 +371,10 @@ def validate_allocation(periods_path: Path, vehicles_path: Path, config_path: Pa
     objective = float(c @ matrix.reshape(-1))
     if result_path:
         claimed = read_json(result_path)
-        if claimed.get("status") != "optimal" or abs(float(claimed.get("objective", math.inf)) - objective) > tolerance:
+        reported = claimed.get("objective")
+        objective_matches = (isinstance(reported, (int, float)) and not isinstance(reported, bool)
+                             and math.isfinite(reported) and abs(reported - objective) <= tolerance)
+        if claimed.get("status") != "optimal" or not objective_matches:
             checks["reported_objective"] = False
             errors.append({"type": "reported_objective_mismatch", "recomputed": objective,
                            "reported": claimed.get("objective")})
@@ -378,7 +387,8 @@ def validate_allocation(periods_path: Path, vehicles_path: Path, config_path: Pa
         "checks": checks, "errors": errors,
         "maximum_energy_residual_kwh": float(np.max(np.abs(energy_residual), initial=0.0)),
         "maximum_capacity_violation_kw": float(max(0.0, np.max(capacity_residual, initial=0.0))),
-        "minimum_capacity_margin_kw": float(np.min(headroom - total, initial=0.0)),
+        "minimum_capacity_margin_kw": float(np.min(headroom - total)),
+        "tightest_period": int(periods.period.iloc[int(np.argmin(headroom - total))]),
         "recomputed_objective": objective,
     }
 

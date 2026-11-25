@@ -6,6 +6,8 @@ Pillow
 python-docx
 lxml
 olefile
+pypdf
+openpyxl
 requests
 # Optional Office Math conversion: latex2mathml
 # Native MathType conversion uses installed Microsoft Word and MathType on Windows.

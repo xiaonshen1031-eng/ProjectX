@@ -1,142 +1,599 @@
 'use strict';
+
 (() => {
-  const $=(selector,root=document)=>root.querySelector(selector);
-  const $$=(selector,root=document)=>[...root.querySelectorAll(selector)];
-  document.documentElement.classList.add('js');
-  const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
-  let reduced=motionPreference.matches;
-  try{reduced ||= localStorage.getItem('projectx-reduced-motion')==='true';}catch{}
-  const motionButton=$('#motion-toggle');
-  function applyMotion(){const active=reduced||motionPreference.matches;document.documentElement.classList.toggle('reduced-motion',active);document.body.classList.toggle('reduced-motion',active);motionButton.setAttribute('aria-pressed',String(active));motionButton.textContent=motionPreference.matches?'跟随系统减少动效':reduced?'动效已减少':'减少动效';}
-  motionButton.addEventListener('click',()=>{if(motionPreference.matches)return;reduced=!reduced;applyMotion();try{localStorage.setItem('projectx-reduced-motion',String(reduced));}catch{}});
-  motionPreference.addEventListener('change',applyMotion);applyMotion();
-  const reveal=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');reveal.unobserve(e.target);}}),{threshold:.06});
-  $$('.reveal').forEach(e=>reveal.observe(e));
-  let queued=false;
-  function progress(){const available=document.documentElement.scrollHeight-innerHeight;document.documentElement.style.setProperty('--page-progress',available>0?Math.min(1,Math.max(0,scrollY/available)):0);queued=false;}
-  addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(progress);}},{passive:true});addEventListener('resize',progress);progress();
-  document.addEventListener('visibilitychange',()=>document.body.classList.toggle('page-hidden',document.hidden));
-  const menu=$('.menu-toggle'),nav=$('#site-nav');
-  function closeMenu(){menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','展开导航');nav.classList.remove('open');}
-  menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'收起导航':'展开导航');nav.classList.toggle('open',open);});
-  $$('a',nav).forEach(a=>a.addEventListener('click',closeMenu));
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&nav.classList.contains('open')){closeMenu();menu.focus();}});
-  let toastTimer;
-  function toast(text){const el=$('#toast');el.textContent=text;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2300);}
-  $('#copy-prompt').addEventListener('click',async()=>{try{await navigator.clipboard.writeText($('#starter-prompt').textContent.trim());toast('项目提示已复制');}catch{const r=document.createRange();r.selectNodeContents($('#starter-prompt'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('提示已选中，可手动复制');}});
-  const stages={
-    task:['01 / TASK & MATERIALS','先明确，这个项目要解决什么。','从任务书、合同研究内容和已有材料中找到研究对象、承担范围与交付要求，再把要求拆成相互衔接的技术问题。','任务书、合同内容、已有成果与客户模板','拆解任务，确定研究对象、问题与承担范围','研究问题、工作边界与交付清单'],
-    data:['02 / DATA & ADAPTATION','把数据，整理成模型输入。','检查字段、单位、时间尺度和缺失情况，按照研究对象组织数据。需要跨地区或场景适配时，结合当地规模与约束调整曲线，并核查聚合前后的总量关系。','原始表格、时序曲线、公开数据与地区规模','数据清理、时间对齐、尺度适配与总量核查','模型输入、参数表与处理脚本'],
-    model:['03 / MODEL & METHOD','把问题，写成有联系的模型。','围绕输入、输出和需要回答的问题，明确变量、目标与运行约束。参考相关方法建立模型，说明关键关系如何影响结果，再选择适合的计算方法。','研究问题、数据输入、物理关系与参考方法','定义变量、目标和约束，建立模型关系','数学模型、方法选择与可计算的表达'],
-    compute:['04 / COMPUTE & VALIDATE','完成计算，再核查结果是否成立。','实施求解、预测或仿真，用相同数据划分、参数条件与指标组织比较。结合约束残差、独立计算和边界条件检查，定位异常并修正模型或实现。','模型、数据、参数设置与比较方案','求解计算、公平比较、独立复核与异常修正','计算结果、比较指标与可复算代码'],
-    analysis:['05 / RESULTS & ANALYSIS','从结果变化，解释背后的原因。','先比较总体差异，再追踪时间、空间、场景和参数变化。选择能够呈现这些关系的图表，把数值、模型机制与工程含义连成完整分析。','计算结果、比较方案与研究问题','差异比较、时空分析、敏感性分析与图表表达','有依据的结论、结果图表与连续分析'],
-    delivery:['06 / DELIVERABLES','沿客户模板，把成果交付完整。','把建模、结果和分析整理成技术报告，再转化为适合汇报的PPT。检查公式、图表、参考文献和页面，连同数据处理与计算源码一起交付。','模型关系、计算结果、分析与客户模板','报告写作、模板汇报、公式处理与页面检查','技术报告、PPT、图件与计算材料']
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+  const visible = element => Boolean(element && element.getClientRects().length && getComputedStyle(element).visibility !== 'hidden');
+  const focus = element => {
+    if (visible(element) && !element.disabled) element.focus({preventScroll: true});
   };
-  const stageTabs=$$('[data-stage]');
-  function showStage(button,focus=false){
-    const content=stages[button.dataset.stage];
-    stageTabs.forEach(tab=>{const active=tab===button;tab.setAttribute('aria-selected',String(active));tab.tabIndex=active?0:-1;});
-    $('#workflow-detail').setAttribute('aria-labelledby',button.id);
-    $('.stage-watermark').textContent=content[0].slice(0,2);
-    ['workflow-step-label','workflow-step-title','workflow-step-body','workflow-input','workflow-process','workflow-output'].forEach((id,i)=>$('#'+id).textContent=content[i]);
-    if(focus)button.focus({preventScroll:true});
+  const setText = (element, text) => {
+    if (element && element.textContent !== text) element.textContent = text;
+  };
+  const setSource = (element, path) => {
+    if (element && element.getAttribute('src') !== path) element.setAttribute('src', path);
+  };
+  function readPreference(key) {
+    try { return localStorage.getItem(key); } catch { return null; }
   }
-  stageTabs.forEach((button,i)=>{
-    button.addEventListener('click',()=>showStage(button));
-    button.addEventListener('keydown',event=>{let next;if(['ArrowRight','ArrowDown'].includes(event.key))next=(i+1)%stageTabs.length;if(['ArrowLeft','ArrowUp'].includes(event.key))next=(i+stageTabs.length-1)%stageTabs.length;if(event.key==='Home')next=0;if(event.key==='End')next=stageTabs.length-1;if(next!==undefined){event.preventDefault();showStage(stageTabs[next],true);}});
+  function writePreference(key, value) {
+    try { localStorage.setItem(key, value); } catch {}
+  }
+
+  document.documentElement.classList.add('js');
+  const motionQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  let userReducesMotion = readPreference('projectx-reduced-motion') === 'true';
+  const reducesMotion = () => userReducesMotion || motionQuery.matches;
+  const scrollBehavior = () => reducesMotion() ? 'auto' : 'smooth';
+  const motionButton = $('#motion-toggle');
+  function updateMotion() {
+    const reduced = reducesMotion();
+    document.documentElement.classList.toggle('reduced-motion', reduced);
+    document.body.classList.toggle('reduced-motion', reduced);
+    if (!motionButton) return;
+    motionButton.setAttribute('aria-pressed', String(reduced));
+    motionButton.setAttribute('aria-disabled', String(motionQuery.matches));
+    setText(motionButton, motionQuery.matches ? '跟随系统减少动效' : reduced ? '动效已减少' : '减少动效');
+  }
+  motionButton?.addEventListener('click', () => {
+    if (motionQuery.matches) return;
+    userReducesMotion = !userReducesMotion;
+    writePreference('projectx-reduced-motion', String(userReducesMotion));
+    updateMotion();
   });
-  $$('[data-route]').forEach(link=>link.addEventListener('click',()=>showStage($('#stage-'+link.dataset.route))));
-  const chartDialog=$('#chart-dialog'),videoDialog=$('#video-dialog'),video=$('#demo-video');
-  const charts=$$('.chart-card');
-  const titles=Object.fromEntries(charts.map(card=>[card.dataset.chart,$('h3',card).textContent]));
-  const chartMetadata=Object.fromEntries(charts.map(c=>[c.dataset.chart,{zh:{title:c.dataset.titleZh,description:c.dataset.descriptionZh,tags:c.dataset.tagsZh},en:{title:c.dataset.titleEn,description:c.dataset.descriptionEn,tags:c.dataset.tagsEn}}]));
-  let mode='python',language='zh',category='all',query='',selectedChart='gantt',release;
-  try{const saved=localStorage.getItem('projectx-figure-language');if(['zh','en'].includes(saved))language=saved;}catch{}
-  const pickerButtons=$$('[data-pick]');
-  const searchText=Object.fromEntries(charts.map(c=>[c.dataset.chart,($('figcaption',c).textContent+' '+pickerButtons.find(b=>b.dataset.pick===c.dataset.chart).textContent+' '+Object.values(chartMetadata[c.dataset.chart].en).join(' ')).toLowerCase()]));
-  const availableCharts=()=>charts.filter(c=>(category==='all'||c.dataset.family===category)&&(!query||searchText[c.dataset.chart].includes(query)));
-  const extension=()=>mode==='matlab'?'emf':'png';
-  const format=()=>extension().toUpperCase();
-  const modeLabel=()=>mode==='matlab'?'MATLAB / EMF':'Python / PNG';
-  const languageLabel=()=>language==='zh'?'中文':'英文';
-  const original=slug=>`downloads/figures/${mode}/${language==='zh'?'zh/':''}${slug}.${extension()}`;
-  const preview=slug=>`assets/charts/${language==='zh'?'zh/':''}${mode}-${slug}.webp`;
-  function refreshDialog(){
-    if(!selectedChart)return;
-    const zoomed=chartDialog.classList.contains('is-zoomed');
-    $('#lightbox-image').src=zoomed?(mode==='python'?original(selectedChart):`assets/charts/detail/${language==='zh'?'zh/':''}matlab-${selectedChart}.webp`):preview(selectedChart);$('#lightbox-image').alt=titles[selectedChart]+'，'+languageLabel()+'，'+modeLabel()+'模式';
-    chartDialog.dataset.figureLang=language;$('#chart-dialog-title').textContent=titles[selectedChart];$('#dialog-mode-label').textContent=languageLabel()+' · '+modeLabel();
-    $('#dialog-download').href=original(selectedChart);$('#dialog-download').textContent=`下载${languageLabel()}${format()}原图 ↘`;$('#dialog-download').download=`${selectedChart}-${language}.${extension()}`;
-    const extra=charts.find(c=>c.dataset.chart===selectedChart).dataset.extra==='true'?'_extra':'';
-    $('#dialog-source').href=`https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/${mode==='python'?'build_bilingual.py':'build_matlab'+extra+'.m'}`;
-    $('#dialog-backend').value=mode;$('#dialog-language').value=language;
-    $$('[data-dialog-step]').forEach(button=>button.disabled=availableCharts().length<2);
+  motionQuery.addEventListener('change', updateMotion);
+  updateMotion();
+
+  if ('IntersectionObserver' in window) {
+    const reveal = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        reveal.unobserve(entry.target);
+      }
+    }), {threshold: 0.06});
+    $$('.reveal').forEach(element => reveal.observe(element));
+  } else {
+    $$('.reveal').forEach(element => element.classList.add('visible'));
   }
-  function setMode(value){
-    if(!['python','matlab'].includes(value))return;mode=value;
-    $$('[data-mode]').forEach(b=>{const on=b.dataset.mode===mode;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});
-    refreshCards();
-    updateCount();if(chartDialog.open)refreshDialog();
+  let progressFrame = 0;
+  function updateProgress() {
+    progressFrame = 0;
+    const length = document.documentElement.scrollHeight - innerHeight;
+    const progress = length > 0 ? Math.min(1, Math.max(0, scrollY / length)) : 0;
+    document.documentElement.style.setProperty('--page-progress', progress);
   }
-  function refreshCards(){
-    const familyEn={time:'Time and scheduling',distribution:'Distributions',relation:'Relations and composition',space:'Space and constraints',evaluation:'Evaluation'};
-    charts.forEach(card=>{const slug=card.dataset.chart,meta=chartMetadata[slug][language];titles[slug]=meta.title;card.dataset.figureLang=language;card.lang=language==='zh'?'zh-CN':'en';$('h3',card).textContent=meta.title;$('figcaption>p',card).textContent=meta.description;$('.chart-tags',card).textContent=meta.tags;$('img',card).src=preview(slug);$('img',card).alt=language==='zh'?meta.title+'，中文':meta.title+' — English figure';$('[data-open]',card).setAttribute('aria-label',language==='zh'?'查看'+meta.title+'大图':'View '+meta.title+' full size');$('.chart-format',card).textContent=modeLabel();const link=$('.chart-download',card);link.href=original(slug);link.textContent=(language==='zh'?'中文 ':'EN ')+format()+' ↘';link.download=`${slug}-${language}.${extension()}`;link.setAttribute('aria-label',`下载${languageLabel()}${meta.title}${format()}原图`);const picker=pickerButtons.find(p=>p.dataset.pick===slug);$('strong',picker).textContent=meta.title;$('small',picker).textContent=language==='zh'?{time:'时序与调度',distribution:'分布比较',relation:'关联与构成',space:'空间与约束',evaluation:'评估对比'}[card.dataset.family]:familyEn[card.dataset.family];});
-    $('.atlas-picker').dataset.figureLang=language;$('#gallery').dataset.figureLang=language;
+  function queueProgress() {
+    if (!progressFrame) progressFrame = requestAnimationFrame(updateProgress);
   }
-  function setLanguage(value){
-    if(!['zh','en'].includes(value))return;language=value;
-    $$('[data-lang]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lang===language)));
-    refreshCards();syncMobilePicker();$('#mobile-chart-picker').value=selectedChart||'';updateCount();if(chartDialog.open)refreshDialog();try{localStorage.setItem('projectx-figure-language',language);}catch{}
+  addEventListener('scroll', queueProgress, {passive: true});
+  addEventListener('resize', queueProgress);
+  document.addEventListener('visibilitychange', () => document.body.classList.toggle('page-hidden', document.hidden));
+  updateProgress();
+
+  const menu = $('.menu-toggle');
+  const navigation = $('#site-nav');
+  if (menu && navigation) {
+    const isOpen = () => menu.getAttribute('aria-expanded') === 'true';
+    function setMenu(open, restoreFocus = false) {
+      menu.setAttribute('aria-expanded', String(open));
+      menu.setAttribute('aria-label', open ? '收起导航' : '展开导航');
+      navigation.classList.toggle('open', open);
+      if (open) focus($('a', navigation));
+      else if (restoreFocus) focus(menu);
+    }
+    menu.addEventListener('click', () => setMenu(!isOpen(), isOpen()));
+    navigation.addEventListener('click', event => {
+      const link = event.target.closest('a');
+      if (!link || !isOpen()) return;
+      setMenu(false);
+      if (link.hash && link.pathname === location.pathname && link.origin === location.origin) {
+        const target = document.getElementById(link.hash.slice(1));
+        if (target) {
+          if (!target.hasAttribute('tabindex')) target.tabIndex = -1;
+          focus(target);
+        }
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && isOpen()) {
+        event.preventDefault();
+        setMenu(false, true);
+      }
+    });
+    document.addEventListener('pointerdown', event => {
+      if (isOpen() && !menu.contains(event.target) && !navigation.contains(event.target)) setMenu(false);
+    });
+    document.addEventListener('focusin', event => {
+      if (isOpen() && !menu.contains(event.target) && !navigation.contains(event.target)) setMenu(false);
+    });
+    addEventListener('resize', () => {
+      if (isOpen() && !visible(menu)) setMenu(false);
+    });
   }
-  function updateCount(){const available=availableCharts(),index=available.findIndex(c=>c.dataset.chart===selectedChart)+1;$('#collection-status').textContent=available.length?`${languageLabel()} · ${modeLabel()} · 第${index}张 / 筛选到${available.length}类 · 共${charts.length}类图型`:'没有匹配的图型';$('#chart-prev').disabled=available.length<2;$('#chart-next').disabled=available.length<2;}
-  function syncMobilePicker(){const select=$('#mobile-chart-picker');select.replaceChildren();availableCharts().forEach(c=>{const option=document.createElement('option');option.value=c.dataset.chart;option.textContent=titles[c.dataset.chart];select.append(option);});select.disabled=!select.options.length;}
-  function selectChart(slug,focus=false){
-    selectedChart=slug;
-    charts.forEach(card=>{const active=card.dataset.chart===slug;card.hidden=!active;card.classList.toggle('is-selected',active);});
-    pickerButtons.forEach(button=>{const active=button.dataset.pick===slug;button.setAttribute('aria-selected',String(active));button.tabIndex=active?0:-1;if(active&&matchMedia('(min-width:761px)').matches){if(focus)button.focus({preventScroll:true});const picker=$('.atlas-picker'),r=button.getBoundingClientRect(),p=picker.getBoundingClientRect();const delta=r.top<p.top?r.top-p.top:r.bottom>p.bottom?r.bottom-p.bottom:0;if(delta)picker.scrollBy({top:delta,behavior:reduced?'auto':'smooth'});}});
-    $('#mobile-chart-picker').value=slug||'';$('#atlas-empty').hidden=Boolean(slug);
-    updateCount();if(chartDialog.open)refreshDialog();
+
+  let toastTimer;
+  function toast(text) {
+    const output = $('#toast');
+    if (!output) return;
+    setText(output, text);
+    output.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => output.classList.remove('show'), 2400);
   }
-  function cycleChart(offset,focus=false){const current=availableCharts();if(!current.length)return;const index=current.findIndex(c=>c.dataset.chart===selectedChart);selectChart(current[(index+offset+current.length)%current.length].dataset.chart,focus);}
-  function filterCharts(){
-    const current=availableCharts();
-    pickerButtons.forEach(b=>b.hidden=!current.some(c=>c.dataset.chart===b.dataset.pick));
-    syncMobilePicker();selectChart(current.some(c=>c.dataset.chart===selectedChart)?selectedChart:(current[0]?.dataset.chart||null));$('#clear-search').hidden=!query;requestAnimationFrame(progress);
-  }
-  $$('[data-mode]').forEach(button=>button.addEventListener('click',()=>setMode(button.dataset.mode)));
-  $$('[data-category]').forEach(button=>button.addEventListener('click',()=>{category=button.dataset.category;$$('[data-category]').forEach(b=>{const on=b===button;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));});filterCharts();}));
-  pickerButtons.forEach(button=>{
-    button.addEventListener('click',()=>selectChart(button.dataset.pick));
-    button.addEventListener('keydown',event=>{if(['ArrowDown','ArrowRight','ArrowUp','ArrowLeft','Home','End'].includes(event.key)){event.preventDefault();const current=availableCharts();if(!current.length)return;if(event.key==='Home')selectChart(current[0].dataset.chart,true);else if(event.key==='End')selectChart(current.at(-1).dataset.chart,true);else cycleChart(['ArrowDown','ArrowRight'].includes(event.key)?1:-1,true);}});
+  $('#copy-prompt')?.addEventListener('click', async () => {
+    const prompt = $('#starter-prompt');
+    if (!prompt) return;
+    try {
+      await navigator.clipboard.writeText(prompt.textContent.trim());
+      toast('项目提示已复制');
+    } catch {
+      const selection = getSelection();
+      if (!selection) return;
+      const range = document.createRange();
+      range.selectNodeContents(prompt);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      toast('已选中提示，可手动复制');
+    }
   });
-  $('#chart-prev').addEventListener('click',()=>cycleChart(-1));$('#chart-next').addEventListener('click',()=>cycleChart(1));
-  $('#chart-search').addEventListener('input',event=>{query=event.target.value.trim().toLowerCase();filterCharts();});
-  $('#clear-search').addEventListener('click',()=>{query='';$('#chart-search').value='';filterCharts();$('#chart-search').focus({preventScroll:true});});
-  $('#reset-atlas').addEventListener('click',()=>{query='';category='all';$('#chart-search').value='';$$('[data-category]').forEach(b=>{const active=b.dataset.category==='all';b.classList.toggle('active',active);b.setAttribute('aria-pressed',String(active));});filterCharts();});
-  $('#mobile-chart-picker').addEventListener('change',event=>selectChart(event.target.value));
-  $$('[data-lang]').forEach(button=>button.addEventListener('click',()=>setLanguage(button.dataset.lang)));
-  $('#dialog-backend').addEventListener('change',event=>setMode(event.target.value));
-  $('#dialog-language').addEventListener('change',event=>setLanguage(event.target.value));
-  setLanguage(language);
-  filterCharts();
-  $$('[data-use-mode]').forEach(button=>button.addEventListener('click',()=>{setMode(button.dataset.useMode);$('#gallery').scrollIntoView({behavior:reduced?'auto':'smooth'});$('.mode-switch [data-mode="'+mode+'"]').focus({preventScroll:true});}));
-  $$('[data-open]').forEach(button=>button.addEventListener('click',()=>{selectedChart=button.dataset.open;chartDialog.classList.remove('is-zoomed');refreshDialog();$('#image-zoom').setAttribute('aria-pressed','false');$('#image-zoom').textContent='放大查看';chartDialog.showModal();document.body.style.overflow='hidden';}));
-  function toggleZoom(){const active=chartDialog.classList.toggle('is-zoomed');$('#image-zoom').setAttribute('aria-pressed',String(active));$('#image-zoom').textContent=active?'适合屏幕':'放大查看';refreshDialog();}
-  $('#image-zoom').addEventListener('click',toggleZoom);$('#lightbox-image').addEventListener('click',toggleZoom);
-  $$('[data-dialog-step]').forEach(b=>b.addEventListener('click',()=>cycleChart(Number(b.dataset.dialogStep))));
-  chartDialog.addEventListener('keydown',event=>{if(event.target.closest('select,input,textarea'))return;if(!chartDialog.classList.contains('is-zoomed')&&(event.key==='ArrowLeft'||event.key==='ArrowRight')){event.preventDefault();cycleChart(event.key==='ArrowLeft'?-1:1);}});
-  function openVideo(start){
-    if(!videoDialog.open)videoDialog.showModal();document.body.style.overflow='hidden';
-    if(Number.isFinite(start)){if(video.readyState>=1)video.currentTime=start;else video.addEventListener('loadedmetadata',()=>{video.currentTime=start;},{once:true});}
-    const playing=video.play();if(playing)playing.catch(()=>toast('点击视频播放按钮观看演示'));
+
+  function scrollTabIntoPanel(tab, panel) {
+    if (!panel || !visible(tab)) return;
+    const tabRect = tab.getBoundingClientRect();
+    const panelRect = panel.getBoundingClientRect();
+    const horizontal = panel.scrollWidth > panel.clientWidth;
+    const vertical = panel.scrollHeight > panel.clientHeight;
+    const dx = tabRect.left < panelRect.left ? tabRect.left - panelRect.left
+      : Math.max(0, tabRect.right - panelRect.right);
+    const dy = tabRect.top < panelRect.top ? tabRect.top - panelRect.top
+      : Math.max(0, tabRect.bottom - panelRect.bottom);
+    if ((horizontal && dx) || (vertical && dy)) {
+      panel.scrollBy({left: horizontal ? dx : 0, top: vertical ? dy : 0, behavior: scrollBehavior()});
+    }
   }
-  $$('.watch-video').forEach(b=>b.addEventListener('click',()=>openVideo()));
-  $$('[data-chapter]').forEach(b=>b.addEventListener('click',()=>{const chapter=release?.video?.chapters?.find(c=>c.id===b.dataset.chapter);openVideo(chapter?.start||0);}));
-  $$('[data-close]').forEach(b=>b.addEventListener('click',()=>$('#'+b.dataset.close).close()));
-  [chartDialog,videoDialog].forEach(dialog=>{
-    dialog.addEventListener('close',()=>{if(dialog===videoDialog)video.pause();document.body.style.overflow='';});
-    dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const r=dialog.getBoundingClientRect();if(event.clientX<r.left||event.clientX>r.right||event.clientY<r.top||event.clientY>r.bottom)dialog.close();});
+  function arrowIndex(key, index, count) {
+    if (!count) return;
+    if (key === 'Home') return 0;
+    if (key === 'End') return count - 1;
+    if (key === 'ArrowRight' || key === 'ArrowDown') return (index + 1) % count;
+    if (key === 'ArrowLeft' || key === 'ArrowUp') return (index + count - 1) % count;
+  }
+
+  const stages = {
+    task: ['01 / TASK & MATERIALS', '确定项目要解决的问题', '从任务书、合同和已有成果确认承担范围，再把研究要求拆成可核查的问题。', '任务书、已有成果、客户模板', '核对研究对象、交付范围及约束', '技术问题和交付清单'],
+    data: ['02 / DATA & ADAPTATION', '整理模型所需的数据', '核对字段、单位、时段及样本覆盖。曲线需要迁移到其他地区时，按当地规模调整，再校核总量。', '原始表格、历史曲线、地区规模', '清理数据，统一时段和统计单位', '模型输入、参数表、处理脚本'],
+    model: ['03 / MODEL & METHOD', '建立能回答问题的模型', '确定输入、变量和运行约束。用已有物理关系或可验证的统计关系解释输出如何形成，再选择计算方法。', '工程问题和数据输入', '建立变量关系、边界和目标', '可计算的模型'],
+    compute: ['04 / COMPUTE & VALIDATE', '复算关键约束', '在相同信息条件下比较各方案。从保存的结果重算约束残差，核对异常是来自输入、模型还是实现。', '模型、参数和对照方案', '求解并独立复核关键约束', '结果、比较指标和复算代码'],
+    analysis: ['05 / RESULTS & ANALYSIS', '解释差异怎样产生', '在相同工况下比较结果。用曲线、配对差值或阈值定位变化，再说明哪个约束限制了可用能力。', '计算结果与对照工况', '定位差异，解释运行约束', '结果图表和工程判断'],
+    delivery: ['06 / DELIVERABLES', '按客户模板交付', '把方法、工况和可复算结果编入技术报告。汇报页呈现决定方案的关键证据，并复核公式、图表和页面。', '结果、分析与客户模板', '编排报告，按实际页面复核', '报告、汇报、图件和源码']
+  };
+  const stageTabs = $$('[data-stage]');
+  const stagePanel = $('#workflow-detail');
+  const stageFieldIds = ['workflow-step-label', 'workflow-step-title', 'workflow-step-body', 'workflow-input', 'workflow-process', 'workflow-output'];
+  function showStage(tab, moveFocus = false) {
+    if (!tab || !stagePanel) return;
+    const content = stages[tab.dataset.stage];
+    if (!content) return;
+    stageTabs.forEach(button => {
+      const active = button === tab;
+      button.setAttribute('aria-selected', String(active));
+      button.tabIndex = active ? 0 : -1;
+    });
+    stagePanel.setAttribute('aria-labelledby', tab.id);
+    stageFieldIds.forEach((id, i) => setText(document.getElementById(id), content[i]));
+    if (moveFocus) {
+      focus(tab);
+      scrollTabIntoPanel(tab, tab.closest('[role="tablist"]'));
+    }
+  }
+  stageTabs.forEach((tab, index) => {
+    tab.addEventListener('click', () => showStage(tab));
+    tab.addEventListener('keydown', event => {
+      const next = arrowIndex(event.key, index, stageTabs.length);
+      if (next === undefined) return;
+      event.preventDefault();
+      showStage(stageTabs[next], true);
+    });
   });
-  const time=seconds=>`${Math.floor(seconds/60).toString().padStart(2,'0')}:${Math.floor(seconds%60).toString().padStart(2,'0')}`;
-  fetch('release.json').then(r=>{if(!r.ok)throw Error('metadata');return r.json();}).then(r=>{release=r;$$('[data-version]').forEach(e=>e.textContent='v'+r.version);$$('[data-download-size]').forEach(e=>e.textContent=`ZIP · ${Math.round(r.bytes/1024)} KiB`);$$('[data-download]').forEach(e=>e.href=r.download);$$('[data-video-duration]').forEach(e=>e.textContent=time(r.video.duration));$$('[data-chapter]').forEach(b=>{const c=r.video.chapters.find(c=>c.id===b.dataset.chapter);if(c)$('span',b).textContent=time(c.start);});}).catch(()=>{});
+  $$('[data-route]').forEach(link => link.addEventListener('click', () => {
+    showStage(stageTabs.find(tab => tab.dataset.stage === link.dataset.route));
+  }));
+
+  const chartDialog = $('#chart-dialog');
+  const videoDialog = $('#video-dialog');
+  const video = $('#demo-video');
+  const openDialogs = new Set();
+  let savedOverflow;
+  function showDialog(dialog, opener) {
+    if (!dialog || dialog.open) return;
+    dialog.showModal();
+    if (!openDialogs.size) {
+      savedOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+    }
+    openDialogs.add(dialog);
+    dialog.openedBy = opener;
+    focus($('[data-close]', dialog));
+  }
+  function restoreDialogFocus(dialog, backup) {
+    const opener = visible(dialog.openedBy) ? dialog.openedBy : backup;
+    dialog.openedBy = null;
+    openDialogs.delete(dialog);
+    if (!openDialogs.size) document.body.style.overflow = savedOverflow ?? '';
+    focus(opener);
+  }
+  [chartDialog, videoDialog].filter(Boolean).forEach(dialog => {
+    let pressedBackdrop = false;
+    function outside(event) {
+      const rect = dialog.getBoundingClientRect();
+      return event.target === dialog && (
+        event.clientX < rect.left || event.clientX > rect.right ||
+        event.clientY < rect.top || event.clientY > rect.bottom
+      );
+    }
+    dialog.addEventListener('pointerdown', event => { pressedBackdrop = outside(event); });
+    dialog.addEventListener('click', event => {
+      if (pressedBackdrop && outside(event)) dialog.close();
+      pressedBackdrop = false;
+    });
+    $$('[data-close]', dialog).forEach(button => button.addEventListener('click', () => dialog.close()));
+  });
+
+  const gallery = $('#gallery');
+  const atlasPicker = $('.atlas-picker');
+  const mobilePicker = $('#mobile-chart-picker');
+  const searchBox = $('#chart-search');
+  const clearSearch = $('#clear-search');
+  const resetAtlas = $('#reset-atlas');
+  const emptyPanel = $('#atlas-empty');
+  const status = $('#collection-status');
+  const zoomButton = $('#image-zoom');
+  const dialogPicture = $('#lightbox-image');
+  const dialogScroll = $('.chart-dialog-scroll');
+  const categories = $$('[data-category]');
+  const modeButtons = $$('[data-mode]');
+  const languageButtons = $$('[data-lang]');
+  const formatByMode = {python: 'PNG', matlab: 'EMF'};
+  const modeName = {python: 'Python / PNG', matlab: 'MATLAB / EMF'};
+  const languageName = {zh: '中文', en: '英文'};
+  const familyName = {
+    zh: {time: '时序与调度', distribution: '分布比较', relation: '关联与构成', space: '空间与约束', evaluation: '评估对比'},
+    en: {time: 'Time and scheduling', distribution: 'Distributions', relation: 'Relations and composition', space: 'Space and constraints', evaluation: 'Evaluation'}
+  };
+  const galleryTabs = new Map($$('[data-pick]').map(tab => [tab.dataset.pick, tab]));
+  const searchKey = text => (text ?? '').normalize('NFKC').toLocaleLowerCase().trim();
+  const charts = $$('.chart-card').map(card => {
+    const {chart: id, family, extra} = card.dataset;
+    const tab = galleryTabs.get(id);
+    const metadata = {
+      zh: {title: card.dataset.titleZh || $('h3', card)?.textContent, description: card.dataset.descriptionZh, tags: card.dataset.tagsZh},
+      en: {title: card.dataset.titleEn, description: card.dataset.descriptionEn, tags: card.dataset.tagsEn}
+    };
+    return {
+      id, card, tab, family, extra,
+      title: $('h3', card), description: $('figcaption > p', card), tags: $('.chart-tags', card),
+      opener: $('[data-open]', card), image: $('img', card), format: $('.chart-format', card), download: $('.chart-download', card),
+      metadata,
+      search: searchKey([id, family, familyName.zh[family], familyName.en[family], ...Object.values(metadata.zh), ...Object.values(metadata.en)].join(' '))
+    };
+  });
+
+  let mode = 'python';
+  const savedLanguage = readPreference('projectx-figure-language');
+  let language = savedLanguage === 'en' ? 'en' : 'zh';
+  let selectedChart = charts.find(chart => !chart.card.hidden) ?? charts[0];
+  let available = charts;
+  let category = 'all';
+
+  function figurePaths(chart) {
+    const folder = language === 'zh' ? 'zh/' : '';
+    return {
+      thumbnail: 'assets/charts/' + folder + mode + '-' + chart.id + '.webp',
+      original: 'downloads/figures/' + mode + '/' + folder + chart.id + '.' + formatByMode[mode].toLowerCase(),
+      detail: 'assets/charts/detail/' + folder + 'matlab-' + chart.id + '.webp'
+    };
+  }
+  function setPressed(buttons, key, selected) {
+    buttons.forEach(button => {
+      const active = button.dataset[key] === selected;
+      button.setAttribute('aria-pressed', String(active));
+      button.classList.toggle('active', active);
+    });
+  }
+  function renderCard(chart) {
+    const paths = figurePaths(chart);
+    const {title, description, tags} = chart.metadata[language];
+    const label = language === 'zh' ? '查看' + title + '大图' : 'View ' + title + ' full size';
+    chart.card.dataset.figureLang = language;
+    chart.card.lang = language === 'zh' ? 'zh-CN' : 'en';
+    setText(chart.title, title);
+    setText(chart.description, description);
+    setText(chart.tags, tags);
+    setText(chart.format, modeName[mode]);
+    chart.opener?.setAttribute('aria-label', label);
+    if (chart.image) chart.image.alt = language === 'zh' ? title + '，中文图' : title + ' — English figure';
+    if (chart.download) {
+      chart.download.href = paths.original;
+      chart.download.download = chart.id + '-' + language + '.' + formatByMode[mode].toLowerCase();
+      setText(chart.download, (language === 'zh' ? '中文 ' : 'EN ') + formatByMode[mode] + ' ↘');
+      chart.download.setAttribute('aria-label', '下载' + languageName[language] + title + formatByMode[mode] + '原图');
+    }
+    // Hidden cards keep their image requests deferred until selection.
+    if (chart === selectedChart) setSource(chart.image, paths.thumbnail);
+  }
+  function renderTab(chart) {
+    if (!chart.tab) return;
+    chart.tab.lang = language === 'zh' ? 'zh-CN' : 'en';
+    setText($('strong', chart.tab), chart.metadata[language].title);
+    setText($('small', chart.tab), familyName[language][chart.family]);
+  }
+  function renderStatus() {
+    if (available.length) {
+      const number = available.indexOf(selectedChart) + 1;
+      setText(status, number + ' / ' + available.length + ' 类图型 · ' + languageName[language] + ' · ' + modeName[mode]);
+    } else {
+      setText(status, '没有匹配的图型');
+    }
+    $$('#chart-prev, #chart-next, [data-dialog-step]').forEach(button => button.disabled = available.length < 2);
+  }
+  function fillMobilePicker() {
+    if (!mobilePicker) return;
+    const options = available.map(chart => new Option(chart.metadata[language].title, chart.id));
+    mobilePicker.replaceChildren(...options);
+    mobilePicker.lang = language === 'zh' ? 'zh-CN' : 'en';
+    mobilePicker.value = selectedChart?.id || '';
+    mobilePicker.disabled = !available.length;
+  }
+  function renderDialog() {
+    if (!chartDialog || !selectedChart) return;
+    const {title} = selectedChart.metadata[language];
+    const paths = figurePaths(selectedChart);
+    const zoomed = chartDialog.classList.contains('is-zoomed');
+    setSource(dialogPicture, zoomed ? (mode === 'python' ? paths.original : paths.detail) : paths.thumbnail);
+    if (dialogPicture) dialogPicture.alt = title + '，' + languageName[language] + '，' + modeName[mode];
+    chartDialog.dataset.figureLang = language;
+    const heading = $('#chart-dialog-title');
+    setText(heading, title);
+    if (heading) heading.lang = language === 'zh' ? 'zh-CN' : 'en';
+    setText($('#dialog-mode-label'), languageName[language] + ' · ' + modeName[mode]);
+    const download = $('#dialog-download');
+    if (download) {
+      download.href = paths.original;
+      download.download = selectedChart.id + '-' + language + '.' + formatByMode[mode].toLowerCase();
+      setText(download, '下载' + languageName[language] + formatByMode[mode] + '原图 ↘');
+    }
+    const source = $('#dialog-source');
+    if (source) {
+      const script = mode === 'python' ? 'build_bilingual.py' : selectedChart.extra === 'true' ? 'build_matlab_extra.m' : 'build_matlab.m';
+      source.href = 'https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/' + script;
+    }
+    const backend = $('#dialog-backend');
+    const locale = $('#dialog-language');
+    if (backend) backend.value = mode;
+    if (locale) locale.value = language;
+  }
+  function selectChart(chart, moveFocus = false) {
+    selectedChart = chart;
+    for (const item of charts) {
+      const active = chart === item;
+      item.card.hidden = !active;
+      item.card.classList.toggle('is-selected', active);
+      if (item.tab) {
+        item.tab.setAttribute('aria-selected', String(active));
+        item.tab.tabIndex = active ? 0 : -1;
+      }
+    }
+    if (chart) {
+      renderCard(chart);
+      if (moveFocus) focus(chart.tab);
+      scrollTabIntoPanel(chart.tab, atlasPicker);
+    }
+    if (mobilePicker) mobilePicker.value = chart?.id || '';
+    if (emptyPanel) emptyPanel.hidden = Boolean(chart);
+    renderStatus();
+    if (chartDialog?.open) {
+      renderDialog();
+      dialogScroll?.scrollTo(0, 0);
+    }
+    queueProgress();
+  }
+  function setZoom(on) {
+    chartDialog?.classList.toggle('is-zoomed', on);
+    zoomButton?.setAttribute('aria-pressed', String(on));
+    setText(zoomButton, on ? '适合屏幕' : '放大查看');
+    if (dialogScroll) {
+      dialogScroll.tabIndex = on ? 0 : -1;
+      if (on) dialogScroll.setAttribute('aria-label', '图型大图，可滚动查看');
+      else dialogScroll.removeAttribute('aria-label');
+      dialogScroll.scrollTo(0, 0);
+    }
+  }
+  function cycleChart(offset, moveFocus = false) {
+    if (available.length < 2) return;
+    const at = available.indexOf(selectedChart);
+    selectChart(available[(at + offset + available.length) % available.length], moveFocus);
+  }
+  function applyFilters() {
+    const query = searchKey(searchBox?.value).split(/\s+/).filter(Boolean);
+    available = charts.filter(chart => {
+      return (category === 'all' || chart.family === category) && query.every(term => chart.search.includes(term));
+    });
+    for (const chart of charts) if (chart.tab) chart.tab.hidden = !available.includes(chart);
+    setPressed(categories, 'category', category);
+    if (clearSearch) clearSearch.hidden = !searchBox?.value;
+    fillMobilePicker();
+    selectChart(available.includes(selectedChart) ? selectedChart : available[0]);
+  }
+  function setMode(value) {
+    if (value !== 'python' && value !== 'matlab') return;
+    mode = value;
+    setPressed(modeButtons, 'mode', mode);
+    if (selectedChart) renderCard(selectedChart);
+    renderStatus();
+    if (chartDialog?.open) renderDialog();
+  }
+  function setLanguage(value) {
+    if (value !== 'zh' && value !== 'en') return;
+    language = value;
+    setPressed(languageButtons, 'lang', language);
+    if (atlasPicker) atlasPicker.dataset.figureLang = language;
+    if (gallery) gallery.dataset.figureLang = language;
+    charts.forEach(renderTab);
+    fillMobilePicker();
+    if (selectedChart) renderCard(selectedChart);
+    renderStatus();
+    if (chartDialog?.open) renderDialog();
+    writePreference('projectx-figure-language', language);
+  }
+
+  charts.forEach(chart => {
+    chart.tab?.addEventListener('click', () => selectChart(chart));
+    chart.tab?.addEventListener('keydown', event => {
+      const next = arrowIndex(event.key, available.indexOf(chart), available.length);
+      if (next === undefined) return;
+      event.preventDefault();
+      selectChart(available[next], true);
+    });
+    chart.opener?.addEventListener('click', () => {
+      selectChart(chart);
+      setZoom(false);
+      renderDialog();
+      showDialog(chartDialog, chart.opener);
+    });
+  });
+  modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
+  languageButtons.forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.lang)));
+  categories.forEach(button => button.addEventListener('click', () => {
+    category = button.dataset.category;
+    applyFilters();
+  }));
+  searchBox?.addEventListener('input', applyFilters);
+  clearSearch?.addEventListener('click', () => {
+    searchBox.value = '';
+    applyFilters();
+    focus(searchBox);
+  });
+  resetAtlas?.addEventListener('click', () => {
+    if (searchBox) searchBox.value = '';
+    category = 'all';
+    applyFilters();
+    focus(searchBox ?? (visible(mobilePicker) ? mobilePicker : selectedChart?.tab));
+  });
+  mobilePicker?.addEventListener('change', event => {
+    const chart = available.find(item => item.id === event.target.value);
+    if (chart) selectChart(chart);
+  });
+  $('#chart-prev')?.addEventListener('click', () => cycleChart(-1));
+  $('#chart-next')?.addEventListener('click', () => cycleChart(1));
+  $('#dialog-backend')?.addEventListener('change', event => setMode(event.target.value));
+  $('#dialog-language')?.addEventListener('change', event => setLanguage(event.target.value));
+  $$('[data-use-mode]').forEach(button => button.addEventListener('click', () => {
+    setMode(button.dataset.useMode);
+    gallery?.scrollIntoView({behavior: scrollBehavior(), block: 'start'});
+    focus(modeButtons.find(item => item.dataset.mode === mode));
+  }));
+  function toggleZoom() {
+    if (!chartDialog) return;
+    setZoom(!chartDialog.classList.contains('is-zoomed'));
+    renderDialog();
+  }
+  zoomButton?.addEventListener('click', toggleZoom);
+  dialogPicture?.addEventListener('click', toggleZoom);
+  $$('[data-dialog-step]').forEach(button => button.addEventListener('click', () => cycleChart(Number(button.dataset.dialogStep))));
+  chartDialog?.addEventListener('keydown', event => {
+    if (event.target.closest('select, input, textarea') || chartDialog.classList.contains('is-zoomed')) return;
+    if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+      event.preventDefault();
+      cycleChart(event.key === 'ArrowLeft' ? -1 : 1);
+    }
+  });
+  chartDialog?.addEventListener('close', () => restoreDialogFocus(chartDialog, selectedChart?.opener || searchBox));
+  if (charts.length) {
+    setLanguage(language);
+    setMode(mode);
+    applyFilters();
+  }
+
+  const versionPattern = /^\d+\.\d+\.\d+(?:[-+][\w.-]+)?$/;
+  const declaredVersion = $('[data-version]')?.textContent.trim().replace(/^v/, '');
+  function validLocalFile(path, directory) {
+    if (typeof path !== 'string' || !path.startsWith(directory)) return false;
+    const resolved = new URL(path, document.baseURI);
+    const permitted = new URL(directory, document.baseURI);
+    return resolved.origin === permitted.origin && resolved.pathname.startsWith(permitted.pathname);
+  }
+  function releaseIsCurrent(version) {
+    return versionPattern.test(version) && (
+      !versionPattern.test(declaredVersion) || version.localeCompare(declaredVersion, undefined, {numeric: true}) >= 0
+    );
+  }
+  function formatTime(seconds) {
+    const min = Math.floor(seconds / 60).toString().padStart(2, '0');
+    const sec = Math.floor(seconds % 60).toString().padStart(2, '0');
+    return min + ':' + sec;
+  }
+  const release = fetch('release.json', {cache: 'no-cache'}).then(response => {
+    if (!response.ok) return null;
+    return response.json();
+  }).then(data => {
+    if (!data) return null;
+    if (releaseIsCurrent(data.version) && validLocalFile(data.download, 'downloads/')) {
+      $$('[data-version]').forEach(element => setText(element, 'v' + data.version));
+      $$('[data-download]').forEach(element => element.href = data.download);
+      if (Number.isFinite(data.bytes) && data.bytes > 0) {
+        $$('[data-download-size]').forEach(element => setText(element, 'ZIP · ' + Math.round(data.bytes / 1024) + ' KiB'));
+      }
+      if (Number.isInteger(data.tests?.regressions) && data.tests.regressions >= 0) {
+        $$('[data-test-count]').forEach(element => setText(element, String(data.tests.regressions)));
+      }
+    }
+    if (Number.isFinite(data.video?.duration) && data.video.duration > 0) {
+      $$('[data-video-duration]').forEach(element => setText(element, formatTime(data.video.duration)));
+    }
+    if (Array.isArray(data.video?.chapters)) $$('[data-chapter]').forEach(button => {
+      const chapter = data.video.chapters.find(item => item.id === button.dataset.chapter);
+      if (Number.isFinite(chapter?.start) && chapter.start >= 0) setText($('span', button), formatTime(chapter.start));
+    });
+    return data;
+  }).catch(() => null);
+
+  let videoRequest = 0;
+  let pendingSeek;
+  function seekVideo() {
+    if (videoDialog?.open && video.readyState >= 1 && Number.isFinite(pendingSeek)) {
+      if (pendingSeek >= 0 && pendingSeek < video.duration) video.currentTime = pendingSeek;
+      pendingSeek = undefined;
+    }
+  }
+  function openVideo(button) {
+    if (!video || !videoDialog) return;
+    showDialog(videoDialog, button);
+    const request = ++videoRequest;
+    pendingSeek = button.dataset.chapter ? undefined : 0;
+    seekVideo();
+    if (button.dataset.chapter) {
+      const fallback = Number.parseFloat(button.dataset.start);
+      if (Number.isFinite(fallback)) {
+        pendingSeek = fallback;
+        seekVideo();
+      } else {
+        release.then(data => {
+          if (!videoDialog.open || request !== videoRequest) return;
+          pendingSeek = data?.video?.chapters?.find(chapter => chapter.id === button.dataset.chapter)?.start;
+          seekVideo();
+        });
+      }
+    }
+    video.play()?.catch(() => {
+      if (videoDialog.open && request === videoRequest) toast('点击视频播放按钮观看演示');
+    });
+  }
+  video?.addEventListener('loadedmetadata', seekVideo);
+  $$('.watch-video, [data-chapter]').forEach(button => button.addEventListener('click', () => openVideo(button)));
+  videoDialog?.addEventListener('close', () => {
+    videoRequest++;
+    pendingSeek = undefined;
+    video?.pause();
+    restoreDialogFocus(videoDialog, $('.watch-video'));
+  });
 })();
