@@ -240,13 +240,9 @@
   });
 
   const gallery = $('#gallery');
-  const atlasPicker = $('.atlas-picker');
-  const mobilePicker = $('#mobile-chart-picker');
   const searchBox = $('#chart-search');
   const clearSearch = $('#clear-search');
-  const resetAtlas = $('#reset-atlas');
   const emptyPanel = $('#atlas-empty');
-  const status = $('#collection-status');
   const zoomButton = $('#image-zoom');
   const dialogPicture = $('#lightbox-image');
   const dialogScroll = $('.chart-dialog-scroll');
@@ -260,147 +256,83 @@
     zh: {time: '时序与调度', distribution: '分布比较', relation: '关联与构成', space: '空间与约束', evaluation: '评估对比'},
     en: {time: 'Time and scheduling', distribution: 'Distributions', relation: 'Relations and composition', space: 'Space and constraints', evaluation: 'Evaluation'}
   };
-  const galleryTabs = new Map($$('[data-pick]').map(tab => [tab.dataset.pick, tab]));
   const searchKey = text => (text ?? '').normalize('NFKC').toLocaleLowerCase().trim();
-  const charts = $$('.chart-card').map(card => {
-    const {chart: id, family, extra} = card.dataset;
-    const tab = galleryTabs.get(id);
+  const charts = $$('.chart-card', gallery).map(card => {
+    const {chart: id, family, pythonSource, matlabSource} = card.dataset;
     const metadata = {
-      zh: {title: card.dataset.titleZh || $('h3', card)?.textContent, description: card.dataset.descriptionZh, tags: card.dataset.tagsZh},
+      zh: {title: card.dataset.titleZh, description: card.dataset.descriptionZh, tags: card.dataset.tagsZh},
       en: {title: card.dataset.titleEn, description: card.dataset.descriptionEn, tags: card.dataset.tagsEn}
     };
     return {
-      id, card, tab, family, extra,
-      title: $('h3', card), description: $('figcaption > p', card), tags: $('.chart-tags', card),
-      opener: $('[data-open]', card), image: $('img', card), format: $('.chart-format', card), download: $('.chart-download', card),
-      metadata,
-      search: searchKey([id, family, familyName.zh[family], familyName.en[family], ...Object.values(metadata.zh), ...Object.values(metadata.en)].join(' '))
+      id, card, family, metadata, scripts: {python: pythonSource, matlab: matlabSource},
+      title: $('h3', card), familyLabel: $('.chart-family', card), opener: $('[data-open]', card),
+      image: $('img', card), download: $('.chart-download', card),
+      search: searchKey([id.replaceAll('-', ' '), family, familyName.zh[family], familyName.en[family],
+        ...Object.values(metadata.zh), ...Object.values(metadata.en)].join(' '))
     };
   });
 
   let mode = 'python';
-  const savedLanguage = readPreference('projectx-figure-language');
-  let language = savedLanguage === 'en' ? 'en' : 'zh';
-  let selectedChart = charts.find(chart => !chart.card.hidden) ?? charts[0];
+  let language = readPreference('projectx-figure-language') === 'en' ? 'en' : 'zh';
+  let selectedChart;
   let available = charts;
   let category = 'all';
 
   function figurePaths(chart) {
     const folder = language === 'zh' ? 'zh/' : '';
     return {
-      thumbnail: 'assets/charts/' + folder + mode + '-' + chart.id + '.webp?v=122',
-      original: 'downloads/figures/' + mode + '/' + folder + chart.id + '.' + formatByMode[mode].toLowerCase() + '?v=122',
-      detail: 'assets/charts/detail/' + folder + 'matlab-' + chart.id + '.webp?v=122'
+      thumbnail: 'assets/charts/' + folder + mode + '-' + chart.id + '.webp',
+      original: 'downloads/figures/' + mode + '/' + folder + chart.id + '.' + formatByMode[mode].toLowerCase(),
+      detail: 'assets/charts/detail/' + folder + 'matlab-' + chart.id + '.webp'
     };
   }
   function setPressed(buttons, key, selected) {
-    buttons.forEach(button => {
-      const active = button.dataset[key] === selected;
-      button.setAttribute('aria-pressed', String(active));
-      button.classList.toggle('active', active);
-    });
+    buttons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset[key] === selected)));
   }
   function renderCard(chart) {
     const paths = figurePaths(chart);
-    const {title, description, tags} = chart.metadata[language];
-    const label = language === 'zh' ? '查看' + title + '大图' : 'View ' + title + ' full size';
-    chart.card.dataset.figureLang = language;
+    const {title} = chart.metadata[language];
     chart.card.lang = language === 'zh' ? 'zh-CN' : 'en';
     setText(chart.title, title);
-    setText(chart.description, description);
-    setText(chart.tags, tags);
-    setText(chart.format, modeName[mode]);
-    chart.opener?.setAttribute('aria-label', label);
-    if (chart.image) chart.image.alt = language === 'zh' ? title + '，中文图' : title + ' — English figure';
-    if (chart.download) {
-      chart.download.href = paths.original;
-      chart.download.download = chart.id + '-' + language + '.' + formatByMode[mode].toLowerCase();
-      setText(chart.download, (language === 'zh' ? '中文 ' : 'EN ') + formatByMode[mode] + ' ↘');
-      chart.download.setAttribute('aria-label', '下载' + languageName[language] + title + formatByMode[mode] + '原图');
-    }
-    // Hidden cards keep their image requests deferred until selection.
-    if (chart === selectedChart) setSource(chart.image, paths.thumbnail);
-  }
-  function renderTab(chart) {
-    if (!chart.tab) return;
-    chart.tab.lang = language === 'zh' ? 'zh-CN' : 'en';
-    setText($('strong', chart.tab), chart.metadata[language].title);
-    setText($('small', chart.tab), familyName[language][chart.family]);
-  }
-  function renderStatus() {
-    if (available.length) {
-      const number = available.indexOf(selectedChart) + 1;
-      setText(status, number + ' / ' + available.length + ' 类图型 · ' + languageName[language] + ' · ' + modeName[mode]);
-    } else {
-      setText(status, '没有匹配的图型');
-    }
-    $$('#chart-prev, #chart-next, [data-dialog-step]').forEach(button => button.disabled = available.length < 2);
-  }
-  function fillMobilePicker() {
-    if (!mobilePicker) return;
-    const options = available.map(chart => new Option(chart.metadata[language].title, chart.id));
-    mobilePicker.replaceChildren(...options);
-    mobilePicker.lang = language === 'zh' ? 'zh-CN' : 'en';
-    mobilePicker.value = selectedChart?.id || '';
-    mobilePicker.disabled = !available.length;
+    setText(chart.familyLabel, familyName[language][chart.family]);
+    chart.opener.href = paths.original;
+    chart.opener.setAttribute('aria-label', language === 'zh' ? '查看' + title + '大图' : 'View ' + title + ' full size');
+    const format = formatByMode[mode];
+    chart.download.href = paths.original;
+    chart.download.download = chart.id + '-' + language + '.' + format.toLowerCase();
+    setText(chart.download, format + ' ↓');
+    chart.download.setAttribute('aria-label', language === 'zh' ? '下载' + title + '的中文 ' + format + ' 原图' : 'Download ' + title + ' as ' + format);
+    setSource(chart.image, paths.thumbnail);
   }
   function renderDialog() {
     if (!chartDialog || !selectedChart) return;
-    const {title} = selectedChart.metadata[language];
+    const {title, description} = selectedChart.metadata[language];
     const paths = figurePaths(selectedChart);
     const zoomed = chartDialog.classList.contains('is-zoomed');
     setSource(dialogPicture, zoomed ? (mode === 'python' ? paths.original : paths.detail) : paths.thumbnail);
-    if (dialogPicture) dialogPicture.alt = title + '，' + languageName[language] + '，' + modeName[mode];
-    chartDialog.dataset.figureLang = language;
+    dialogPicture.alt = title;
+    dialogPicture.lang = language === 'zh' ? 'zh-CN' : 'en';
     const heading = $('#chart-dialog-title');
+    const reading = $('#dialog-reading');
     setText(heading, title);
-    if (heading) heading.lang = language === 'zh' ? 'zh-CN' : 'en';
+    setText($('#dialog-note'), description);
+    heading.lang = reading.lang = dialogPicture.lang;
     setText($('#dialog-mode-label'), languageName[language] + ' · ' + modeName[mode]);
     const download = $('#dialog-download');
-    if (download) {
-      download.href = paths.original;
-      download.download = selectedChart.id + '-' + language + '.' + formatByMode[mode].toLowerCase();
-      setText(download, '下载' + languageName[language] + formatByMode[mode] + '原图 ↘');
-    }
-    const source = $('#dialog-source');
-    if (source) {
-      const script = mode === 'python' ? 'build_bilingual.py' : selectedChart.extra === 'true' ? 'build_matlab_extra.m' : 'build_matlab.m';
-      source.href = 'https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/' + script;
-    }
-    const backend = $('#dialog-backend');
-    const locale = $('#dialog-language');
-    if (backend) backend.value = mode;
-    if (locale) locale.value = language;
-  }
-  function selectChart(chart, moveFocus = false) {
-    selectedChart = chart;
-    for (const item of charts) {
-      const active = chart === item;
-      item.card.hidden = !active;
-      item.card.classList.toggle('is-selected', active);
-      if (item.tab) {
-        item.tab.setAttribute('aria-selected', String(active));
-        item.tab.tabIndex = active ? 0 : -1;
-      }
-    }
-    if (chart) {
-      renderCard(chart);
-      if (moveFocus) focus(chart.tab);
-      scrollTabIntoPanel(chart.tab, atlasPicker);
-    }
-    if (mobilePicker) mobilePicker.value = chart?.id || '';
-    if (emptyPanel) emptyPanel.hidden = Boolean(chart);
-    renderStatus();
-    if (chartDialog?.open) {
-      renderDialog();
-      dialogScroll?.scrollTo(0, 0);
-    }
-    queueProgress();
+    download.href = paths.original;
+    download.download = selectedChart.id + '-' + language + '.' + formatByMode[mode].toLowerCase();
+    setText(download, '下载' + languageName[language] + ' ' + formatByMode[mode] + ' ↘');
+    $('#dialog-source').href = 'https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/' + selectedChart.scripts[mode];
+    $('#dialog-backend').value = mode;
+    $('#dialog-language').value = language;
+    $$('[data-dialog-step]', chartDialog).forEach(button => button.disabled = available.length < 2);
   }
   function setZoom(on) {
     chartDialog?.classList.toggle('is-zoomed', on);
     zoomButton?.setAttribute('aria-pressed', String(on));
     setText(zoomButton, on ? '适合屏幕' : '放大查看');
+    const hint = $('#zoom-hint');
+    if (hint) hint.hidden = !on;
     if (dialogScroll) {
       dialogScroll.tabIndex = on ? 0 : -1;
       if (on) dialogScroll.setAttribute('aria-label', '图型大图，可滚动查看');
@@ -408,59 +340,54 @@
       dialogScroll.scrollTo(0, 0);
     }
   }
-  function cycleChart(offset, moveFocus = false) {
+  function cycleChart(offset) {
     if (available.length < 2) return;
     const at = available.indexOf(selectedChart);
-    selectChart(available[(at + offset + available.length) % available.length], moveFocus);
+    selectedChart = available[(at + offset + available.length) % available.length];
+    renderDialog();
+    dialogScroll?.scrollTo(0, 0);
   }
   function applyFilters() {
     const query = searchKey(searchBox?.value).split(/\s+/).filter(Boolean);
-    available = charts.filter(chart => {
-      return (category === 'all' || chart.family === category) && query.every(term => chart.search.includes(term));
-    });
-    for (const chart of charts) if (chart.tab) chart.tab.hidden = !available.includes(chart);
-    setPressed(categories, 'category', category);
+    available = charts.filter(chart => (
+      (category === 'all' || chart.family === category) && query.every(term => chart.search.includes(term))
+    ));
+    const visibleCharts = new Set(available);
+    for (const chart of charts) {
+      chart.card.hidden = !visibleCharts.has(chart);
+      if (!chart.card.hidden) renderCard(chart);
+    }
+    if (emptyPanel) emptyPanel.hidden = Boolean(available.length);
     if (clearSearch) clearSearch.hidden = !searchBox?.value;
-    fillMobilePicker();
-    selectChart(available.includes(selectedChart) ? selectedChart : available[0]);
+    setPressed(categories, 'category', category);
+    setText($('#collection-status'), category === 'all' && !query.length ? '' : '找到 ' + available.length + ' 类图型');
+    queueProgress();
   }
   function setMode(value) {
     if (value !== 'python' && value !== 'matlab') return;
     mode = value;
     setPressed(modeButtons, 'mode', mode);
-    if (selectedChart) renderCard(selectedChart);
-    renderStatus();
+    available.forEach(renderCard);
     if (chartDialog?.open) renderDialog();
   }
   function setLanguage(value) {
     if (value !== 'zh' && value !== 'en') return;
     language = value;
     setPressed(languageButtons, 'lang', language);
-    if (atlasPicker) atlasPicker.dataset.figureLang = language;
-    if (gallery) gallery.dataset.figureLang = language;
-    charts.forEach(renderTab);
-    fillMobilePicker();
-    if (selectedChart) renderCard(selectedChart);
-    renderStatus();
+    available.forEach(renderCard);
     if (chartDialog?.open) renderDialog();
     writePreference('projectx-figure-language', language);
   }
 
-  charts.forEach(chart => {
-    chart.tab?.addEventListener('click', () => selectChart(chart));
-    chart.tab?.addEventListener('keydown', event => {
-      const next = arrowIndex(event.key, available.indexOf(chart), available.length);
-      if (next === undefined) return;
-      event.preventDefault();
-      selectChart(available[next], true);
-    });
-    chart.opener?.addEventListener('click', () => {
-      selectChart(chart);
-      setZoom(false);
-      renderDialog();
-      showDialog(chartDialog, chart.opener);
-    });
-  });
+  charts.forEach(chart => chart.opener.addEventListener('click', event => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    if (!chartDialog || typeof chartDialog.showModal !== 'function') return;
+    event.preventDefault();
+    selectedChart = chart;
+    setZoom(false);
+    renderDialog();
+    showDialog(chartDialog, chart.opener);
+  }));
   modeButtons.forEach(button => button.addEventListener('click', () => setMode(button.dataset.mode)));
   languageButtons.forEach(button => button.addEventListener('click', () => setLanguage(button.dataset.lang)));
   categories.forEach(button => button.addEventListener('click', () => {
@@ -473,18 +400,12 @@
     applyFilters();
     focus(searchBox);
   });
-  resetAtlas?.addEventListener('click', () => {
-    if (searchBox) searchBox.value = '';
+  $('#reset-atlas')?.addEventListener('click', () => {
+    searchBox.value = '';
     category = 'all';
     applyFilters();
-    focus(searchBox ?? (visible(mobilePicker) ? mobilePicker : selectedChart?.tab));
+    focus(searchBox);
   });
-  mobilePicker?.addEventListener('change', event => {
-    const chart = available.find(item => item.id === event.target.value);
-    if (chart) selectChart(chart);
-  });
-  $('#chart-prev')?.addEventListener('click', () => cycleChart(-1));
-  $('#chart-next')?.addEventListener('click', () => cycleChart(1));
   $('#dialog-backend')?.addEventListener('change', event => setMode(event.target.value));
   $('#dialog-language')?.addEventListener('change', event => setLanguage(event.target.value));
   $$('[data-use-mode]').forEach(button => button.addEventListener('click', () => {
@@ -494,8 +415,10 @@
   }));
   function toggleZoom() {
     if (!chartDialog) return;
-    setZoom(!chartDialog.classList.contains('is-zoomed'));
+    const on = !chartDialog.classList.contains('is-zoomed');
+    setZoom(on);
     renderDialog();
+    focus(on ? dialogScroll : zoomButton);
   }
   zoomButton?.addEventListener('click', toggleZoom);
   dialogPicture?.addEventListener('click', toggleZoom);
@@ -508,11 +431,7 @@
     }
   });
   chartDialog?.addEventListener('close', () => restoreDialogFocus(chartDialog, selectedChart?.opener || searchBox));
-  if (charts.length) {
-    setLanguage(language);
-    setMode(mode);
-    applyFilters();
-  }
+  if (charts.length) setLanguage(language);
 
   const versionPattern = /^\d+\.\d+\.\d+(?:[-+][\w.-]+)?$/;
   const declaredVersion = $('[data-version]')?.textContent.trim().replace(/^v/, '');

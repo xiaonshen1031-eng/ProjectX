@@ -1,8 +1,8 @@
 # 项目结果可视化示例
 
-这里提供14类图型的中英文版本，以及两套实现：**MATLAB绘制EMF**、**Python绘制PNG**，共56份原图。每种图型用于表达一种或几种相互联系的结果关系。
+图册收录 20 类图型。每类提供中英文版本，分别使用 MATLAB 导出 EMF、Python 导出 PNG，共 80 份原图。
 
-两个后端读取同一份教学数据，数值来自解析函数和固定随机种子。资源分配示例按 1 h 时段给出 kW 功率，逐时积分为 kWh。容量上限采用示例峰值的 1.12 倍。其他指标按定义使用归一化量或 a.u.。
+两个后端读取同一份教学数据，数值来自解析函数和固定随机种子。资源分配示例按 1 h 时段给出 kW 功率，逐时积分为 kWh。容量上限采用示例峰值的 1.12 倍。其余示例的单位随指标定义。用于展示画法的数据全部为合成示例。
 
 | 图型 | 图中的关系 |
 | --- | --- |
@@ -20,22 +20,30 @@
 | 校准与分辨联合诊断 | 结合校准区间、各区间样本量和类别概率分布，分析预测表现。 |
 | 时频结构与频率功率 | 对齐信号、时频结构和各频率的窗口功率合计。 |
 | 配对差异与效应量森林 | 每工况使用成对差，显示分布与均值区间。端点和符号区分区间全在零值一侧或跨零。 |
+| 容量约束下的负荷持续曲线 | 对照移峰前后的负荷排序，累计超限小时及电量。 |
+| 约束饱和日历 | 逐日逐时区分余量充足、接近上限和超限，右侧给出每天的时长汇总。 |
+| 调节能量收支 | 用有符号增量核对移峰、储能和节能的影响，再核对基准及调节后的购电量。 |
+| 调节后负荷反弹 | 对齐控制开始和回补窗口，按配对工况积分削减量及回补量。 |
+| 温控负荷的热滞回 | 在室温与功率图上读出开停机阈值，再在时间轴上核对每次切换。 |
+| 成本与未供电量的权衡 | 在同一场景集上核对 56 个配置，用非支配边界标出满足双限值的最低成本方案。 |
 
 在仓库根目录运行：
 
 ```powershell
 python -m pip install -r skill/senior-projectx/requirements.txt
+python gallery/engineering_examples.py --check
 python gallery/verify_evidence.py
 python gallery/build_bilingual.py
 matlab -batch "addpath('gallery'); build_matlab([],'zh'); build_matlab_extra([],'zh'); build_matlab([],'en'); build_matlab_extra([],'en')"
+matlab -batch "addpath('gallery'); build_matlab_engineering([],'zh'); build_matlab_engineering([],'en')"
 python tools/prepare_bilingual_gallery.py
 python tools/audit_bilingual_fonts.py
 python tools/verify_site.py
 ```
 
-`verify_evidence.py`复算流带几何和节点守恒、可行投影、区间、计数及重点标注。`build_bilingual.py`生成 28 张 2400×1440 PNG。MATLAB 使用 Windows 原生 `print -dmeta -vector` 导出 28 张 EMF。`prepare_bilingual_gallery.py`读取实际 PNG 和 EMF，等比例生成浏览器预览并记录原图格式、哈希和矢量检查结果。
+`verify_evidence.py`复算流带几何和节点守恒、可行投影、区间、计数及重点标注。`build_bilingual.py`生成 40 张 2400×1440 PNG。MATLAB 使用 Windows 原生 `print -dmeta -vector` 导出 40 张 EMF。`prepare_bilingual_gallery.py`读取实际 PNG 和 EMF，等比例生成浏览器预览并记录原图格式、哈希和矢量检查结果。
 
-Python原图位于`docs/downloads/figures/python/`，MATLAB原图位于`docs/downloads/figures/matlab/`。网页使用等比例WebP预览，下载保留各自原生格式。新增8种图型的实现位于`build_python_extra.py`和`build_matlab_extra.m`，完整图型注册表位于`catalog.json`。
+Python原图位于`docs/downloads/figures/python/`，MATLAB原图位于`docs/downloads/figures/matlab/`。网页使用等比例WebP预览，下载保留各自原生格式。完整图型注册表位于 `catalog.json`。新增的六种工程示例使用 `engineering_examples.py` 生成的 `engineering-data.json`。文件包括计算依据和两种后端共用的图形坐标，Python 和 MATLAB 均保留原生坐标轴、标记、路径及文字。
 
 EMF导出和预览需要Windows上的MATLAB及支持Windows元文件的Pillow。中文使用微软雅黑加粗，英文、数字、单位与符号使用Times New Roman常规体。Python采用分别指定字体的文字段，MATLAB采用TeX字体段；字体核查同时检查Python实际字形和EMF中的原生字体记录。
 

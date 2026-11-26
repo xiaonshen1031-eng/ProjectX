@@ -11,7 +11,10 @@ from prepare_gallery import inspect_emf
 def main():
     configure();parser=MathTextParser('path')
     audit=json.loads((ROOT/'work/bilingual-python-labels.json').read_text(encoding='utf-8'))
-    assert len(audit['charts'])==28,'Rebuild all Python language variants before auditing'
+    manifest=json.loads((ROOT/'docs/gallery.json').read_text(encoding='utf-8'))
+    expected={(chart['id'],lang) for chart in manifest['charts'] for lang in manifest['languages']}
+    observed=[(chart['chart'],chart['language']) for chart in audit['charts']]
+    assert len(observed)==len(expected) and set(observed)==expected,'Rebuild all Python language variants before auditing'
     cjk=latin=labels=0
     for chart in audit['charts']:
         for label in chart['labels']:
@@ -24,7 +27,6 @@ def main():
                     assert font.family_name=='Times New Roman' and font.style_name=='Regular','Incorrect Latin / numeric glyph font'
                     latin+=1
             labels+=1
-    manifest=json.loads((ROOT/'docs/gallery.json').read_text(encoding='utf-8'))
     files=0
     for chart in manifest['charts']:
         for lang in ['zh','en']:

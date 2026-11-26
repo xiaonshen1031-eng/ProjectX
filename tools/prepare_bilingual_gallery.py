@@ -1,5 +1,5 @@
 """Prepare language-specific previews and native-file metadata."""
-from pathlib import Path
+import argparse
 import hashlib,json
 from PIL import Image, ImageOps
 from prepare_gallery import ROOT,CATALOG,inspect_emf
@@ -11,10 +11,26 @@ def save_preview(image, destination, size, quality):
     fitted.save(destination, 'WEBP', quality=quality, method=6)
 
 def main():
-    manifest={'data':['gallery/demo-data.json','gallery/extra-data.json'],'source':'independent illustrative data','languages':['zh','en'],
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--charts',nargs='+',help='Regenerate only selected chart previews from their existing native files')
+    args=parser.parse_args()
+    selected=set(args.charts or [chart['id'] for chart in CATALOG])
+    unknown=selected-{chart['id'] for chart in CATALOG}
+    if unknown:
+        parser.error(f"Unknown charts: {', '.join(sorted(unknown))}")
+    manifest_path=ROOT/'docs/gallery.json'
+    previous=json.loads(manifest_path.read_text(encoding='utf-8')) if manifest_path.exists() else {}
+    old_charts={chart['id']:chart for chart in previous.get('charts',[])}
+    manifest={'data':['gallery/demo-data.json','gallery/extra-data.json','gallery/engineering-data.json'],'source':'independent illustrative data','languages':['zh','en'],
       'fontPolicy':{'chinese':'Microsoft YaHei Bold','latinAndNumerals':'Times New Roman Regular'},'charts':[]}
     for chart in CATALOG:
         slug=chart['id'];item={**chart,'languages':{}}
+        if slug not in selected:
+            if slug not in old_charts:
+                parser.error(f"Chart {slug!r} has no existing preview. Add it to --charts.")
+            item.update({field:old_charts[slug][field] for field in ('languages','outputs')})
+            manifest['charts'].append(item)
+            continue
         for language in ['en','zh']:
             outputs={}
             for backend,suffix in [('python','png'),('matlab','emf')]:
@@ -37,7 +53,7 @@ def main():
                 outputs[backend]=output
             item['languages'][language]=outputs
         item['outputs']=item['languages']['en'];manifest['charts'].append(item)
-    (ROOT/'docs/gallery.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    manifest_path.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
     print(json.dumps({'chartTypes':len(CATALOG),'languages':2,'nativeOutputs':len(CATALOG)*4}))
 
 if __name__=='__main__':main()

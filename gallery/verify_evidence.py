@@ -65,6 +65,89 @@ def scheduled_energy(data):
             "delivered_kwh": power.sum(axis=1).tolist()}
 
 
+
+def engineering_checks(charts):
+    duration = charts["duration"]["data"]
+    baseline = np.asarray(duration["baselineKW"])
+    shifted = np.asarray(duration["shiftedKW"])
+    capacity = duration["capacityKW"]
+    interval = duration["hoursPerBin"]
+    np.testing.assert_allclose(baseline.sum(axis=1), shifted.sum(axis=1))
+    exceeded = [np.asarray(case) - capacity for case in (baseline, shifted)]
+    np.testing.assert_array_equal([np.count_nonzero(series > 1e-9) for series in exceeded],
+                                  duration["exceedanceHours"])
+    totals = [series[series > 0].sum() * interval for series in exceeded]
+    np.testing.assert_allclose(totals, duration["aboveCapKWh"])
+
+    saturation = charts["saturation"]["data"]
+    np.testing.assert_array_equal(saturation["scheduledKW"], shifted)
+    headroom = capacity - shifted
+    above = headroom < -1e-9
+    near = (headroom >= -1e-9) & (headroom < saturation["nearThresholdKW"])
+    np.testing.assert_allclose(headroom, saturation["headroomKW"])
+    np.testing.assert_array_equal(above, saturation["aboveCapacity"])
+    np.testing.assert_array_equal(near, saturation["nearCapacity"])
+    np.testing.assert_array_equal(~(above | near), saturation["adequate"])
+    counts = np.column_stack((above.sum(axis=1), near.sum(axis=1)))
+    np.testing.assert_array_equal(counts, saturation["dailyHours"])
+
+    bridge = charts["energy-bridge"]["data"]
+    values = np.asarray(bridge["incrementsKWh"])
+    np.testing.assert_array_equal(np.r_[0, values.cumsum()], bridge["cumulativeChangeKWh"])
+    assert values[:2].sum() == bridge["shiftBalanceKWh"] == 0
+    assert values[2:4].sum() == bridge["storageLossKWh"]
+    assert bridge["baselineKWh"] + values.sum() == bridge["gridKWh"]
+
+    rebound = charts["rebound"]["data"]
+    delta = np.array(rebound["controlledKW"]) - np.array(rebound["baselineKW"])
+    event = np.asarray(rebound["controlMask"])
+    recovery = np.asarray(rebound["recoveryMask"])
+    assert not np.any(event & recovery)
+    np.testing.assert_allclose(delta, rebound["deltaKW"])
+    np.testing.assert_allclose(-delta[:, event].sum(axis=1) * rebound["intervalH"],
+                               rebound["eventReductionKWh"])
+    np.testing.assert_allclose(delta[:, recovery].sum(axis=1) * rebound["intervalH"],
+                               rebound["returnKWh"])
+
+    thermal = charts["hysteresis"]["data"]
+    indoor = np.asarray(thermal["indoorC"])
+    power = np.asarray(thermal["loadKW"])
+    switches = np.diff(power)
+    np.testing.assert_array_equal(np.flatnonzero(switches > 0) + 1, thermal["onIndex"])
+    np.testing.assert_array_equal(np.flatnonzero(switches < 0) + 1, thermal["offIndex"])
+    assert np.all(indoor[thermal["onIndex"]] >= thermal["startThresholdC"])
+    assert np.all(indoor[thermal["offIndex"]] <= thermal["stopThresholdC"])
+
+    pareto = charts["pareto"]["data"]
+    cost = np.asarray(pareto["dailyCostUSD"])
+    energy = np.asarray(pareto["unservedKWhPerDay"])
+    deficit = np.asarray(pareto["scenarioDeficitKW"])
+    for observed, reserve, storage in zip(energy, pareto["firmReserveKW"],
+                                          pareto["usableStorageKWh"], strict=True):
+        hourly = np.maximum(deficit - reserve, 0)
+        np.testing.assert_allclose(np.maximum(hourly.sum(axis=1) - storage, 0).mean(), observed)
+    expected_frontier = set()
+    for i in range(len(cost)):
+        better_cost = (cost < cost[i]) & (energy <= energy[i])
+        better_robustness = (energy < energy[i]) & (cost <= cost[i])
+        if not (better_cost | better_robustness).any():
+            expected_frontier.add(i)
+    assert set(pareto["frontierIndices"]) == expected_frontier
+    chosen = pareto["chosenIndex"]
+    viable = (cost <= pareto["costCapUSD"]) & (energy <= pareto["unservedCapKWh"])
+    assert viable[chosen] and chosen in expected_frontier and cost[chosen] == cost[viable].min()
+    return {
+        "duration_above_cap_kwh": totals,
+        "saturation_above_cap_hours": int(above.sum()),
+        "net_grid_change_kwh": int(values.sum()),
+        "matched_rebound_pairs": len(delta),
+        "thermal_switches": int(np.count_nonzero(switches)),
+        "nondominated_policies": len(expected_frontier),
+        "selected_daily_cost_usd": float(cost[chosen]),
+        "selected_unserved_kwh_per_day": float(energy[chosen]),
+    }
+
+
 def main():
     basic, extra = load("demo-data.json"), load("extra-data.json")
     trajectory = basic["trajectory"]
@@ -93,6 +176,7 @@ def main():
         "chord_largest_pair_weight": float(chord.max()),
         "forest_intervals_crossing_zero": int(((forest_ci[:, 0] <= 0) & (forest_ci[:, 1] >= 0)).sum()),
         "calibration_n": int(bins[:, 4].sum()),
+        "engineering": engineering_checks(load("engineering-data.json")["charts"]),
     }, ensure_ascii=False, indent=2))
 
 

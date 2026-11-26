@@ -1,7 +1,8 @@
 {
   "data": [
     "gallery/demo-data.json",
-    "gallery/extra-data.json"
+    "gallery/extra-data.json",
+    "gallery/engineering-data.json"
   ],
   "source": "independent illustrative data",
   "languages": [
@@ -1270,6 +1271,552 @@
             }
           ],
           "detailPreview": "assets/charts/detail/matlab-forest.webp"
+        }
+      }
+    },
+    {
+      "id": "duration",
+      "family": "time",
+      "title": "容量约束下的负荷持续曲线",
+      "description": "负荷按功率从大到小排列。右图累计超过容量上限的电量，用于区分少数尖峰和持续超限。",
+      "tags": "负荷排序 · 超限小时 · 超限电量",
+      "extra": true,
+      "featured": false,
+      "source": "engineering",
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/duration.png",
+            "format": "PNG",
+            "bytes": 126564,
+            "sha256": "afc10a46076c5cb29fab599ca794ab35efb95838970e3e99af3882422f2eb8cb",
+            "preview": "assets/charts/python-duration.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/duration.emf",
+            "format": "EMF",
+            "bytes": 107472,
+            "sha256": "be042106b9c399e9d8e7f1dd13416c0720bc858e4a6740f51edf1c0e2f55b70b",
+            "preview": "assets/charts/matlab-duration.webp",
+            "records": 2743,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-duration.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/duration.png",
+            "format": "PNG",
+            "bytes": 123487,
+            "sha256": "84c5fcfcf92a04cba3a6b0a45c3a79c01ab2382d596db22fc321048e74c8dfc4",
+            "preview": "assets/charts/zh/python-duration.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/duration.emf",
+            "format": "EMF",
+            "bytes": 111036,
+            "sha256": "c55e6b0d40f99745adcb038e6f719e85602ecae742395069e7cbaf22f86e6ce5",
+            "preview": "assets/charts/zh/matlab-duration.webp",
+            "records": 2781,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-duration.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/duration.png",
+          "format": "PNG",
+          "bytes": 126564,
+          "sha256": "afc10a46076c5cb29fab599ca794ab35efb95838970e3e99af3882422f2eb8cb",
+          "preview": "assets/charts/python-duration.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/duration.emf",
+          "format": "EMF",
+          "bytes": 107472,
+          "sha256": "be042106b9c399e9d8e7f1dd13416c0720bc858e4a6740f51edf1c0e2f55b70b",
+          "preview": "assets/charts/matlab-duration.webp",
+          "records": 2743,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-duration.webp"
+        }
+      }
+    },
+    {
+      "id": "saturation",
+      "family": "time",
+      "title": "约束饱和日历",
+      "description": "按日期和小时定位接近容量上限的时段。右侧列出每天超限和余量不足的小时数。",
+      "tags": "逐时余量 · 超限 · 日内聚集",
+      "extra": true,
+      "featured": false,
+      "source": "engineering",
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/saturation.png",
+            "format": "PNG",
+            "bytes": 79536,
+            "sha256": "aedf6d8925911414858dcc478e45ce5833e879121eaf2fde5a15e3f85434fb5e",
+            "preview": "assets/charts/python-saturation.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/saturation.emf",
+            "format": "EMF",
+            "bytes": 260004,
+            "sha256": "82f9429eaca25cebfb6bdb9820b0bd99f23341dfa6f701feb272f758f813040a",
+            "preview": "assets/charts/matlab-saturation.webp",
+            "records": 8618,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-saturation.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/saturation.png",
+            "format": "PNG",
+            "bytes": 73447,
+            "sha256": "29ac76ad36a4dba9e8adffbb64f8640f1222e0218605cba490a82eee5f7df64a",
+            "preview": "assets/charts/zh/python-saturation.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/saturation.emf",
+            "format": "EMF",
+            "bytes": 262184,
+            "sha256": "6ce19d9e8840c0883c115e27017053f70a26c4af4b8c7c72a9b3394adfa2b25b",
+            "preview": "assets/charts/zh/matlab-saturation.webp",
+            "records": 8638,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-saturation.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/saturation.png",
+          "format": "PNG",
+          "bytes": 79536,
+          "sha256": "aedf6d8925911414858dcc478e45ce5833e879121eaf2fde5a15e3f85434fb5e",
+          "preview": "assets/charts/python-saturation.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/saturation.emf",
+          "format": "EMF",
+          "bytes": 260004,
+          "sha256": "82f9429eaca25cebfb6bdb9820b0bd99f23341dfa6f701feb272f758f813040a",
+          "preview": "assets/charts/matlab-saturation.webp",
+          "records": 8618,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-saturation.webp"
+        }
+      }
+    },
+    {
+      "id": "energy-bridge",
+      "family": "relation",
+      "title": "调节能量收支",
+      "description": "用有符号的能量增量核对移峰、储能放电、回充和节能各自贡献，再读调节前后的购电总量。",
+      "tags": "能量平衡 · 跨时段转移 · 储能损耗",
+      "extra": true,
+      "featured": false,
+      "source": "engineering",
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/energy-bridge.png",
+            "format": "PNG",
+            "bytes": 111629,
+            "sha256": "aab3d9019c531e8430532e0c5ee812921936e88f8900f250f709465e406a2c55",
+            "preview": "assets/charts/python-energy-bridge.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/energy-bridge.emf",
+            "format": "EMF",
+            "bytes": 36480,
+            "sha256": "6175ef7a36d2bfc42bfaf874957eeb60b30847576f0fa60995b7e885860e9ed9",
+            "preview": "assets/charts/matlab-energy-bridge.webp",
+            "records": 719,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-energy-bridge.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/energy-bridge.png",
+            "format": "PNG",
+            "bytes": 100358,
+            "sha256": "eefb27794d1716227142c55dc0da75343970126d72cb709bf81053ea9c444b08",
+            "preview": "assets/charts/zh/python-energy-bridge.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/energy-bridge.emf",
+            "format": "EMF",
+            "bytes": 42684,
+            "sha256": "9297a41c45b573a362f315976e5b53b54152220b543a0b0acf03712e324d1eb8",
+            "preview": "assets/charts/zh/matlab-energy-bridge.webp",
+            "records": 755,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-energy-bridge.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/energy-bridge.png",
+          "format": "PNG",
+          "bytes": 111629,
+          "sha256": "aab3d9019c531e8430532e0c5ee812921936e88f8900f250f709465e406a2c55",
+          "preview": "assets/charts/python-energy-bridge.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/energy-bridge.emf",
+          "format": "EMF",
+          "bytes": 36480,
+          "sha256": "6175ef7a36d2bfc42bfaf874957eeb60b30847576f0fa60995b7e885860e9ed9",
+          "preview": "assets/charts/matlab-energy-bridge.webp",
+          "records": 719,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-energy-bridge.webp"
+        }
+      }
+    },
+    {
+      "id": "rebound",
+      "family": "time",
+      "title": "调节后负荷反弹",
+      "description": "以调节开始为零点，比较同一天有无控制的功率差。右图按同日配对回补电量和削减电量。对角线下方的点表示回补抵消了部分削减。",
+      "tags": "配对工况 · 事件对齐 · 回补电量",
+      "extra": true,
+      "featured": false,
+      "source": "engineering",
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/rebound.png",
+            "format": "PNG",
+            "bytes": 140077,
+            "sha256": "7b53645ee3d5c0bd08050ffa121e398ca1091ae4798488c0f7a54649b378b80e",
+            "preview": "assets/charts/python-rebound.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/rebound.emf",
+            "format": "EMF",
+            "bytes": 76464,
+            "sha256": "926f93318a98d2ea747093225917718b69a7ae24af5fb6425c0b3db2a63532c7",
+            "preview": "assets/charts/matlab-rebound.webp",
+            "records": 1562,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-rebound.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/rebound.png",
+            "format": "PNG",
+            "bytes": 138575,
+            "sha256": "8063e0f29c11d0bbe5a4b03e65a56ffebd309daeb9b8bdef394e4ed81e235ab8",
+            "preview": "assets/charts/zh/python-rebound.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/rebound.emf",
+            "format": "EMF",
+            "bytes": 79640,
+            "sha256": "ac1402312fae131e212c85de4d83086bcf06c100874384888d88f177db5153b2",
+            "preview": "assets/charts/zh/matlab-rebound.webp",
+            "records": 1589,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-rebound.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/rebound.png",
+          "format": "PNG",
+          "bytes": 140077,
+          "sha256": "7b53645ee3d5c0bd08050ffa121e398ca1091ae4798488c0f7a54649b378b80e",
+          "preview": "assets/charts/python-rebound.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/rebound.emf",
+          "format": "EMF",
+          "bytes": 76464,
+          "sha256": "926f93318a98d2ea747093225917718b69a7ae24af5fb6425c0b3db2a63532c7",
+          "preview": "assets/charts/matlab-rebound.webp",
+          "records": 1562,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-rebound.webp"
+        }
+      }
+    },
+    {
+      "id": "hysteresis",
+      "family": "relation",
+      "title": "温控负荷的热滞回",
+      "description": "用开机和停机的两个温度阈值解释同一温度下的不同功率状态，并在时序中核对这些切换。",
+      "tags": "室温阈值 · 温控开关 · 功率状态",
+      "extra": true,
+      "featured": false,
+      "source": "engineering",
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/hysteresis.png",
+            "format": "PNG",
+            "bytes": 143049,
+            "sha256": "cfdd36882e55b4b7b156c0f11cbaa9ff97244f29523e9e5c2c86a283461ecb5f",
+            "preview": "assets/charts/python-hysteresis.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/hysteresis.emf",
+            "format": "EMF",
+            "bytes": 65212,
+            "sha256": "ecbe2795d7be9d294a1777a38c9dc2f675cedc4f87f7057635cc3d41946967ea",
+            "preview": "assets/charts/matlab-hysteresis.webp",
+            "records": 943,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-hysteresis.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/hysteresis.png",
+            "format": "PNG",
+            "bytes": 138191,
+            "sha256": "6c5d06fd177333fea11767f9b3846a2d401a497fc5a07bbcb2601e007ac64511",
+            "preview": "assets/charts/zh/python-hysteresis.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/hysteresis.emf",
+            "format": "EMF",
+            "bytes": 67176,
+            "sha256": "87780374159be215cd9a191de25f52dd76a6d00b059f1308f6f6983f484fcaa5",
+            "preview": "assets/charts/zh/matlab-hysteresis.webp",
+            "records": 961,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-hysteresis.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/hysteresis.png",
+          "format": "PNG",
+          "bytes": 143049,
+          "sha256": "cfdd36882e55b4b7b156c0f11cbaa9ff97244f29523e9e5c2c86a283461ecb5f",
+          "preview": "assets/charts/python-hysteresis.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/hysteresis.emf",
+          "format": "EMF",
+          "bytes": 65212,
+          "sha256": "ecbe2795d7be9d294a1777a38c9dc2f675cedc4f87f7057635cc3d41946967ea",
+          "preview": "assets/charts/matlab-hysteresis.webp",
+          "records": 943,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-hysteresis.webp"
+        }
+      }
+    },
+    {
+      "id": "pareto",
+      "family": "evaluation",
+      "title": "成本与未供电量的权衡",
+      "description": "绘制各储能容量下的运行候选方案。用非支配边界识别同时满足成本和可靠性限值的最低成本方案。",
+      "tags": "非支配边界 · 储能容量 · 可靠性限值",
+      "extra": true,
+      "featured": false,
+      "source": "engineering",
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/pareto.png",
+            "format": "PNG",
+            "bytes": 144290,
+            "sha256": "382f0bfa22c11e27a0f9169764b1690d03d3f1c18ff6ebf00b9ae42dd74cbdb8",
+            "preview": "assets/charts/python-pareto.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/pareto.emf",
+            "format": "EMF",
+            "bytes": 75832,
+            "sha256": "5ade060e4a26b6cd697ead124ee2ba21d860b33a6d0d815ee6144962e98dbff2",
+            "preview": "assets/charts/matlab-pareto.webp",
+            "records": 2002,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-pareto.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/pareto.png",
+            "format": "PNG",
+            "bytes": 141471,
+            "sha256": "04ca53e2f6918d0f95d70ebb8811dc3a72b5726336c625bdbaf04b8e6c04bcfb",
+            "preview": "assets/charts/zh/python-pareto.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/pareto.emf",
+            "format": "EMF",
+            "bytes": 77216,
+            "sha256": "fc013ac65c2f607dea79a161ddcac8df5e0e883b2ce8a2712c3d9a69d49247da",
+            "preview": "assets/charts/zh/matlab-pareto.webp",
+            "records": 2009,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-pareto.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/pareto.png",
+          "format": "PNG",
+          "bytes": 144290,
+          "sha256": "382f0bfa22c11e27a0f9169764b1690d03d3f1c18ff6ebf00b9ae42dd74cbdb8",
+          "preview": "assets/charts/python-pareto.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/pareto.emf",
+          "format": "EMF",
+          "bytes": 75832,
+          "sha256": "5ade060e4a26b6cd697ead124ee2ba21d860b33a6d0d815ee6144962e98dbff2",
+          "preview": "assets/charts/matlab-pareto.webp",
+          "records": 2002,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-pareto.webp"
         }
       }
     }

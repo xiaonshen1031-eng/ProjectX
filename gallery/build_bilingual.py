@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import build_python as basic
 import build_python_extra as extra
+import build_python_engineering as engineering
 from chart_language import ROOT,configure,localize_figure,REGISTRY
 
 def main():
@@ -15,6 +16,7 @@ def main():
     if unknown:
         parser.error(f"Unknown chart IDs: {', '.join(sorted(unknown))}")
     data=json.loads((ROOT/'gallery/demo-data.json').read_text(encoding='utf-8'));additional=json.loads((ROOT/'gallery/extra-data.json').read_text(encoding='utf-8'))
+    engineering_data=json.loads((ROOT/'gallery/engineering-data.json').read_text(encoding='utf-8'))['charts']
     languages=['en','zh'] if args.language=='both' else [args.language]
     records=[]
     for language in languages:
@@ -24,8 +26,11 @@ def main():
         for chart in catalog:
             slug=chart['id']
             if args.charts and slug not in args.charts:continue
-            source=extra if chart['extra'] else basic
-            fig=getattr(source,slug)((additional if chart['extra'] else data)[slug])
+            if chart.get('source') == 'engineering':
+                fig=engineering.render(engineering_data[slug])
+            else:
+                source=extra if chart['extra'] else basic
+                fig=getattr(source,slug)((additional if chart['extra'] else data)[slug])
             labels=localize_figure(fig,language)
             path=out/(slug+'.png');fig.savefig(path,dpi=150,facecolor='white');plt.close(fig)
             with Image.open(path) as image:image.resize((1440,864),Image.Resampling.LANCZOS).save(preview/('python-'+slug+'.webp'),'WEBP',quality=92,method=6)
@@ -33,6 +38,13 @@ def main():
             print('Python PNG:',language,slug,flush=True)
     audit=ROOT/'work/bilingual-python-labels.json'
     audit.parent.mkdir(parents=True,exist_ok=True)
-    audit.write_text(json.dumps({'fontPolicy':REGISTRY['fontPolicy'],'charts':records},ensure_ascii=False,indent=2),encoding='utf-8')
+    registry={chart['id'] for chart in catalog}
+    previous=json.loads(audit.read_text(encoding='utf-8')) if audit.exists() else {}
+    observed={(record['chart'], record['language']): record for record in previous.get('charts', [])
+              if record['chart'] in registry}
+    observed.update({(record['chart'], record['language']):record for record in records})
+    ordered=[observed[key] for lang in ('en','zh') for chart in catalog
+             if (key := (chart['id'], lang)) in observed]
+    audit.write_text(json.dumps({'fontPolicy':REGISTRY['fontPolicy'],'charts':ordered},ensure_ascii=False,indent=2),encoding='utf-8')
 
 if __name__=='__main__':main()

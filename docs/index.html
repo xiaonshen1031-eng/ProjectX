@@ -5,18 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0c35a8">
   <meta name="description" content="ProjectX 帮助研究助手按任务书开展工程计算，解释结果并编写技术报告。工程图册提供中英文绘图示例和源码。">
-  <meta property="og:title" content="ProjectX · 工程研究与技术交付">
+  <meta property="og:title" content="ProjectX — Find the limit. Make the call.">
   <meta property="og:description" content="面向委托研究的开源技能。查看工程图册或下载 ProjectX。">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://xiaonshen1031-eng.github.io/ProjectX/">
   <link rel="canonical" href="https://xiaonshen1031-eng.github.io/ProjectX/">
   <link rel="icon" href="assets/icon.svg?v=blue" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/Manrope.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/ProjectX-SansSC.woff2?v=122" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=122">
-  <script src="app.js?v=122" defer></script>
+  <link rel="preload" href="assets/fonts/ProjectX-SansSC.woff2?v=atlas20" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=atlas20">
+  <script src="app.js?v=atlas20" defer></script>
   <script src="load-preview.js?v=122" defer></script>
-  <title>ProjectX · 从工程问题到技术交付</title>
+  <title>ProjectX — Find the limit. Make the call.</title>
 </head>
 <body>
   <a class="skip-link" href="#main">跳到正文</a>
@@ -47,11 +47,12 @@
         <div class="hero-grid">
           <div class="hero-copy">
             <p class="hero-kicker"><span class="status-dot" aria-hidden="true"></span>委托研究的开源技能</p>
-            <h1 id="hero-title">工程计算如何<br><span>写进技术报告</span></h1>
-            <p class="hero-description">从任务书确定计算范围。用图表找出改变方案判断的工况，把计算依据、工程解释和复算材料交给客户。</p>
+            <h1 id="hero-title" lang="en"><span>Find the limit.</span><em>Make the call.</em></h1>
+            <p class="hero-description">容量在哪一刻用满？换个工况，方案还成立吗？ProjectX 从任务书拆出这些问题，把计算和图表写进技术报告，让客户能沿着结论复算。</p>
             <div class="hero-actions">
               <a class="button button-white" data-download download href="downloads/Senior-ProjectX-v1.2.2.zip">下载 ProjectX <span aria-hidden="true">↓</span></a>
               <button type="button" class="button button-ghost watch-video"><span class="play-icon" aria-hidden="true"></span>观看演示</button>
+              <a class="hero-atlas-link" href="#gallery">浏览工程图册 <span aria-hidden="true">↘</span></a>
             </div>
             <p class="hero-version"><span data-version>v1.2.2</span><span class="version-divider" aria-hidden="true"></span><a href="#start">查看本版更新 ↘</a></p>
           </div>
@@ -82,8 +83,8 @@
           </div>
         </div>
         <dl class="hero-proof">
-          <div><dt>工程图型</dt><dd>14 <small>类</small></dd></div>
-          <div><dt>双语原图</dt><dd>56 <small>份</small></dd></div>
+          <div><dt>工程图型</dt><dd><span data-atlas-count>20</span> <small>类</small></dd></div>
+          <div><dt>双语原图</dt><dd><span data-atlas-files>80</span> <small>份</small></dd></div>
           <div><dt>通过回归检查</dt><dd><span data-test-count>127</span> <small>项</small></dd></div>
         </dl>
       </div>
@@ -92,7 +93,7 @@
     <section class="workflow-section section-space" id="workflow" aria-labelledby="workflow-title">
       <div class="shell">
         <div class="section-heading">
-          <div><p class="eyebrow">WORKFLOW</p><h2 id="workflow-title">研究流程</h2></div>
+          <div><p class="eyebrow" lang="en">Follow the evidence</p><h2 id="workflow-title">研究流程</h2></div>
           <p>点选一个阶段，查看它处理哪项输入，以及结果如何用于下一步。</p>
         </div>
         <div class="workflow-layout">
@@ -121,55 +122,279 @@
     </section>
 
     <div class="gallery-theme section-space">
-<section aria-labelledby="gallery-title" class="gallery-section shell" data-figure-lang="zh" id="gallery">
-<div class="section-heading">
-<div><p class="eyebrow">FIGURE ATLAS</p><h2 id="gallery-title">工程图册</h2></div>
-<p>按问题选图。可以切换中英文标注，查看同一示例的 Python PNG 或 MATLAB EMF 原图。</p>
-</div>
-<div class="gallery-toolbar" id="gallery-toolbar"><div aria-label="选择绘图模式" class="mode-switch" role="group"><button aria-pressed="true" class="active" data-mode="python"> Python <span>PNG</span></button>
-<button aria-pressed="false" data-mode="matlab"> MATLAB <span>EMF</span></button></div><div aria-label="选择图中文字语言" class="language-switch" role="group"><span>图中文字</span><button aria-pressed="true" data-lang="zh">中文</button>
-<button aria-pressed="false" data-lang="en">English</button></div><div aria-label="筛选图型" class="category-switch" role="group"><button aria-pressed="true" class="active" data-category="all">全部图型</button>
-<button aria-pressed="false" data-category="time">时序</button>
-<button aria-pressed="false" data-category="distribution">分布</button>
-<button aria-pressed="false" data-category="relation">关联</button>
-<button aria-pressed="false" data-category="space">空间与约束</button>
-<button aria-pressed="false" data-category="evaluation">评估对比</button></div></div>
-<div class="atlas-search"><label for="chart-search">查找图型</label><div><input aria-controls="atlas-picker" autocomplete="off" id="chart-search" placeholder="输入图名或用途，如“时序”" type="search"/><button aria-label="清空图型搜索" hidden="" id="clear-search">清空</button></div></div><div class="mobile-chart-select"><label for="mobile-chart-picker">选择图型</label><select aria-controls="chart-grid" id="mobile-chart-picker"></select></div><div class="collection-caption"><p>图表采用独立合成数据，支持中英文标注。</p><span aria-live="polite" id="collection-status">Python / PNG · 01 / 14</span></div>
-<div class="atlas-layout"><div aria-label="选择图型" aria-orientation="vertical" class="atlas-picker" id="atlas-picker" role="tablist"><button aria-controls="chart-gantt" aria-selected="true" data-pick="gantt" id="pick-gantt" role="tab" tabindex="0" type="button"><span>01</span><span><strong>资源分配与容量余量</strong><small>时序与调度</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-sankey" aria-selected="false" data-pick="sankey" id="pick-sankey" role="tab" tabindex="-1" type="button"><span>02</span><span><strong>多阶段分配与流量平衡</strong><small>关联与构成</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-raincloud" aria-selected="false" data-pick="raincloud" id="pick-raincloud" role="tab" tabindex="-1" type="button"><span>03</span><span><strong>雨云分布与区间比较</strong><small>分布比较</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-parallel" aria-selected="false" data-pick="parallel" id="pick-parallel" role="tab" tabindex="-1" type="button"><span>04</span><span><strong>多指标平行坐标</strong><small>关联与构成</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-spatial" aria-selected="false" data-pick="spatial" id="pick-spatial" role="tab" tabindex="-1" type="button"><span>05</span><span><strong>空间场、节点采样与连接</strong><small>空间与约束</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-feasibility" aria-selected="false" data-pick="feasibility" id="pick-feasibility" role="tab" tabindex="-1" type="button"><span>06</span><span><strong>可行域投影与紧约束</strong><small>空间与约束</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-trajectory" aria-selected="false" data-pick="trajectory" id="pick-trajectory" role="tab" tabindex="-1" type="button"><span>07</span><span><strong>轨迹包络与约束余量</strong><small>时序与调度</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-ridges" aria-selected="false" data-pick="ridges" id="pick-ridges" role="tab" tabindex="-1" type="button"><span>08</span><span><strong>条件分布山峦图</strong><small>分布比较</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-chord" aria-selected="false" data-pick="chord" id="pick-chord" role="tab" tabindex="-1" type="button"><span>09</span><span><strong>成对关系弦图与权重矩阵</strong><small>关联与构成</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-cluster" aria-selected="false" data-pick="cluster" id="pick-cluster" role="tab" tabindex="-1" type="button"><span>10</span><span><strong>聚类关系矩阵</strong><small>关联与构成</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-polar" aria-selected="false" data-pick="polar" id="pick-polar" role="tab" tabindex="-1" type="button"><span>11</span><span><strong>周期响应与工况间极差</strong><small>时序与调度</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-calibration" aria-selected="false" data-pick="calibration" id="pick-calibration" role="tab" tabindex="-1" type="button"><span>12</span><span><strong>校准与分辨联合诊断</strong><small>评估对比</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-spectrum" aria-selected="false" data-pick="spectrum" id="pick-spectrum" role="tab" tabindex="-1" type="button"><span>13</span><span><strong>信号、时频结构与频率功率</strong><small>时序与调度</small></span><i aria-hidden="true">↗</i></button>
-<button aria-controls="chart-forest" aria-selected="false" data-pick="forest" id="pick-forest" role="tab" tabindex="-1" type="button"><span>14</span><span><strong>配对差分布与效应区间</strong><small>评估对比</small></span><i aria-hidden="true">↗</i></button></div><div class="chart-grid" id="chart-grid"><figure aria-labelledby="pick-gantt" class="chart-card is-selected" data-chart="gantt" data-description-en="Read vehicle assignments and aggregate power on the same time axis. A diamond marks the hour with the least headroom." data-description-zh="上下两组图共用时间轴。逐车分配累加后得到总功率，容量余量最小的时段用菱形标出。" data-extra="true" data-family="time" data-featured="true" data-figure-lang="zh" data-tags-en="Time windows · Delivered energy · Headroom" data-tags-zh="分配窗口 · 电量 · 容量余量" data-title-en="Resource assignment and capacity headroom" data-title-zh="资源分配与容量余量" id="chart-gantt" role="tabpanel"><button aria-label="查看资源分配与容量余量大图" class="chart-image" data-open="gantt"><img alt="资源分配与容量余量，中文图" height="864" loading="lazy" src="assets/charts/zh/python-gantt.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>资源分配与容量余量</h3><a class="chart-download" download="gantt-zh.png" href="downloads/figures/python/zh/gantt.png?v=122">中文 PNG ↘</a></div><p>上下两组图共用时间轴。逐车分配累加后得到总功率，容量余量最小的时段用菱形标出。</p><span class="chart-tags">分配窗口 · 电量 · 容量余量</span></figcaption></figure>
-<figure aria-labelledby="pick-sankey" class="chart-card" data-chart="sankey" data-description-en="Follow the ribbon widths through three stages. Node values let you check flow conservation at each stage." data-description-zh="沿带宽追踪三级分配。从各节点读取流量，再核对每一级的总量。" data-extra="true" data-family="relation" data-featured="true" data-figure-lang="zh" data-tags-en="Stage allocation · Node totals · Conservation" data-tags-zh="阶段分配 · 节点总量 · 流量守恒" data-title-en="Multi-stage allocation and flow balance" data-title-zh="多阶段分配与流量平衡" hidden="hidden" id="chart-sankey" role="tabpanel"><button aria-label="查看多阶段分配与流量平衡大图" class="chart-image" data-open="sankey"><img alt="多阶段分配与流量平衡，中文图" height="864" loading="lazy" src="assets/charts/zh/python-sankey.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>多阶段分配与流量平衡</h3><a class="chart-download" download="sankey-zh.png" href="downloads/figures/python/zh/sankey.png?v=122">中文 PNG ↘</a></div><p>沿带宽追踪三级分配。从各节点读取流量，再核对每一级的总量。</p><span class="chart-tags">阶段分配 · 节点总量 · 流量守恒</span></figcaption></figure>
-<figure aria-labelledby="pick-raincloud" class="chart-card" data-chart="raincloud" data-description-en="Read the observations and their density on each row. The box spans the middle half of the sample and the whiskers mark the 10th and 90th percentiles." data-description-zh="在同一行查看原始观测及其密度。箱体覆盖中间一半样本，须线标出第 10 和第 90 百分位。" data-extra="true" data-family="distribution" data-featured="true" data-figure-lang="zh" data-tags-en="Distribution shape · Observations · Interval statistics" data-tags-zh="分布形态 · 原始点 · 区间统计" data-title-en="Raincloud distributions and intervals" data-title-zh="雨云分布与区间比较" hidden="hidden" id="chart-raincloud" role="tabpanel"><button aria-label="查看雨云分布与区间比较大图" class="chart-image" data-open="raincloud"><img alt="雨云分布与区间比较，中文图" height="864" loading="lazy" src="assets/charts/zh/python-raincloud.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>雨云分布与区间比较</h3><a class="chart-download" download="raincloud-zh.png" href="downloads/figures/python/zh/raincloud.png?v=122">中文 PNG ↘</a></div><p>在同一行查看原始观测及其密度。箱体覆盖中间一半样本，须线标出第 10 和第 90 百分位。</p><span class="chart-tags">分布形态 · 原始点 · 区间统计</span></figcaption></figure>
-<figure aria-labelledby="pick-parallel" class="chart-card" data-chart="parallel" data-description-en="Each line represents one case. Crossings show where cases change rank between neighboring metrics." data-description-zh="每条线代表一个方案。相邻轴上的线束出现交叉时，可以比较方案在两项指标上的排序变化。" data-extra="true" data-family="relation" data-featured="true" data-figure-lang="zh" data-tags-en="Multiple metrics · Groups · Distribution envelopes" data-tags-zh="多指标 · 方案群组 · 分布包络" data-title-en="Multi-metric parallel coordinates" data-title-zh="多指标平行坐标" hidden="hidden" id="chart-parallel" role="tabpanel"><button aria-label="查看多指标平行坐标大图" class="chart-image" data-open="parallel"><img alt="多指标平行坐标，中文图" height="864" loading="lazy" src="assets/charts/zh/python-parallel.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>多指标平行坐标</h3><a class="chart-download" download="parallel-zh.png" href="downloads/figures/python/zh/parallel.png?v=122">中文 PNG ↘</a></div><p>每条线代表一个方案。相邻轴上的线束出现交叉时，可以比较方案在两项指标上的排序变化。</p><span class="chart-tags">多指标 · 方案群组 · 分布包络</span></figcaption></figure>
-<figure aria-labelledby="pick-spatial" class="chart-card" data-chart="spatial" data-description-en="Find each network node on the map. The ranking at right compares field intensity at the same node locations." data-description-zh="在左图定位网络节点。右图按采样场强排序，可查各节点落在场强分布的哪一端。" data-extra="false" data-family="space" data-featured="true" data-figure-lang="zh" data-tags-en="Spatial field · Node samples · Network links" data-tags-zh="空间场 · 节点采样 · 网络连接" data-title-en="Spatial field and network samples" data-title-zh="空间场、节点采样与连接" hidden="hidden" id="chart-spatial" role="tabpanel"><button aria-label="查看空间场、节点采样与连接大图" class="chart-image" data-open="spatial"><img alt="空间场、节点采样与连接，中文图" height="864" loading="lazy" src="assets/charts/zh/python-spatial.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>空间场、节点采样与连接</h3><a class="chart-download" download="spatial-zh.png" href="downloads/figures/python/zh/spatial.png?v=122">中文 PNG ↘</a></div><p>在左图定位网络节点。右图按采样场强排序，可查各节点落在场强分布的哪一端。</p><span class="chart-tags">空间场 · 节点采样 · 网络连接</span></figcaption></figure>
-<figure aria-labelledby="pick-feasibility" class="chart-card" data-chart="feasibility" data-description-en="Arrows connect each original state to the nearest feasible point. The side panel records the distance and the active constraints." data-description-zh="箭头把原状态连到最近可行点。右侧列出移动距离，并标明投影碰到哪条边界。" data-extra="false" data-family="space" data-featured="true" data-figure-lang="zh" data-tags-en="Feasible domain · Euclidean projection · Active constraints" data-tags-zh="可行域 · 欧氏投影 · 紧约束" data-title-en="Feasible-state projection and binding constraints" data-title-zh="可行域投影与紧约束" hidden="hidden" id="chart-feasibility" role="tabpanel"><button aria-label="查看可行域投影与紧约束大图" class="chart-image" data-open="feasibility"><img alt="可行域投影与紧约束，中文图" height="864" loading="lazy" src="assets/charts/zh/python-feasibility.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>可行域投影与紧约束</h3><a class="chart-download" download="feasibility-zh.png" href="downloads/figures/python/zh/feasibility.png?v=122">中文 PNG ↘</a></div><p>箭头把原状态连到最近可行点。右侧列出移动距离，并标明投影碰到哪条边界。</p><span class="chart-tags">可行域 · 欧氏投影 · 紧约束</span></figcaption></figure>
-<figure aria-labelledby="pick-trajectory" class="chart-card" data-chart="trajectory" data-description-en="Align the mean and 90th percentile in time. Their margins show how close each profile comes to the upper limit." data-description-zh="沿时间轴对齐均值和第 90 百分位。两条余量曲线显示高位工况离上限还有多少距离。" data-extra="false" data-family="time" data-featured="false" data-figure-lang="zh" data-tags-en="Trajectory envelope · Bound · Quantile headroom" data-tags-zh="时序包络 · 上限边界 · 分位余量" data-title-en="Trajectory envelope and headroom" data-title-zh="轨迹包络与约束余量" hidden="hidden" id="chart-trajectory" role="tabpanel"><button aria-label="查看轨迹包络与约束余量大图" class="chart-image" data-open="trajectory"><img alt="轨迹包络与约束余量，中文图" height="864" loading="lazy" src="assets/charts/zh/python-trajectory.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>轨迹包络与约束余量</h3><a class="chart-download" download="trajectory-zh.png" href="downloads/figures/python/zh/trajectory.png?v=122">中文 PNG ↘</a></div><p>沿时间轴对齐均值和第 90 百分位。两条余量曲线显示高位工况离上限还有多少距离。</p><span class="chart-tags">时序包络 · 上限边界 · 分位余量</span></figcaption></figure>
-<figure aria-labelledby="pick-ridges" class="chart-card" data-chart="ridges" data-description-en="Density peaks show where observations cluster. Medians and quartiles show how the distributions shift across conditions." data-description-zh="密度峰显示各工况的常见取值。用中位数和四分位区间比较分布的位移。" data-extra="false" data-family="distribution" data-featured="false" data-figure-lang="zh" data-tags-en="Density · Median · Interquartile range" data-tags-zh="密度 · 中位数 · 四分位距" data-title-en="Conditional ridgeline distributions" data-title-zh="条件分布山峦图" hidden="hidden" id="chart-ridges" role="tabpanel"><button aria-label="查看条件分布山峦图大图" class="chart-image" data-open="ridges"><img alt="条件分布山峦图，中文图" height="864" loading="lazy" src="assets/charts/zh/python-ridges.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>条件分布山峦图</h3><a class="chart-download" download="ridges-zh.png" href="downloads/figures/python/zh/ridges.png?v=122">中文 PNG ↘</a></div><p>密度峰显示各工况的常见取值。用中位数和四分位区间比较分布的位移。</p><span class="chart-tags">密度 · 中位数 · 四分位距</span></figcaption></figure>
-<figure aria-labelledby="pick-chord" class="chart-card" data-chart="chord" data-description-en="Each ribbon width comes from the matrix at right. Outlined cells identify the pairs with maximal weight." data-description-zh="弦带宽度来自右侧矩阵。带框单元格标出最大权重，可据此查回对应的一对节点。" data-extra="false" data-family="relation" data-featured="false" data-figure-lang="zh" data-tags-en="Relation network · Weight matrix · Maximum pairs" data-tags-zh="关系网络 · 权重矩阵 · 最大成对权重" data-title-en="Pairwise connections and weight matrix" data-title-zh="成对关系弦图与权重矩阵" hidden="hidden" id="chart-chord" role="tabpanel"><button aria-label="查看成对关系弦图与权重矩阵大图" class="chart-image" data-open="chord"><img alt="成对关系弦图与权重矩阵，中文图" height="864" loading="lazy" src="assets/charts/zh/python-chord.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>成对关系弦图与权重矩阵</h3><a class="chart-download" download="chord-zh.png" href="downloads/figures/python/zh/chord.png?v=122">中文 PNG ↘</a></div><p>弦带宽度来自右侧矩阵。带框单元格标出最大权重，可据此查回对应的一对节点。</p><span class="chart-tags">关系网络 · 权重矩阵 · 最大成对权重</span></figcaption></figure>
-<figure aria-labelledby="pick-cluster" class="chart-card" data-chart="cluster" data-description-en="The tree and matrix use the same variable order. Read the blocks for within-group correlation and the off-diagonal blocks for its sign between groups." data-description-zh="聚类树和矩阵按相同顺序排列变量。沿色块读出组内相关系数，再查看组间相关的正负。" data-extra="false" data-family="relation" data-featured="false" data-figure-lang="zh" data-tags-en="Hierarchical clustering · Correlation · Consistent ordering" data-tags-zh="层级聚类 · 相关系数 · 同序排列" data-title-en="Clustered correlation matrix" data-title-zh="聚类关系矩阵" hidden="hidden" id="chart-cluster" role="tabpanel"><button aria-label="查看聚类关系矩阵大图" class="chart-image" data-open="cluster"><img alt="聚类关系矩阵，中文图" height="864" loading="lazy" src="assets/charts/zh/python-cluster.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>聚类关系矩阵</h3><a class="chart-download" download="cluster-zh.png" href="downloads/figures/python/zh/cluster.png?v=122">中文 PNG ↘</a></div><p>聚类树和矩阵按相同顺序排列变量。沿色块读出组内相关系数，再查看组间相关的正负。</p><span class="chart-tags">层级聚类 · 相关系数 · 同序排列</span></figcaption></figure>
-<figure aria-labelledby="pick-polar" class="chart-card" data-chart="polar" data-description-en="The four rings share the hour scale. Their colors show condition-specific response and the range trace at right identifies the hours of greatest spread." data-description-zh="四圈共用小时刻度。环形色带显示各工况的响应，右侧极差曲线定位工况分化最大的小时。" data-extra="true" data-family="time" data-featured="false" data-figure-lang="zh" data-tags-en="Periodic response · Condition rings · Range" data-tags-zh="周期响应 · 环带索引 · 工况极差" data-title-en="Circular profiles and between-condition range" data-title-zh="周期响应与工况间极差" hidden="hidden" id="chart-polar" role="tabpanel"><button aria-label="查看周期响应与工况间极差大图" class="chart-image" data-open="polar"><img alt="周期响应与工况间极差，中文图" height="864" loading="lazy" src="assets/charts/zh/python-polar.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>周期响应与工况间极差</h3><a class="chart-download" download="polar-zh.png" href="downloads/figures/python/zh/polar.png?v=122">中文 PNG ↘</a></div><p>四圈共用小时刻度。环形色带显示各工况的响应，右侧极差曲线定位工况分化最大的小时。</p><span class="chart-tags">周期响应 · 环带索引 · 工况极差</span></figcaption></figure>
-<figure aria-labelledby="pick-calibration" class="chart-card" data-chart="calibration" data-description-en="Use the bin counts to interpret the width of the calibration intervals. The companion distributions show where the classes overlap in predicted probability." data-description-zh="用分箱样本量解读校准区间的宽度。侧图显示两类样本的预测概率在哪些区间重叠。" data-extra="true" data-family="evaluation" data-featured="false" data-figure-lang="zh" data-tags-en="Calibration intervals · Bin counts · Probability distributions" data-tags-zh="校准区间 · 样本量 · 概率分布" data-title-en="Calibration and discrimination diagnostics" data-title-zh="校准与分辨联合诊断" hidden="hidden" id="chart-calibration" role="tabpanel"><button aria-label="查看校准与分辨联合诊断大图" class="chart-image" data-open="calibration"><img alt="校准与分辨联合诊断，中文图" height="864" loading="lazy" src="assets/charts/zh/python-calibration.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>校准与分辨联合诊断</h3><a class="chart-download" download="calibration-zh.png" href="downloads/figures/python/zh/calibration.png?v=122">中文 PNG ↘</a></div><p>用分箱样本量解读校准区间的宽度。侧图显示两类样本的预测概率在哪些区间重叠。</p><span class="chart-tags">校准区间 · 样本量 · 概率分布</span></figcaption></figure>
-<figure aria-labelledby="pick-spectrum" class="chart-card" data-chart="spectrum" data-description-en="The spectrogram locates frequency components in time. The profile at right sums power over windows to compare total power at each frequency." data-description-zh="时频图标出频率分量出现的时段。右图汇总各窗口的功率，可比较各频率的总功率贡献。" data-extra="true" data-family="time" data-featured="false" data-figure-lang="zh" data-tags-en="Signal · Spectrogram · STFT power" data-tags-zh="时频结构 · 频率 · STFT功率" data-title-en="Signal, time-frequency structure and spectral power" data-title-zh="信号、时频结构与频率功率" hidden="hidden" id="chart-spectrum" role="tabpanel"><button aria-label="查看信号、时频结构与频率功率大图" class="chart-image" data-open="spectrum"><img alt="信号、时频结构与频率功率，中文图" height="864" loading="lazy" src="assets/charts/zh/python-spectrum.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>信号、时频结构与频率功率</h3><a class="chart-download" download="spectrum-zh.png" href="downloads/figures/python/zh/spectrum.png?v=122">中文 PNG ↘</a></div><p>时频图标出频率分量出现的时段。右图汇总各窗口的功率，可比较各频率的总功率贡献。</p><span class="chart-tags">时频结构 · 频率 · STFT功率</span></figcaption></figure>
-<figure aria-labelledby="pick-forest" class="chart-card" data-chart="forest" data-description-en="The left panel shows the paired differences in each condition. On the right, a zero line shows which corresponding mean intervals cross zero." data-description-zh="左侧是逐工况的配对差分布。右侧用零线判断同一工况的均值区间是否跨过零。" data-extra="true" data-family="evaluation" data-featured="false" data-figure-lang="zh" data-tags-en="Paired difference · Distribution · Bootstrap interval" data-tags-zh="配对差 · 工况分布 · 自助法区间" data-title-en="Paired differences and effect intervals" data-title-zh="配对差分布与效应区间" hidden="hidden" id="chart-forest" role="tabpanel"><button aria-label="查看配对差分布与效应区间大图" class="chart-image" data-open="forest"><img alt="配对差分布与效应区间，中文图" height="864" loading="lazy" src="assets/charts/zh/python-forest.webp?v=122" width="1440"/><span class="chart-format">PYTHON / PNG</span><span aria-hidden="true" class="expand-mark">查看大图 ↗</span></button><figcaption><div class="chart-title"><h3>配对差分布与效应区间</h3><a class="chart-download" download="forest-zh.png" href="downloads/figures/python/zh/forest.png?v=122">中文 PNG ↘</a></div><p>左侧是逐工况的配对差分布。右侧用零线判断同一工况的均值区间是否跨过零。</p><span class="chart-tags">配对差 · 工况分布 · 自助法区间</span></figcaption></figure><div class="atlas-empty" hidden="" id="atlas-empty"><h3>没有找到匹配的图型</h3><p>试试“分布”“时序”“空间”等关键词，或重置筛选。</p><button id="reset-atlas">查看全部14类图型</button></div></div></div><div class="atlas-navigation"><span>从目录选择图型，或使用方向键切换</span><div><button aria-label="上一类图型" id="chart-prev">← 上一张</button>
-<button aria-label="下一类图型" id="chart-next">下一张 →</button></div></div><div class="gallery-bottom"><span>图型可按用途筛选。</span><a class="inline-link" href="https://github.com/xiaonshen1031-eng/ProjectX/tree/main/gallery" rel="noopener noreferrer" target="_blank">查看全部绘图源码 ↗</a></div>
-</section>
-</div>
+      <section aria-labelledby="gallery-title" class="gallery-section shell" id="gallery">
+        <div class="section-heading">
+          <div><p class="eyebrow" lang="en">A closer look at the numbers</p><h2 id="gallery-title">工程图册</h2></div>
+          <p>持续多久、哪里受限、怎样取舍？按问题找图，点开后可查看读图要点。每类图都提供中文和英文原图。</p>
+        </div>
+        <div class="gallery-toolbar" id="gallery-toolbar">
+          <div aria-label="筛选图型" class="category-switch" role="group">
+            <button type="button" aria-pressed="true" data-category="all">全部</button>
+            <button type="button" aria-pressed="false" data-category="time">时序与调度</button>
+            <button type="button" aria-pressed="false" data-category="distribution">分布比较</button>
+            <button type="button" aria-pressed="false" data-category="relation">关联与构成</button>
+            <button type="button" aria-pressed="false" data-category="space">空间与约束</button>
+            <button type="button" aria-pressed="false" data-category="evaluation">评估对比</button>
+          </div>
+          <div class="atlas-controls">
+            <div class="atlas-search">
+              <label class="visually-hidden" for="chart-search">搜索图型</label>
+              <div><input aria-controls="chart-grid" autocomplete="off" id="chart-search" placeholder="搜图名、用途或术语" type="search"><button type="button" hidden id="clear-search">清空</button></div>
+            </div>
+            <div aria-label="选择绘图工具" class="mode-switch" role="group">
+              <button type="button" aria-pressed="true" data-mode="python">Python <span>PNG</span></button>
+              <button type="button" aria-pressed="false" data-mode="matlab">MATLAB <span>EMF</span></button>
+            </div>
+            <div aria-label="选择图中文字语言" class="language-switch" role="group">
+              <button type="button" aria-pressed="true" data-lang="zh">中文</button>
+              <button type="button" aria-pressed="false" data-lang="en" lang="en">English</button>
+            </div>
+          </div>
+        </div>
+        <div class="collection-caption">
+          <p><span data-atlas-count>20</span> 类图型 · <span data-atlas-files>80</span> 份原图</p>
+          <p id="collection-status" role="status" aria-live="polite"></p>
+        </div>
+        <div class="chart-grid" id="chart-grid">
+          <!-- atlas cards -->
+          <figure class="chart-card" id="chart-duration" data-chart="duration" data-family="time" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="容量约束下的负荷持续曲线" data-description-zh="负荷按功率从大到小排列。右图累计超过容量上限的电量，用于区分少数尖峰和持续超限。" data-tags-zh="负荷排序 · 超限小时 · 超限电量" data-title-en="Capacity and load duration" data-description-en="Sort hourly loads from highest to lowest. The companion curve accumulates energy above capacity, showing how much of the excess comes from the highest peaks." data-tags-en="Load duration · Exceedance hours · Excess energy">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/duration.png" aria-label="查看容量约束下的负荷持续曲线大图">
+              <img src="assets/charts/zh/python-duration.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">时序与调度</p>
+              <h3>容量约束下的负荷持续曲线</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/duration.png" download="duration-zh.png" aria-label="下载容量约束下的负荷持续曲线的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-saturation" data-chart="saturation" data-family="time" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="约束饱和日历" data-description-zh="按日期和小时定位接近容量上限的时段。右侧列出每天超限和余量不足的小时数。" data-tags-zh="逐时余量 · 超限 · 日内聚集" data-title-en="Constraint saturation calendar" data-description-en="Find when capacity headroom runs low. The bars count each day’s overload hours and near-limit hours." data-tags-en="Hourly headroom · Overload · Daily clustering">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/saturation.png" aria-label="查看约束饱和日历大图">
+              <img src="assets/charts/zh/python-saturation.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">时序与调度</p>
+              <h3>约束饱和日历</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/saturation.png" download="saturation-zh.png" aria-label="下载约束饱和日历的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-energy-bridge" data-chart="energy-bridge" data-family="relation" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="调节能量收支" data-description-zh="用有符号的能量增量核对移峰、储能放电、回充和节能各自贡献，再读调节前后的购电总量。" data-tags-zh="能量平衡 · 跨时段转移 · 储能损耗" data-title-en="Dispatch energy budget" data-description-en="Reconcile each signed contribution from load shifting, storage discharge, recharge and efficiency. Compare the resulting grid energy with the baseline total." data-tags-en="Energy balance · Load shifting · Storage loss">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/energy-bridge.png" aria-label="查看调节能量收支大图">
+              <img src="assets/charts/zh/python-energy-bridge.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">关联与构成</p>
+              <h3>调节能量收支</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/energy-bridge.png" download="energy-bridge-zh.png" aria-label="下载调节能量收支的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-rebound" data-chart="rebound" data-family="time" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="调节后负荷反弹" data-description-zh="以调节开始为零点，比较同一天有无控制的功率差。右图按同日配对回补电量和削减电量。对角线下方的点表示回补抵消了部分削减。" data-tags-zh="配对工况 · 事件对齐 · 回补电量" data-title-en="Post-dispatch rebound" data-description-en="Align same-day controlled and uncontrolled runs to the event start. Compare their power differences. Points below the diagonal show that rebound offsets only part of each event’s energy reduction." data-tags-en="Matched runs · Event alignment · Rebound energy">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/rebound.png" aria-label="查看调节后负荷反弹大图">
+              <img src="assets/charts/zh/python-rebound.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">时序与调度</p>
+              <h3>调节后负荷反弹</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/rebound.png" download="rebound-zh.png" aria-label="下载调节后负荷反弹的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-hysteresis" data-chart="hysteresis" data-family="relation" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="温控负荷的热滞回" data-description-zh="用开机和停机的两个温度阈值解释同一温度下的不同功率状态，并在时序中核对这些切换。" data-tags-zh="室温阈值 · 温控开关 · 功率状态" data-title-en="Thermal load hysteresis" data-description-en="Read why the same indoor temperature can correspond to two power states. The aligned timeline shows cooling switching on and off at different thresholds." data-tags-en="Temperature thresholds · Thermostat switching · Power state">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/hysteresis.png" aria-label="查看温控负荷的热滞回大图">
+              <img src="assets/charts/zh/python-hysteresis.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">关联与构成</p>
+              <h3>温控负荷的热滞回</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/hysteresis.png" download="hysteresis-zh.png" aria-label="下载温控负荷的热滞回的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-pareto" data-chart="pareto" data-family="evaluation" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="成本与未供电量的权衡" data-description-zh="绘制各储能容量下的运行候选方案。用非支配边界识别同时满足成本和可靠性限值的最低成本方案。" data-tags-zh="非支配边界 · 储能容量 · 可靠性限值" data-title-en="Cost and unserved-energy trade-off" data-description-en="Compare operating plans across storage capacities. The nondominated frontier identifies the least-cost plan that meets both the cost and reliability limits." data-tags-en="Nondominated frontier · Storage capacity · Reliability limit">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/pareto.png" aria-label="查看成本与未供电量的权衡大图">
+              <img src="assets/charts/zh/python-pareto.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">评估对比</p>
+              <h3>成本与未供电量的权衡</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/pareto.png" download="pareto-zh.png" aria-label="下载成本与未供电量的权衡的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-gantt" data-chart="gantt" data-family="time" data-python-source="build_bilingual.py" data-matlab-source="build_matlab_extra.m" data-title-zh="资源分配与容量余量" data-description-zh="上下两组图共用时间轴。逐车分配累加后得到总功率，容量余量最小的时段用菱形标出。" data-tags-zh="分配窗口 · 电量 · 容量余量" data-title-en="Resource assignment and capacity headroom" data-description-en="Read vehicle assignments and aggregate power on the same time axis. A diamond marks the hour with the least headroom." data-tags-en="Time windows · Delivered energy · Headroom">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/gantt.png" aria-label="查看资源分配与容量余量大图">
+              <img src="assets/charts/zh/python-gantt.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">时序与调度</p>
+              <h3>资源分配与容量余量</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/gantt.png" download="gantt-zh.png" aria-label="下载资源分配与容量余量的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-sankey" data-chart="sankey" data-family="relation" data-python-source="build_bilingual.py" data-matlab-source="build_matlab_extra.m" data-title-zh="多阶段分配与流量平衡" data-description-zh="沿带宽追踪三级分配。从各节点读取流量，再核对每一级的总量。" data-tags-zh="阶段分配 · 节点总量 · 流量守恒" data-title-en="Multi-stage allocation and flow balance" data-description-en="Follow the ribbon widths through three stages. Node values let you check flow conservation at each stage." data-tags-en="Stage allocation · Node totals · Conservation">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/sankey.png" aria-label="查看多阶段分配与流量平衡大图">
+              <img src="assets/charts/zh/python-sankey.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">关联与构成</p>
+              <h3>多阶段分配与流量平衡</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/sankey.png" download="sankey-zh.png" aria-label="下载多阶段分配与流量平衡的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-raincloud" data-chart="raincloud" data-family="distribution" data-python-source="build_bilingual.py" data-matlab-source="build_matlab_extra.m" data-title-zh="雨云分布与区间比较" data-description-zh="在同一行查看原始观测及其密度。箱体覆盖中间一半样本，须线标出第 10 和第 90 百分位。" data-tags-zh="分布形态 · 原始点 · 区间统计" data-title-en="Raincloud distributions and intervals" data-description-en="Read the observations and their density on each row. The box spans the middle half of the sample and the whiskers mark the 10th and 90th percentiles." data-tags-en="Distribution shape · Observations · Interval statistics">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/raincloud.png" aria-label="查看雨云分布与区间比较大图">
+              <img src="assets/charts/zh/python-raincloud.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">分布比较</p>
+              <h3>雨云分布与区间比较</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/raincloud.png" download="raincloud-zh.png" aria-label="下载雨云分布与区间比较的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-parallel" data-chart="parallel" data-family="relation" data-python-source="build_bilingual.py" data-matlab-source="build_matlab_extra.m" data-title-zh="多指标平行坐标" data-description-zh="每条线代表一个方案。相邻轴上的线束出现交叉时，可以比较方案在两项指标上的排序变化。" data-tags-zh="多指标 · 方案群组 · 分布包络" data-title-en="Multi-metric parallel coordinates" data-description-en="Each line represents one case. Crossings show where cases change rank between neighboring metrics." data-tags-en="Multiple metrics · Groups · Distribution envelopes">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/parallel.png" aria-label="查看多指标平行坐标大图">
+              <img src="assets/charts/zh/python-parallel.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">关联与构成</p>
+              <h3>多指标平行坐标</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/parallel.png" download="parallel-zh.png" aria-label="下载多指标平行坐标的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-spatial" data-chart="spatial" data-family="space" data-python-source="build_bilingual.py" data-matlab-source="build_matlab.m" data-title-zh="空间场、节点采样与连接" data-description-zh="在左图定位网络节点。右图按采样场强排序，可查各节点落在场强分布的哪一端。" data-tags-zh="空间场 · 节点采样 · 网络连接" data-title-en="Spatial field and network samples" data-description-en="Find each network node on the map. The ranking at right compares field intensity at the same node locations." data-tags-en="Spatial field · Node samples · Network links">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/spatial.png" aria-label="查看空间场、节点采样与连接大图">
+              <img src="assets/charts/zh/python-spatial.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">空间与约束</p>
+              <h3>空间场、节点采样与连接</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/spatial.png" download="spatial-zh.png" aria-label="下载空间场、节点采样与连接的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-feasibility" data-chart="feasibility" data-family="space" data-python-source="build_bilingual.py" data-matlab-source="build_matlab.m" data-title-zh="可行域投影与紧约束" data-description-zh="箭头把原状态连到最近可行点。右侧列出移动距离，并标明投影碰到哪条边界。" data-tags-zh="可行域 · 欧氏投影 · 紧约束" data-title-en="Feasible-state projection and binding constraints" data-description-en="Arrows connect each original state to the nearest feasible point. The side panel records the distance and the active constraints." data-tags-en="Feasible domain · Euclidean projection · Active constraints">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/feasibility.png" aria-label="查看可行域投影与紧约束大图">
+              <img src="assets/charts/zh/python-feasibility.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">空间与约束</p>
+              <h3>可行域投影与紧约束</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/feasibility.png" download="feasibility-zh.png" aria-label="下载可行域投影与紧约束的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-trajectory" data-chart="trajectory" data-family="time" data-python-source="build_bilingual.py" data-matlab-source="build_matlab.m" data-title-zh="轨迹包络与约束余量" data-description-zh="沿时间轴对齐均值和第 90 百分位。两条余量曲线显示高位工况离上限还有多少距离。" data-tags-zh="时序包络 · 上限边界 · 分位余量" data-title-en="Trajectory envelope and headroom" data-description-en="Align the mean and 90th percentile in time. Their margins show how close each profile comes to the upper limit." data-tags-en="Trajectory envelope · Bound · Quantile headroom">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/trajectory.png" aria-label="查看轨迹包络与约束余量大图">
+              <img src="assets/charts/zh/python-trajectory.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">时序与调度</p>
+              <h3>轨迹包络与约束余量</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/trajectory.png" download="trajectory-zh.png" aria-label="下载轨迹包络与约束余量的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-ridges" data-chart="ridges" data-family="distribution" data-python-source="build_bilingual.py" data-matlab-source="build_matlab.m" data-title-zh="条件分布山峦图" data-description-zh="密度峰显示各工况的常见取值。用中位数和四分位区间比较分布的位移。" data-tags-zh="密度 · 中位数 · 四分位距" data-title-en="Conditional ridgeline distributions" data-description-en="Density peaks show where observations cluster. Medians and quartiles show how the distributions shift across conditions." data-tags-en="Density · Median · Interquartile range">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/ridges.png" aria-label="查看条件分布山峦图大图">
+              <img src="assets/charts/zh/python-ridges.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">分布比较</p>
+              <h3>条件分布山峦图</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/ridges.png" download="ridges-zh.png" aria-label="下载条件分布山峦图的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-chord" data-chart="chord" data-family="relation" data-python-source="build_bilingual.py" data-matlab-source="build_matlab.m" data-title-zh="成对关系弦图与权重矩阵" data-description-zh="弦带宽度来自右侧矩阵。带框单元格标出最大权重，可据此查回对应的一对节点。" data-tags-zh="关系网络 · 权重矩阵 · 最大成对权重" data-title-en="Pairwise connections and weight matrix" data-description-en="Each ribbon width comes from the matrix at right. Outlined cells identify the pairs with maximal weight." data-tags-en="Relation network · Weight matrix · Maximum pairs">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/chord.png" aria-label="查看成对关系弦图与权重矩阵大图">
+              <img src="assets/charts/zh/python-chord.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">关联与构成</p>
+              <h3>成对关系弦图与权重矩阵</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/chord.png" download="chord-zh.png" aria-label="下载成对关系弦图与权重矩阵的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-cluster" data-chart="cluster" data-family="relation" data-python-source="build_bilingual.py" data-matlab-source="build_matlab.m" data-title-zh="聚类关系矩阵" data-description-zh="聚类树和矩阵按相同顺序排列变量。沿色块读出组内相关系数，再查看组间相关的正负。" data-tags-zh="层级聚类 · 相关系数 · 同序排列" data-title-en="Clustered correlation matrix" data-description-en="The tree and matrix use the same variable order. Read the blocks for within-group correlation and the off-diagonal blocks for its sign between groups." data-tags-en="Hierarchical clustering · Correlation · Consistent ordering">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/cluster.png" aria-label="查看聚类关系矩阵大图">
+              <img src="assets/charts/zh/python-cluster.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">关联与构成</p>
+              <h3>聚类关系矩阵</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/cluster.png" download="cluster-zh.png" aria-label="下载聚类关系矩阵的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-polar" data-chart="polar" data-family="time" data-python-source="build_bilingual.py" data-matlab-source="build_matlab_extra.m" data-title-zh="周期响应与工况间极差" data-description-zh="四圈共用小时刻度。环形色带显示各工况的响应，右侧极差曲线定位工况分化最大的小时。" data-tags-zh="周期响应 · 环带索引 · 工况极差" data-title-en="Circular profiles and between-condition range" data-description-en="The four rings share the hour scale. Their colors show condition-specific response and the range trace at right identifies the hours of greatest spread." data-tags-en="Periodic response · Condition rings · Range">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/polar.png" aria-label="查看周期响应与工况间极差大图">
+              <img src="assets/charts/zh/python-polar.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">时序与调度</p>
+              <h3>周期响应与工况间极差</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/polar.png" download="polar-zh.png" aria-label="下载周期响应与工况间极差的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-calibration" data-chart="calibration" data-family="evaluation" data-python-source="build_bilingual.py" data-matlab-source="build_matlab_extra.m" data-title-zh="校准与分辨联合诊断" data-description-zh="用分箱样本量解读校准区间的宽度。侧图显示两类样本的预测概率在哪些区间重叠。" data-tags-zh="校准区间 · 样本量 · 概率分布" data-title-en="Calibration and discrimination diagnostics" data-description-en="Use the bin counts to interpret the width of the calibration intervals. The companion distributions show where the classes overlap in predicted probability." data-tags-en="Calibration intervals · Bin counts · Probability distributions">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/calibration.png" aria-label="查看校准与分辨联合诊断大图">
+              <img src="assets/charts/zh/python-calibration.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">评估对比</p>
+              <h3>校准与分辨联合诊断</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/calibration.png" download="calibration-zh.png" aria-label="下载校准与分辨联合诊断的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-spectrum" data-chart="spectrum" data-family="time" data-python-source="build_bilingual.py" data-matlab-source="build_matlab_extra.m" data-title-zh="信号、时频结构与频率功率" data-description-zh="时频图标出频率分量出现的时段。右图汇总各窗口的功率，可比较各频率的总功率贡献。" data-tags-zh="时频结构 · 频率 · STFT功率" data-title-en="Signal, time-frequency structure and spectral power" data-description-en="The spectrogram locates frequency components in time. The profile at right sums power over windows to compare total power at each frequency." data-tags-en="Signal · Spectrogram · STFT power">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/spectrum.png" aria-label="查看信号、时频结构与频率功率大图">
+              <img src="assets/charts/zh/python-spectrum.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">时序与调度</p>
+              <h3>信号、时频结构与频率功率</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/spectrum.png" download="spectrum-zh.png" aria-label="下载信号、时频结构与频率功率的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <figure class="chart-card" id="chart-forest" data-chart="forest" data-family="evaluation" data-python-source="build_bilingual.py" data-matlab-source="build_matlab_extra.m" data-title-zh="配对差分布与效应区间" data-description-zh="左侧是逐工况的配对差分布。右侧用零线判断同一工况的均值区间是否跨过零。" data-tags-zh="配对差 · 工况分布 · 自助法区间" data-title-en="Paired differences and effect intervals" data-description-en="The left panel shows the paired differences in each condition. On the right, a zero line shows which corresponding mean intervals cross zero." data-tags-en="Paired difference · Distribution · Bootstrap interval">
+            <a class="chart-image" data-open href="downloads/figures/python/zh/forest.png" aria-label="查看配对差分布与效应区间大图">
+              <img src="assets/charts/zh/python-forest.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
+              <span class="expand-mark" aria-hidden="true">↗</span>
+            </a>
+            <figcaption>
+              <p class="chart-family">评估对比</p>
+              <h3>配对差分布与效应区间</h3>
+              <a class="chart-download" href="downloads/figures/python/zh/forest.png" download="forest-zh.png" aria-label="下载配对差分布与效应区间的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
+            </figcaption>
+          </figure>
+          <!-- end atlas cards -->
+        </div>
+        <div class="atlas-empty" id="atlas-empty" hidden>
+          <h3>没有符合条件的图</h3>
+          <p>试试缩短关键词，或者查看全部类别。</p>
+          <button type="button" id="reset-atlas">清除筛选</button>
+        </div>
+        <div class="gallery-bottom">
+          <p>图中数据来自独立的合成算例。</p>
+          <a class="inline-link" href="https://github.com/xiaonshen1031-eng/ProjectX/tree/main/gallery" rel="noopener" target="_blank">数据说明与绘图源码 ↗</a>
+        </div>
+      </section>
+    </div>
 
     <section class="deliverables-section section-space" id="deliverables" aria-labelledby="deliverables-title">
       <div class="shell">
         <div class="section-heading">
-          <div><p class="eyebrow">DELIVERY</p><h2 id="deliverables-title">技术交付</h2></div>
+          <div><p class="eyebrow" lang="en">Ready for review</p><h2 id="deliverables-title">技术交付</h2></div>
           <p>从报告里的工程判断，可以查到相应的图表、计算条件和模型输入。</p>
         </div>
         <div class="deliverable-grid">
@@ -198,7 +423,7 @@
     <section class="film-section" id="film" aria-labelledby="film-title">
       <div class="shell film-layout">
         <div>
-          <p class="eyebrow">DEMO</p>
+          <p class="eyebrow" lang="en">Watch the work unfold</p>
           <h2 id="film-title">项目工作流演示</h2>
           <p>用一个充电调度算例演示怎样从容量约束得出结论。</p>
           <div class="film-chapters"><button data-chapter="task"><span>01</span> 任务与数据</button>
@@ -213,14 +438,14 @@
     <section class="start-section section-space" id="start" aria-labelledby="start-title">
       <div class="shell start-layout">
         <div class="release-intro">
-          <p class="eyebrow">CURRENT RELEASE</p>
+          <p class="eyebrow" lang="en">Take it to your project</p>
           <h2 id="start-title">获取 ProjectX</h2>
           <p>解压后，让研究助手读取 <code>senior-projectx/SKILL.md</code>。提供任务书、数据及客户模板即可开始。</p>
           <p><a class="release-link" href="https://github.com/xiaonshen1031-eng/ProjectX/blob/main/skill/senior-projectx/references/release-validation.md">查看版本验证记录 ↗</a></p>
         </div>
         <div class="download-box">
           <div class="download-version"><strong data-version>v1.2.2</strong><span>Senior-ProjectX · MIT</span></div>
-          <p>更新图册、绘图模板和充电调度报告。图例标出实际比较关系，报告解释约束如何改变调度。</p>
+          <p>内含 Project 研究流程、绘图模板和充电调度算例。用算例复算峰值和容量余量，再看报告怎样解释受限时段。</p>
           <a class="button button-white" data-download href="downloads/Senior-ProjectX-v1.2.2.zip" download>下载完整技能包 <span aria-hidden="true">↓</span></a>
           <div class="download-details"><span data-download-size>ZIP · 401 KiB</span><a href="https://github.com/xiaonshen1031-eng/ProjectX">GitHub 源码 ↗</a></div>
         </div>
@@ -241,7 +466,7 @@
   </footer>
   <dialog aria-labelledby="chart-dialog-title" class="chart-dialog" id="chart-dialog"><div class="dialog-head"><div><span class="eyebrow" id="dialog-mode-label">PYTHON / PNG</span><h2 id="chart-dialog-title">图型预览</h2></div><div class="dialog-browse"><button aria-label="预览上一类图型" data-dialog-step="-1">←</button>
 <button aria-label="预览下一类图型" data-dialog-step="1">→</button></div><button aria-pressed="false" class="zoom-button" id="image-zoom">放大查看</button>
-<button aria-label="关闭图型预览" class="icon-button" data-close="chart-dialog">×</button></div><div class="chart-dialog-scroll"><img alt="复杂图表预览" id="lightbox-image" src="assets/charts/zh/python-gantt.webp?v=122"/></div><div class="dialog-foot"><div class="dialog-figure-controls"><label>绘图工具<select aria-label="选择预览绘图工具" id="dialog-backend"><option value="python">Python</option><option value="matlab">MATLAB</option></select></label><label>图中文字<select aria-label="选择预览图中文字语言" id="dialog-language"><option value="zh">中文</option><option value="en">English</option></select></label></div><a href="https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/build_python.py" id="dialog-source" rel="noopener noreferrer" target="_blank">绘图源码 ↗</a><a class="mini-download" download="gantt-zh.png" href="downloads/figures/python/zh/gantt.png?v=122" id="dialog-download">下载PNG原图 ↘</a></div></dialog>
+<button aria-label="关闭图型预览" class="icon-button" data-close="chart-dialog">×</button></div><div class="chart-dialog-scroll"><img alt="图型预览" id="lightbox-image"></div><p class="zoom-hint" id="zoom-hint" hidden>滑动或使用方向键查看大图</p><div id="dialog-reading" class="dialog-reading"><p id="dialog-note"></p></div><div class="dialog-foot"><div class="dialog-figure-controls"><label>绘图工具<select aria-label="选择预览绘图工具" id="dialog-backend"><option value="python">Python</option><option value="matlab">MATLAB</option></select></label><label>图中文字<select aria-label="选择预览图中文字语言" id="dialog-language"><option value="zh">中文</option><option value="en">English</option></select></label></div><a href="https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/build_python.py" id="dialog-source" rel="noopener noreferrer" target="_blank">绘图源码 ↗</a><a class="mini-download" download="gantt-zh.png" href="downloads/figures/python/zh/gantt.png?v=122" id="dialog-download">下载PNG原图 ↘</a></div></dialog>
   <dialog aria-labelledby="video-title" class="media-dialog" id="video-dialog"><div class="dialog-head"><div><h2 id="video-title">项目工作流演示</h2></div><button aria-label="关闭演示视频" class="icon-button" data-close="video-dialog">×</button></div><video controls="" id="demo-video" playsinline="" poster="assets/project-workflow-poster.webp?v=122" preload="none"><source src="assets/ProjectX-workflow-demo.mp4?v=122" type="video/mp4"/><track default="" kind="captions" label="简体中文" src="assets/workflow-demo.zh.vtt?v=122" srclang="zh"/></video><div class="dialog-foot"><span>项目工作流演示 · 中文语音与字幕</span><a download="" href="assets/ProjectX-workflow-demo.mp4?v=122">下载视频 ↘</a></div></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>

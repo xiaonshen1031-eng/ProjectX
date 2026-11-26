@@ -6,6 +6,7 @@ from zipfile import ZipFile
 import hashlib,json,re,struct
 from build_release import source_bytes, source_files
 from prepare_gallery import inspect_emf
+from render_gallery import render_page
 
 ROOT=Path(__file__).resolve().parents[1]
 DOCS=ROOT/'docs'
@@ -64,7 +65,8 @@ def main():
             require(source.is_file() and source_bytes(source)==archive.read(name),'Skill source mismatch')
     gallery=json.loads((DOCS/'gallery.json').read_text(encoding='utf-8'))
     catalog=json.loads((ROOT/'gallery/catalog.json').read_text(encoding='utf-8'))['charts']
-    require(len(catalog)==14,'Expected fourteen chart types')
+    page=(DOCS/'index.html').read_text(encoding='utf-8')
+    require(render_page(page)==page,'Stale atlas cards or file counts')
     require([c['id'] for c in gallery['charts']]==[c['id'] for c in catalog],'Chart catalog mismatch')
     require(set(gallery['languages'])=={'zh','en'},'Missing figure language')
     for chart in gallery['charts']:
@@ -72,6 +74,7 @@ def main():
             for backend in ('python','matlab'):
                 output=chart['languages'][language][backend];p=DOCS/output['path']
                 require(p.is_file() and (DOCS/output['preview']).is_file(),'Missing chart output')
+                require(p.stat().st_size==output['bytes'],'Chart output byte count mismatch')
                 require(hashlib.sha256(p.read_bytes()).hexdigest()==output['sha256'],'Chart output hash mismatch')
                 if backend=='python':require(p.read_bytes()[:8]==b'\x89PNG\r\n\x1a\n','Invalid PNG signature')
                 else:
@@ -84,7 +87,7 @@ def main():
     video=manifest['video']
     for key in ('src','poster','captions'):require((DOCS/video[key]).is_file(),'Missing chart video resource')
     require(20<video['duration']<120,'Unexpected chart video duration')
-    print(json.dumps({'status':'pass','chartFamilies':len(catalog),'languages':2,'nativeOutputs':len(catalog)*4,'siteAssets':len(assets),'documentArtifacts':0,'skillSha256':manifest['sha256']},indent=2))
+    print(json.dumps({'status':'pass','chartTypes':len(catalog),'languages':2,'nativeOutputs':len(catalog)*4,'siteAssets':len(assets),'documentArtifacts':0,'skillSha256':manifest['sha256']},indent=2))
 
 
 if __name__=='__main__':main()

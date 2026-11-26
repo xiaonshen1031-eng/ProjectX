@@ -125,6 +125,12 @@
       "tags": "配对差 · 工况分布 · 自助法区间",
       "extra": true,
       "featured": false
-    }
+    },
+    {"id": "duration", "family": "time", "title": "容量约束下的负荷持续曲线", "description": "负荷按功率从大到小排列。右图累计超过容量上限的电量，用于区分少数尖峰和持续超限。", "tags": "负荷排序 · 超限小时 · 超限电量", "extra": true, "featured": false, "source": "engineering"},
+    {"id": "saturation", "family": "time", "title": "约束饱和日历", "description": "按日期和小时定位接近容量上限的时段。右侧列出每天超限和余量不足的小时数。", "tags": "逐时余量 · 超限 · 日内聚集", "extra": true, "featured": false, "source": "engineering"},
+    {"id": "energy-bridge", "family": "relation", "title": "调节能量收支", "description": "用有符号的能量增量核对移峰、储能放电、回充和节能各自贡献，再读调节前后的购电总量。", "tags": "能量平衡 · 跨时段转移 · 储能损耗", "extra": true, "featured": false, "source": "engineering"},
+    {"id": "rebound", "family": "time", "title": "调节后负荷反弹", "description": "以调节开始为零点，比较同一天有无控制的功率差。右图按同日配对回补电量和削减电量。对角线下方的点表示回补抵消了部分削减。", "tags": "配对工况 · 事件对齐 · 回补电量", "extra": true, "featured": false, "source": "engineering"},
+    {"id": "hysteresis", "family": "relation", "title": "温控负荷的热滞回", "description": "用开机和停机的两个温度阈值解释同一温度下的不同功率状态，并在时序中核对这些切换。", "tags": "室温阈值 · 温控开关 · 功率状态", "extra": true, "featured": false, "source": "engineering"},
+    {"id": "pareto", "family": "evaluation", "title": "成本与未供电量的权衡", "description": "绘制各储能容量下的运行候选方案。用非支配边界识别同时满足成本和可靠性限值的最低成本方案。", "tags": "非支配边界 · 储能容量 · 可靠性限值", "extra": true, "featured": false, "source": "engineering"}
   ]
 }
