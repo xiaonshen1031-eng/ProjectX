@@ -7,7 +7,7 @@
 
 @font-face {
   font-family: "ProjectX Sans SC";
-  src: url("assets/fonts/ProjectX-SansSC.woff2?v=136") format("woff2");
+  src: url("assets/fonts/ProjectX-SansSC.woff2?v=137") format("woff2");
   font-weight: 100 900;
   font-display: swap;
 }
@@ -218,7 +218,7 @@ img { display: block; max-width: 100%; }
 .workflow-detail { display: flex; flex-direction: column; justify-content: space-between; gap: 24px; padding: clamp(19px, 3vw, 42px); border: 1px solid var(--line); border-radius: var(--radius); background: radial-gradient(ellipse at 100% 0%, #e5efff, transparent 53%), white; box-shadow: 0 17px 45px #2148960e; }
 .workflow-prose h3 { margin-block: 6px 12px; font-size: clamp(25px, 2.9vw, 42px); line-height: 1.28; font-weight: 800; letter-spacing: -.055em; }
 .workflow-prose > p { color: var(--muted); max-width: 66ch; }
-.workflow-chain { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.workflow-chain { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .workflow-chain > div { min-width: 0; background: #f0f5ff; border-top: 2px solid #7098f6; border-radius: 3px 3px 9px 9px; padding: 12px; }
 .workflow-chain span { color: #3156ad; font-size: 12px; font-weight: 800; }
 .workflow-chain p { font-size: 14px; line-height: 1.6; margin-top: 4px; }
@@ -293,6 +293,7 @@ img { display: block; max-width: 100%; }
 .film-chapters button { border: 1px solid #c5d7f5; background: #f8fbff; border-radius: 8px; padding: 8px; text-align: left; font-size: 13px; }
 .film-chapters button:hover { background: #dceaff; }
 .film-chapters span { font-weight: 800; color: #2d56b6; margin-right: 3px; }
+.film-run-link { display: inline-flex; align-items: center; min-height: 44px; margin-top: 6px; }
 
 .start-section { background: radial-gradient(ellipse at 85% 15%, #3b64d4, transparent 56%), linear-gradient(129deg, #102473 24%, #183fb6 90%); color: #f5f8ff; }
 .start-layout { display: grid; grid-template-columns: 1fr .84fr; gap: 30px clamp(40px, 8vw, 126px); align-items: center; }
@@ -344,8 +345,9 @@ dialog::backdrop { background: #071442bc; backdrop-filter: blur(5px); }
 .dialog-figure-controls label { display: flex; align-items: center; gap: 5px; }
 .dialog-figure-controls select { min-height: 37px; }
 .dialog-foot .mini-download { padding: 7px 10px; background: var(--blue); border-radius: 7px; color: white; }
-.media-dialog { width: min(calc(100% - 26px), 940px); }
+.media-dialog { width: min(calc(100% - 26px), 1024px); }
 .media-dialog video { display: block; width: 100%; max-height: 66svh; background: #081948; }
+.media-dialog video::cue { font-size: clamp(13px, 1.55vw, 21px); color: #fff; background-color: #101e43e8; }
 .toast { position: fixed; z-index: 40; inset: auto 16px 18px auto; color: white; background: #112d83; border-radius: 9px; padding: 9px 14px; box-shadow: 0 8px 25px #0b235833; opacity: 0; pointer-events: none; transform: translateY(8px); transition: opacity .2s, transform .2s; }
 .toast.show { opacity: 1; transform: none; }
 

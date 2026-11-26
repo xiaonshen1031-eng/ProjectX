@@ -1,8 +1,8 @@
 # ProjectX
 
-ProjectX 是面向委托研究的开源技能。研究助手读取任务书后，用已有数据建立模型并复算关键约束。报告依据客户模板编排，便于读者从工程判断查到对应图件和计算条件。
+ProjectX 是面向横向委托研究的开源技能。按任务书处理数据、建模计算及绘图，按客户模板编写技术报告或项目汇报。也可用于单独的计算、图表更新和文稿修订。
 
-[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能 v1.3.6](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.3.6.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [绘图源码](gallery/README.md)
+[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能 v1.3.7](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.3.7.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [绘图源码](gallery/README.md)
 
 Copyright © NCEPU-Senior · Author: XiaoN
 
@@ -10,16 +10,19 @@ Copyright © NCEPU-Senior · Author: XiaoN
 
 | 阶段 | 主要工作 | 输出 |
 | --- | --- | --- |
-| 界定范围 | 从任务书提取客户需要据以决策的工况 | 待回答的工程问题 |
-| 准备数据 | 核对时段、单位、缺测和对象覆盖 | 与模型对应的数据 |
-| 建立模型 | 把运行条件写成变量之间的关系 | 可求解的模型 |
-| 复算结果 | 代回原约束，核对工况比较所用条件 | 比较结果及复算脚本 |
-| 解释发现 | 找出容量或其他约束何时起作用 | 图表和工程判断 |
-| 编排报告 | 让图表和判断在客户模板中互相对应 | 技术报告及支撑材料 |
+| 确认任务 | 确定负责的专题、工况和指标 | 计算任务和交付清单 |
+| 整理数据 | 检查缺测、时间间隔和单位 | 模型输入表 |
+| 建模计算 | 定义变量和约束，求解后代回校验 | 脚本、参数和结果表 |
+| 绘图与分析 | 对照各工况，解释变化及其用途 | 图表和结果分析 |
+| 报告与汇报 | 按模板排版，检查原生公式及图表 | Word、PPT 和复算文件 |
 
 Word 流程支持 MathType 原生公式、三线表及图题交叉引用。PPT 流程按照客户模板布置工况和结果，可核对原生图表、嵌入工作簿及原比例页面。
 
-v1.3.6 按调度问题组织结果段，连贯说明满载时段、单车增充电量与供电安排。 [选图与模板](skill/senior-projectx/references/project-engineering-figures.md) · [结果分析](skill/senior-projectx/references/project-results-analysis.md) · [版本验证](skill/senior-projectx/references/release-validation.md)
+[选图与模板](skill/senior-projectx/references/project-engineering-figures.md) · [结果分析](skill/senior-projectx/references/project-results-analysis.md) · [版本验证](skill/senior-projectx/references/release-validation.md)
+
+## 运行演示
+
+用合成的充电数据演示从读取输入表、求解和复算到导出图件。视频中的命令、结果和图件来自同一次运行。[观看演示](https://xiaonshen1031-eng.github.io/ProjectX/#film) · [运行命令](skill/senior-projectx/references/project-allocation-demo.md)
 
 ## 结果可视化
 

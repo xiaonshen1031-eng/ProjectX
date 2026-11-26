@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#0c35a8">
-  <meta name="description" content="ProjectX 帮助研究助手按任务书开展工程计算，解释结果并编写技术报告。工程图册提供中英文绘图示例和源码。">
+  <meta name="description" content="ProjectX 是横向委托研究技能。按任务书处理数据、建模计算及绘图，按客户模板编写技术报告或项目汇报。">
   <meta property="og:title" content="ProjectX — Find the limit. Make the call.">
   <meta property="og:description" content="面向委托研究的开源技能。查看工程图册或下载 ProjectX。">
   <meta property="og:type" content="website">
@@ -12,9 +12,9 @@
   <link rel="canonical" href="https://xiaonshen1031-eng.github.io/ProjectX/">
   <link rel="icon" href="assets/icon.svg?v=blue" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/Manrope.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/ProjectX-SansSC.woff2?v=136" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=136">
-  <script src="app.js?v=136" defer></script>
+  <link rel="preload" href="assets/fonts/ProjectX-SansSC.woff2?v=137" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=137">
+  <script src="app.js?v=137" defer></script>
   <script src="load-preview.js?v=122" defer></script>
   <title>ProjectX — Find the limit. Make the call.</title>
 </head>
@@ -28,14 +28,14 @@
       </a>
       <nav id="site-nav" aria-label="主导航">
         <a href="#workflow">研究流程</a>
+        <a href="#film">运行演示</a>
         <a href="#gallery">工程图册</a>
         <a href="#deliverables">技术交付</a>
-        <a href="#start">版本</a>
         <a class="mobile-source" href="https://github.com/xiaonshen1031-eng/ProjectX">GitHub ↗</a>
       </nav>
       <div class="header-actions">
         <a class="nav-source" href="https://github.com/xiaonshen1031-eng/ProjectX">GitHub <span aria-hidden="true">↗</span></a>
-        <a class="button header-download" data-download download href="downloads/Senior-ProjectX-v1.3.6.zip">下载技能 <span aria-hidden="true">↓</span></a>
+        <a class="button header-download" data-download download href="downloads/Senior-ProjectX-v1.3.7.zip">下载技能 <span aria-hidden="true">↓</span></a>
         <button type="button" class="menu-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="展开导航"><span></span><span></span></button>
       </div>
     </div>
@@ -48,18 +48,18 @@
           <div class="hero-copy">
             <p class="hero-kicker"><span class="status-dot" aria-hidden="true"></span>委托研究的开源技能</p>
             <h1 id="hero-title" lang="en"><span>Find the limit.</span><em>Make the call.</em></h1>
-            <p class="hero-description">换个工况，原来的方案还成立吗？ProjectX 帮你查清哪个限制改变了结果，把原因写进技术报告，再把参数和计算脚本交给客户复算。</p>
+            <p class="hero-description">按任务书用已有数据建模、计算和绘图。技术报告与项目汇报沿用客户模板，随附复算所需的代码和参数。</p>
             <div class="hero-actions">
-              <a class="button button-white" data-download download href="downloads/Senior-ProjectX-v1.3.6.zip">下载 ProjectX <span aria-hidden="true">↓</span></a>
+              <a class="button button-white" data-download download href="downloads/Senior-ProjectX-v1.3.7.zip">下载 ProjectX <span aria-hidden="true">↓</span></a>
               <button type="button" class="button button-ghost watch-video"><span class="play-icon" aria-hidden="true"></span>观看演示</button>
               <a class="hero-atlas-link" href="#gallery">浏览工程图册 <span aria-hidden="true">↘</span></a>
             </div>
-            <p class="hero-version"><span data-version>v1.3.6</span><span class="version-divider" aria-hidden="true"></span><a href="#release-note">查看本版更新 ↘</a></p>
+            <p class="hero-version"><span data-version>v1.3.7</span><span class="version-divider" aria-hidden="true"></span><a href="#start">安装与使用 ↘</a></p>
           </div>
           <div class="hero-console" aria-labelledby="plot-title">
             <div class="console-top">
-              <div><p class="console-caption">充电调度 · 合成算例</p><h2 id="plot-title">哪个时段容量用满？</h2></div>
-              <a href="#gallery" class="console-link">工程图册 <span aria-hidden="true">↗</span></a>
+              <div><p class="console-caption">运行演示预览 · 合成数据</p><h2 id="plot-title">哪个时段容量用满？</h2></div>
+              <a href="#film" class="console-link">查看运行过程 <span aria-hidden="true">↘</span></a>
             </div>
             <div class="plot-panel">
               <div class="plot-keys" aria-label="图例">
@@ -93,31 +93,48 @@
     <section class="workflow-section section-space" id="workflow" aria-labelledby="workflow-title">
       <div class="shell">
         <div class="section-heading">
-          <div><p class="eyebrow" lang="en">From Load to Schedule</p><h2 id="workflow-title">研究流程</h2></div>
-          <p>以充电算例为例，根据车辆接入窗口分配功率，确定满载时段，再计算已分配车辆的可转移电量。</p>
+          <div><p class="eyebrow" lang="en">From the brief to the result</p><h2 id="workflow-title">研究流程</h2></div>
+          <p>可从任务书开始，也可接手已有项目中的数据、计算、图表或文稿。</p>
         </div>
         <div class="workflow-layout">
           <div class="workflow-tabs" role="tablist" aria-label="研究阶段" aria-orientation="vertical">
-            <button type="button" role="tab" id="stage-task" data-stage="task" aria-selected="true" aria-controls="workflow-detail" tabindex="0">任务与资料 <span aria-hidden="true">↗</span></button>
-            <button type="button" role="tab" id="stage-data" data-stage="data" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">数据与适配 <span aria-hidden="true">↗</span></button>
-            <button type="button" role="tab" id="stage-model" data-stage="model" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">模型与方法 <span aria-hidden="true">↗</span></button>
-            <button type="button" role="tab" id="stage-compute" data-stage="compute" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">计算与校核 <span aria-hidden="true">↗</span></button>
-            <button type="button" role="tab" id="stage-analysis" data-stage="analysis" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">结果与分析 <span aria-hidden="true">↗</span></button>
-            <button type="button" role="tab" id="stage-delivery" data-stage="delivery" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">成果交付 <span aria-hidden="true">↗</span></button>
+            <button type="button" role="tab" id="stage-task" data-stage="task" aria-selected="true" aria-controls="workflow-detail" tabindex="0">确认任务 <span aria-hidden="true">↗</span></button>
+            <button type="button" role="tab" id="stage-data" data-stage="data" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">整理数据 <span aria-hidden="true">↗</span></button>
+            <button type="button" role="tab" id="stage-model" data-stage="model" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">建立模型 <span aria-hidden="true">↗</span></button>
+            <button type="button" role="tab" id="stage-compute" data-stage="compute" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">求解与复算 <span aria-hidden="true">↗</span></button>
+            <button type="button" role="tab" id="stage-analysis" data-stage="analysis" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">绘图与解读 <span aria-hidden="true">↗</span></button>
+            <button type="button" role="tab" id="stage-delivery" data-stage="delivery" aria-selected="false" aria-controls="workflow-detail" tabindex="-1">报告与汇报 <span aria-hidden="true">↗</span></button>
           </div>
           <div class="workflow-detail" role="tabpanel" id="workflow-detail" aria-labelledby="stage-task" tabindex="0">
             <div class="workflow-prose">
-              <span class="eyebrow" id="workflow-step-label">SCOPE</span>
-              <h3 id="workflow-step-title">界定研究任务</h3>
-              <p id="workflow-step-body">从任务书确认客户需要做哪项判断。把判断所需的工况和指标写成计算问题。</p>
+              <span class="eyebrow" id="workflow-step-label" lang="en">THE BRIEF</span>
+              <h3 id="workflow-step-title">确定本次要解决的问题</h3>
+              <p id="workflow-step-body">从任务书找出本次负责的专题，确认要比较的工况、采用的指标及交付范围。</p>
             </div>
             <div class="workflow-chain">
-              <div><span>输入</span><p id="workflow-input">任务书、客户模板</p></div>
-              <div><span>处理</span><p id="workflow-process">确定据以决策的工况和指标</p></div>
-              <div><span>输出</span><p id="workflow-output">待回答的工程问题</p></div>
+              <div><span>所需材料</span><p id="workflow-input">任务书、已有成果和客户模板</p></div>
+              <div><span>本步产出</span><p id="workflow-output">待计算的问题和交付清单</p></div>
             </div>
           </div>
         </div>
+      </div>
+    </section>
+
+    <section class="film-section" id="film" aria-labelledby="film-title">
+      <div class="shell film-layout">
+        <div>
+          <p class="eyebrow" lang="en">Watch the work unfold</p>
+          <h2 id="film-title">看数据怎样变成图</h2>
+          <p>用合成的充电数据实际跑一遍。看程序读取两张输入表、求出排程，再从结果表导出图件。</p>
+          <div class="film-chapters" aria-label="视频章节">
+            <button type="button" data-chapter="data"><span></span> 准备数据</button>
+            <button type="button" data-chapter="solve"><span></span> 求解与复算</button>
+            <button type="button" data-chapter="plot"><span></span> 执行绘图</button>
+            <button type="button" data-chapter="read"><span></span> 查看生成图</button>
+          </div>
+          <a class="inline-link film-run-link" href="https://github.com/xiaonshen1031-eng/ProjectX/blob/main/skill/senior-projectx/references/project-allocation-demo.md">查看演示命令 ↗</a>
+        </div>
+        <button type="button" aria-label="播放 ProjectX 数据和绘图演示" class="film-poster watch-video"><img alt="" height="720" loading="lazy" src="assets/project-workflow-poster.webp?v=137" width="1280"><span class="film-shade"></span><span aria-hidden="true" class="film-play">▶</span><span class="film-label"><strong>播放演示</strong></span><span class="film-duration" data-video-duration></span></button>
       </div>
     </section>
 
@@ -439,43 +456,28 @@
       <div class="shell">
         <div class="section-heading">
           <div><p class="eyebrow" lang="en">Ready for review</p><h2 id="deliverables-title">技术交付</h2></div>
-          <p>从报告里的工程判断，可以查到相应的图表、计算条件和模型输入。</p>
+          <p>按任务书交付报告、汇报和复算所需的文件。</p>
         </div>
         <div class="deliverable-grid">
           <article class="deliverable-card deliverable-primary">
             <p class="file-type">DOCX <span>Word</span></p>
             <h3>工程技术报告</h3>
-            <p>报告说明哪些工况改变了方案判断。公式可编辑，图题和交叉引用随正文检查。</p>
+            <p>按模板写入方法、结果和工程结论。Word 公式可编辑，图表带题注和交叉引用。</p>
             <a href="https://github.com/xiaonshen1031-eng/ProjectX/blob/main/skill/senior-projectx/references/word-pagination-and-citation-release.md">Word 排版指南 ↗</a>
           </article>
           <article class="deliverable-card">
             <p class="file-type">PPTX <span>PowerPoint</span></p>
             <h3>客户模板汇报</h3>
-            <p>按客户模板呈现关键工况，在原比例页面检查图表。原生图表保留关联工作簿。</p>
+            <p>按客户模板排版，保留可编辑的文字和图表。原生图表随文件保留其数据工作簿。</p>
             <a href="https://github.com/xiaonshen1031-eng/ProjectX/blob/main/skill/senior-projectx/references/project-presentation-playbook.md">汇报制作指南 ↗</a>
           </article>
           <article class="deliverable-card">
             <p class="file-type">SOURCE <span>Python / MATLAB</span></p>
-            <h3>可复算材料</h3>
-            <p>从原始输入到报告图表，每步计算都有对应的参数和脚本。</p>
+            <h3>计算与绘图文件</h3>
+            <p>交付输入说明、模型参数、计算脚本和结果表，可重新计算及绘图。</p>
             <a href="https://github.com/xiaonshen1031-eng/ProjectX/tree/main/skill/senior-projectx/scripts">查看工具脚本 ↗</a>
           </article>
         </div>
-      </div>
-    </section>
-
-    <section class="film-section" id="film" aria-labelledby="film-title">
-      <div class="shell film-layout">
-        <div>
-          <p class="eyebrow" lang="en">Watch the work unfold</p>
-          <h2 id="film-title">项目工作流演示</h2>
-          <p>用一个充电调度算例演示怎样从容量约束得出结论。</p>
-          <div class="film-chapters"><button data-chapter="task"><span>01</span> 任务与数据</button>
-<button data-chapter="model"><span>02</span> 模型与计算</button>
-<button data-chapter="visual"><span>03</span> 分析与可视化</button>
-<button data-chapter="delivery"><span>04</span> 成果交付</button></div>
-        </div>
-        <button aria-label="播放ProjectX项目工作流演示" class="film-poster watch-video"><img alt="" height="720" loading="lazy" src="assets/project-workflow-poster.webp?v=122" width="1280"/><span class="film-shade"></span><span aria-hidden="true" class="film-play">▶</span><span class="film-label"><strong>播放演示</strong></span><span class="film-duration" data-video-duration="">01:13</span></button>
       </div>
     </section>
 
@@ -488,9 +490,9 @@
           <p><a class="release-link" href="https://github.com/xiaonshen1031-eng/ProjectX/blob/main/skill/senior-projectx/references/release-validation.md">查看版本验证记录 ↗</a></p>
         </div>
         <div class="download-box">
-          <div class="download-version"><strong data-version>v1.3.6</strong><span>Senior-ProjectX · MIT</span></div>
-          <p id="release-note">充电样章把时段满载的原因、增充电量的计算和供电安排连贯写入结果与结论。下载包内含六类可替换数据的绘图模板。</p>
-          <a class="button button-white" data-download href="downloads/Senior-ProjectX-v1.3.6.zip" download>下载完整技能包 <span aria-hidden="true">↓</span></a>
+          <div class="download-version"><strong data-version>v1.3.7</strong><span>Senior-ProjectX · MIT</span></div>
+          <p>内含技能说明、计算工具、可替换数据的绘图模板及 Office 交付指南。</p>
+          <a class="button button-white" data-download href="downloads/Senior-ProjectX-v1.3.7.zip" download>下载完整技能包 <span aria-hidden="true">↓</span></a>
           <div class="download-details"><span data-download-size>ZIP · 437 KiB</span><a href="https://github.com/xiaonshen1031-eng/ProjectX">GitHub 源码 ↗</a></div>
         </div>
         <div class="prompt-card">
@@ -511,7 +513,7 @@
   <dialog aria-labelledby="chart-dialog-title" class="chart-dialog" id="chart-dialog"><div class="dialog-head"><div><span class="eyebrow" id="dialog-mode-label">PYTHON / PNG</span><h2 id="chart-dialog-title">图型预览</h2></div><div class="dialog-browse"><button aria-label="预览上一类图型" data-dialog-step="-1">←</button>
 <button aria-label="预览下一类图型" data-dialog-step="1">→</button></div><button aria-pressed="false" class="zoom-button" id="image-zoom">放大查看</button>
 <button aria-label="关闭图型预览" class="icon-button" data-close="chart-dialog">×</button></div><div class="chart-dialog-scroll"><img alt="图型预览" id="lightbox-image"></div><p class="zoom-hint" id="zoom-hint" hidden>滑动或使用方向键查看大图</p><div id="dialog-reading" class="dialog-reading"><p id="dialog-note"></p></div><div class="dialog-foot"><div class="dialog-figure-controls"><label>绘图工具<select aria-label="选择预览绘图工具" id="dialog-backend"><option value="python">Python</option><option value="matlab">MATLAB</option></select></label><label>图中文字<select aria-label="选择预览图中文字语言" id="dialog-language"><option value="zh">中文</option><option value="en">English</option></select></label></div><a href="https://github.com/xiaonshen1031-eng/ProjectX/blob/main/gallery/build_python.py" id="dialog-source" rel="noopener noreferrer" target="_blank">绘图源码 ↗</a><a class="mini-download" download="gantt-zh.png" href="downloads/figures/python/zh/gantt.png?v=122" id="dialog-download">下载PNG原图 ↘</a></div></dialog>
-  <dialog aria-labelledby="video-title" class="media-dialog" id="video-dialog"><div class="dialog-head"><div><h2 id="video-title">项目工作流演示</h2></div><button aria-label="关闭演示视频" class="icon-button" data-close="video-dialog">×</button></div><video controls="" id="demo-video" playsinline="" poster="assets/project-workflow-poster.webp?v=122" preload="none"><source src="assets/ProjectX-workflow-demo.mp4?v=122" type="video/mp4"/><track default="" kind="captions" label="简体中文" src="assets/workflow-demo.zh.vtt?v=122" srclang="zh"/></video><div class="dialog-foot"><span>项目工作流演示 · 中文语音与字幕</span><a download="" href="assets/ProjectX-workflow-demo.mp4?v=122">下载视频 ↘</a></div></dialog>
+  <dialog aria-labelledby="video-title" class="media-dialog" id="video-dialog"><div class="dialog-head"><div><h2 id="video-title">数据、求解与绘图</h2></div><button aria-label="关闭演示视频" class="icon-button" data-close="video-dialog">×</button></div><video controls id="demo-video" playsinline poster="assets/project-workflow-poster.webp?v=137" preload="none"><source src="assets/ProjectX-workflow-demo.mp4?v=137" type="video/mp4"><track default kind="captions" label="简体中文" src="assets/workflow-demo.zh.vtt?v=137" srclang="zh"></video><div class="dialog-foot"><span>充电调度演示 · 中文讲解与字幕</span><a download href="assets/ProjectX-workflow-demo.mp4?v=137">下载视频 ↘</a></div></dialog>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
