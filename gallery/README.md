@@ -1,6 +1,6 @@
 # 项目结果可视化示例
 
-图册收录 20 类图型。每类提供中英文版本，分别使用 MATLAB 导出 EMF、Python 导出 PNG，共 80 份原图。
+图册收录 24 类图型。每类均提供中英文版本，分别用 MATLAB 导出 EMF、用 Python 导出 PNG，共 96 份原图。
 
 两个后端读取同一份教学数据，数值来自解析函数和固定随机种子。资源分配示例按 1 h 时段给出 kW 功率，逐时积分为 kWh。容量上限采用示例峰值的 1.12 倍。其余示例的单位随指标定义。用于展示画法的数据全部为合成示例。
 
@@ -26,6 +26,10 @@
 | 调节后负荷反弹 | 对齐控制开始和回补窗口，按配对工况积分削减量及回补量。 |
 | 温控负荷的热滞回 | 在室温与功率图上读出开停机阈值，再在时间轴上核对每次切换。 |
 | 成本与未供电量的权衡 | 在同一场景集上核对 56 个配置，用非支配边界标出满足双限值的最低成本方案。 |
+| 支路退出后的负荷转供 | 沿线路检查停运、转供和未供节点。余量变化解释为什么转供后仍有负荷未恢复。 |
+| 备用要求的边际代价 | 台阶对应已报价的分段备用资源。将台阶与各档已用容量配对，判断多买 1 MW 会调用哪一档。 |
+| 多步预测误差与覆盖 | 对相同样本计算两个版本的绝对误差之差。中间 50% 为配对差的四分位距，下方给出各格配对数和缺测状态。 |
+| 调节响应时延与超时 | 在给定时限处比较尚未执行的比例。用同一批指令的确认、执行阶段平均时长解释超时变化。 |
 
 在仓库根目录运行：
 
@@ -41,11 +45,11 @@ python tools/audit_bilingual_fonts.py
 python tools/verify_site.py
 ```
 
-`verify_evidence.py`复算流带几何和节点守恒、可行投影、区间、计数及重点标注。`build_bilingual.py`生成 40 张 2400×1440 PNG。MATLAB 使用 Windows 原生 `print -dmeta -vector` 导出 40 张 EMF。`prepare_bilingual_gallery.py`读取实际 PNG 和 EMF，等比例生成浏览器预览并记录原图格式、哈希和矢量检查结果。
+`verify_evidence.py`复算流带几何和节点守恒、可行投影、区间、计数及重点标注。`build_bilingual.py`生成 48 张 2400×1440 PNG。MATLAB 使用 Windows 原生 `print -dmeta -vector` 导出 48 张 EMF。`prepare_bilingual_gallery.py`读取实际 PNG 和 EMF，等比例生成浏览器预览并记录原图格式、哈希和矢量检查结果。
 
-Python原图位于`docs/downloads/figures/python/`，MATLAB原图位于`docs/downloads/figures/matlab/`。网页使用等比例WebP预览，下载保留各自原生格式。完整图型注册表位于 `catalog.json`。新增的六种工程示例使用 `engineering_examples.py` 生成的 `engineering-data.json`。文件包括计算依据和两种后端共用的图形坐标，Python 和 MATLAB 均保留原生坐标轴、标记、路径及文字。
+Python 原图位于 `docs/downloads/figures/python/`，MATLAB 原图位于 `docs/downloads/figures/matlab/`。网页提供等比例 WebP 预览。完整图型索引位于 `catalog.json`。工程算例由 `engineering_examples.py` 生成 `engineering-data.json`，包含复算数据与两种后端共用的图形坐标。模板依据数据绘制坐标轴、标记、路径及文字。
 
-EMF导出和预览需要Windows上的MATLAB及支持Windows元文件的Pillow。中文使用微软雅黑加粗，英文、数字、单位与符号使用Times New Roman常规体。Python采用分别指定字体的文字段，MATLAB采用TeX字体段；字体核查同时检查Python实际字形和EMF中的原生字体记录。
+EMF 导出和预览需要 Windows 上的 MATLAB 以及支持 Windows 元文件的 Pillow。中文使用微软雅黑加粗，英文、数字、单位与符号使用 Times New Roman 常规体。十张工程图把 166 mm 设为阅读宽度，轴标题约 9.4 pt，刻度约 8.2 pt。逐张查看缩放后的轴题、刻度、图例与标注，确认中英文布局。字体核查同时检查 Python 字形与 EMF 原生字体记录。
 
 Copyright © NCEPU-Senior · Author: XiaoN
 

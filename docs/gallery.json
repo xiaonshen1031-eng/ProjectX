@@ -1288,17 +1288,17 @@
           "python": {
             "path": "downloads/figures/python/duration.png",
             "format": "PNG",
-            "bytes": 126564,
-            "sha256": "afc10a46076c5cb29fab599ca794ab35efb95838970e3e99af3882422f2eb8cb",
+            "bytes": 162516,
+            "sha256": "da528fb49786f195c7ec87257b2104892adb0c76e2a54ccfa6c0fd70b3914351",
             "preview": "assets/charts/python-duration.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/duration.emf",
             "format": "EMF",
-            "bytes": 107472,
-            "sha256": "be042106b9c399e9d8e7f1dd13416c0720bc858e4a6740f51edf1c0e2f55b70b",
+            "bytes": 109264,
+            "sha256": "a38f42436286ed23326b601adfa00440416bb55074ba7d2dbd1fe1c44d38394c",
             "preview": "assets/charts/matlab-duration.webp",
-            "records": 2743,
+            "records": 2751,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1313,17 +1313,17 @@
           "python": {
             "path": "downloads/figures/python/zh/duration.png",
             "format": "PNG",
-            "bytes": 123487,
-            "sha256": "84c5fcfcf92a04cba3a6b0a45c3a79c01ab2382d596db22fc321048e74c8dfc4",
+            "bytes": 151763,
+            "sha256": "7b2cd613677562342dac0dca8c0abb666271d83973ddf33dd1ad6ef6c9ccac13",
             "preview": "assets/charts/zh/python-duration.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/duration.emf",
             "format": "EMF",
-            "bytes": 111036,
-            "sha256": "c55e6b0d40f99745adcb038e6f719e85602ecae742395069e7cbaf22f86e6ce5",
+            "bytes": 112828,
+            "sha256": "95040abc67e2dd67e2714acff05bbc4b26f1f7717037c7a201d400c245562db7",
             "preview": "assets/charts/zh/matlab-duration.webp",
-            "records": 2781,
+            "records": 2789,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1343,17 +1343,17 @@
         "python": {
           "path": "downloads/figures/python/duration.png",
           "format": "PNG",
-          "bytes": 126564,
-          "sha256": "afc10a46076c5cb29fab599ca794ab35efb95838970e3e99af3882422f2eb8cb",
+          "bytes": 162516,
+          "sha256": "da528fb49786f195c7ec87257b2104892adb0c76e2a54ccfa6c0fd70b3914351",
           "preview": "assets/charts/python-duration.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/duration.emf",
           "format": "EMF",
-          "bytes": 107472,
-          "sha256": "be042106b9c399e9d8e7f1dd13416c0720bc858e4a6740f51edf1c0e2f55b70b",
+          "bytes": 109264,
+          "sha256": "a38f42436286ed23326b601adfa00440416bb55074ba7d2dbd1fe1c44d38394c",
           "preview": "assets/charts/matlab-duration.webp",
-          "records": 2743,
+          "records": 2751,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -1379,17 +1379,17 @@
           "python": {
             "path": "downloads/figures/python/saturation.png",
             "format": "PNG",
-            "bytes": 79536,
-            "sha256": "aedf6d8925911414858dcc478e45ce5833e879121eaf2fde5a15e3f85434fb5e",
+            "bytes": 107190,
+            "sha256": "9ec471cba0e1ebd2830ec31ef4c2d936f94b479f902a53d8b73a008df06c17ee",
             "preview": "assets/charts/python-saturation.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/saturation.emf",
             "format": "EMF",
-            "bytes": 260004,
-            "sha256": "82f9429eaca25cebfb6bdb9820b0bd99f23341dfa6f701feb272f758f813040a",
+            "bytes": 260040,
+            "sha256": "b332f4ac193df3b536d4237b4e0486da5e5ef295e19faf27597f2fa04689957d",
             "preview": "assets/charts/matlab-saturation.webp",
-            "records": 8618,
+            "records": 8620,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1404,15 +1404,15 @@
           "python": {
             "path": "downloads/figures/python/zh/saturation.png",
             "format": "PNG",
-            "bytes": 73447,
-            "sha256": "29ac76ad36a4dba9e8adffbb64f8640f1222e0218605cba490a82eee5f7df64a",
+            "bytes": 95453,
+            "sha256": "e0ea001a4a8908fce91d4e82204cafe8acd921a0c1925a2a0160cfcf2a671c94",
             "preview": "assets/charts/zh/python-saturation.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/saturation.emf",
             "format": "EMF",
             "bytes": 262184,
-            "sha256": "6ce19d9e8840c0883c115e27017053f70a26c4af4b8c7c72a9b3394adfa2b25b",
+            "sha256": "7509d06422064116bc5dca014dedaeb27663ffc144563ca4cc58664de4696494",
             "preview": "assets/charts/zh/matlab-saturation.webp",
             "records": 8638,
             "embeddedRasterRecords": 0,
@@ -1434,17 +1434,17 @@
         "python": {
           "path": "downloads/figures/python/saturation.png",
           "format": "PNG",
-          "bytes": 79536,
-          "sha256": "aedf6d8925911414858dcc478e45ce5833e879121eaf2fde5a15e3f85434fb5e",
+          "bytes": 107190,
+          "sha256": "9ec471cba0e1ebd2830ec31ef4c2d936f94b479f902a53d8b73a008df06c17ee",
           "preview": "assets/charts/python-saturation.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/saturation.emf",
           "format": "EMF",
-          "bytes": 260004,
-          "sha256": "82f9429eaca25cebfb6bdb9820b0bd99f23341dfa6f701feb272f758f813040a",
+          "bytes": 260040,
+          "sha256": "b332f4ac193df3b536d4237b4e0486da5e5ef295e19faf27597f2fa04689957d",
           "preview": "assets/charts/matlab-saturation.webp",
-          "records": 8618,
+          "records": 8620,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -1470,17 +1470,17 @@
           "python": {
             "path": "downloads/figures/python/energy-bridge.png",
             "format": "PNG",
-            "bytes": 111629,
-            "sha256": "aab3d9019c531e8430532e0c5ee812921936e88f8900f250f709465e406a2c55",
+            "bytes": 147444,
+            "sha256": "519669eedcee660cf6fdf81e0cb2b7f73af5778616cb0cc7952ffa1d96268595",
             "preview": "assets/charts/python-energy-bridge.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/energy-bridge.emf",
             "format": "EMF",
-            "bytes": 36480,
-            "sha256": "6175ef7a36d2bfc42bfaf874957eeb60b30847576f0fa60995b7e885860e9ed9",
+            "bytes": 40512,
+            "sha256": "604c9e28f8bbb54a48496bdcda3b3108a8c0b943863a57ca2662075db7c909a5",
             "preview": "assets/charts/matlab-energy-bridge.webp",
-            "records": 719,
+            "records": 737,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1495,17 +1495,17 @@
           "python": {
             "path": "downloads/figures/python/zh/energy-bridge.png",
             "format": "PNG",
-            "bytes": 100358,
-            "sha256": "eefb27794d1716227142c55dc0da75343970126d72cb709bf81053ea9c444b08",
+            "bytes": 123278,
+            "sha256": "c2a14e8eda8266deb4b115066ad24afc772a3128974cb9b470bd3d162b047366",
             "preview": "assets/charts/zh/python-energy-bridge.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/energy-bridge.emf",
             "format": "EMF",
-            "bytes": 42684,
-            "sha256": "9297a41c45b573a362f315976e5b53b54152220b543a0b0acf03712e324d1eb8",
+            "bytes": 43336,
+            "sha256": "222920043bac0938692dbcf16bf999683a6de48c62b0e74c9aaf5fafe589a552",
             "preview": "assets/charts/zh/matlab-energy-bridge.webp",
-            "records": 755,
+            "records": 757,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1525,17 +1525,17 @@
         "python": {
           "path": "downloads/figures/python/energy-bridge.png",
           "format": "PNG",
-          "bytes": 111629,
-          "sha256": "aab3d9019c531e8430532e0c5ee812921936e88f8900f250f709465e406a2c55",
+          "bytes": 147444,
+          "sha256": "519669eedcee660cf6fdf81e0cb2b7f73af5778616cb0cc7952ffa1d96268595",
           "preview": "assets/charts/python-energy-bridge.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/energy-bridge.emf",
           "format": "EMF",
-          "bytes": 36480,
-          "sha256": "6175ef7a36d2bfc42bfaf874957eeb60b30847576f0fa60995b7e885860e9ed9",
+          "bytes": 40512,
+          "sha256": "604c9e28f8bbb54a48496bdcda3b3108a8c0b943863a57ca2662075db7c909a5",
           "preview": "assets/charts/matlab-energy-bridge.webp",
-          "records": 719,
+          "records": 737,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -1561,15 +1561,15 @@
           "python": {
             "path": "downloads/figures/python/rebound.png",
             "format": "PNG",
-            "bytes": 140077,
-            "sha256": "7b53645ee3d5c0bd08050ffa121e398ca1091ae4798488c0f7a54649b378b80e",
+            "bytes": 172151,
+            "sha256": "13032ce4e3b46f6e0c80f8624f2954e5bfe3e39611821b780a95fca108fbe454",
             "preview": "assets/charts/python-rebound.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/rebound.emf",
             "format": "EMF",
             "bytes": 76464,
-            "sha256": "926f93318a98d2ea747093225917718b69a7ae24af5fb6425c0b3db2a63532c7",
+            "sha256": "a58a71ea5b467e31147d2c682c3c0feb6a0b8fdcc61404358de0d89f82791269",
             "preview": "assets/charts/matlab-rebound.webp",
             "records": 1562,
             "embeddedRasterRecords": 0,
@@ -1586,15 +1586,15 @@
           "python": {
             "path": "downloads/figures/python/zh/rebound.png",
             "format": "PNG",
-            "bytes": 138575,
-            "sha256": "8063e0f29c11d0bbe5a4b03e65a56ffebd309daeb9b8bdef394e4ed81e235ab8",
+            "bytes": 164581,
+            "sha256": "f27e421daf080bcb5b6d02c508887a974e9e4a98ce6e491ddfe36e2a5dba6e84",
             "preview": "assets/charts/zh/python-rebound.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/rebound.emf",
             "format": "EMF",
             "bytes": 79640,
-            "sha256": "ac1402312fae131e212c85de4d83086bcf06c100874384888d88f177db5153b2",
+            "sha256": "0b923acb6524f47ddc803399f6110ea46cb5c5ad4b2a4c65ebc2265923bc1c90",
             "preview": "assets/charts/zh/matlab-rebound.webp",
             "records": 1589,
             "embeddedRasterRecords": 0,
@@ -1616,15 +1616,15 @@
         "python": {
           "path": "downloads/figures/python/rebound.png",
           "format": "PNG",
-          "bytes": 140077,
-          "sha256": "7b53645ee3d5c0bd08050ffa121e398ca1091ae4798488c0f7a54649b378b80e",
+          "bytes": 172151,
+          "sha256": "13032ce4e3b46f6e0c80f8624f2954e5bfe3e39611821b780a95fca108fbe454",
           "preview": "assets/charts/python-rebound.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/rebound.emf",
           "format": "EMF",
           "bytes": 76464,
-          "sha256": "926f93318a98d2ea747093225917718b69a7ae24af5fb6425c0b3db2a63532c7",
+          "sha256": "a58a71ea5b467e31147d2c682c3c0feb6a0b8fdcc61404358de0d89f82791269",
           "preview": "assets/charts/matlab-rebound.webp",
           "records": 1562,
           "embeddedRasterRecords": 0,
@@ -1652,17 +1652,17 @@
           "python": {
             "path": "downloads/figures/python/hysteresis.png",
             "format": "PNG",
-            "bytes": 143049,
-            "sha256": "cfdd36882e55b4b7b156c0f11cbaa9ff97244f29523e9e5c2c86a283461ecb5f",
+            "bytes": 176432,
+            "sha256": "b0b01516ac906f12b5427140288e6d04eac9a5ed5450c98784be2e635d77b302",
             "preview": "assets/charts/python-hysteresis.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/hysteresis.emf",
             "format": "EMF",
-            "bytes": 65212,
-            "sha256": "ecbe2795d7be9d294a1777a38c9dc2f675cedc4f87f7057635cc3d41946967ea",
+            "bytes": 64764,
+            "sha256": "74d5e51a156671f39e32d8286418b80877435b33e1281bf86df60b8bceb0cc97",
             "preview": "assets/charts/matlab-hysteresis.webp",
-            "records": 943,
+            "records": 941,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1677,17 +1677,17 @@
           "python": {
             "path": "downloads/figures/python/zh/hysteresis.png",
             "format": "PNG",
-            "bytes": 138191,
-            "sha256": "6c5d06fd177333fea11767f9b3846a2d401a497fc5a07bbcb2601e007ac64511",
+            "bytes": 165294,
+            "sha256": "819c3a88252b253f33728c511a58ff3f067da56ace8a3688a792f5e070663e9c",
             "preview": "assets/charts/zh/python-hysteresis.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/hysteresis.emf",
             "format": "EMF",
-            "bytes": 67176,
-            "sha256": "87780374159be215cd9a191de25f52dd76a6d00b059f1308f6f6983f484fcaa5",
+            "bytes": 66796,
+            "sha256": "a2ea483b680fe76c3958a490f600e7e71c86bf80dfb927c544b310fcefb32d65",
             "preview": "assets/charts/zh/matlab-hysteresis.webp",
-            "records": 961,
+            "records": 959,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1707,17 +1707,17 @@
         "python": {
           "path": "downloads/figures/python/hysteresis.png",
           "format": "PNG",
-          "bytes": 143049,
-          "sha256": "cfdd36882e55b4b7b156c0f11cbaa9ff97244f29523e9e5c2c86a283461ecb5f",
+          "bytes": 176432,
+          "sha256": "b0b01516ac906f12b5427140288e6d04eac9a5ed5450c98784be2e635d77b302",
           "preview": "assets/charts/python-hysteresis.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/hysteresis.emf",
           "format": "EMF",
-          "bytes": 65212,
-          "sha256": "ecbe2795d7be9d294a1777a38c9dc2f675cedc4f87f7057635cc3d41946967ea",
+          "bytes": 64764,
+          "sha256": "74d5e51a156671f39e32d8286418b80877435b33e1281bf86df60b8bceb0cc97",
           "preview": "assets/charts/matlab-hysteresis.webp",
-          "records": 943,
+          "records": 941,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -1743,17 +1743,17 @@
           "python": {
             "path": "downloads/figures/python/pareto.png",
             "format": "PNG",
-            "bytes": 144290,
-            "sha256": "382f0bfa22c11e27a0f9169764b1690d03d3f1c18ff6ebf00b9ae42dd74cbdb8",
+            "bytes": 179186,
+            "sha256": "bda737b8d9726e700c14e6281de3341617862c0cc939ba8e27ac136296219479",
             "preview": "assets/charts/python-pareto.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/pareto.emf",
             "format": "EMF",
-            "bytes": 75832,
-            "sha256": "5ade060e4a26b6cd697ead124ee2ba21d860b33a6d0d815ee6144962e98dbff2",
+            "bytes": 75384,
+            "sha256": "725996b871c4f2d67794a6126ecf8468d284f17c59c1fcef082e76456c9b7c45",
             "preview": "assets/charts/matlab-pareto.webp",
-            "records": 2002,
+            "records": 2000,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1768,17 +1768,17 @@
           "python": {
             "path": "downloads/figures/python/zh/pareto.png",
             "format": "PNG",
-            "bytes": 141471,
-            "sha256": "04ca53e2f6918d0f95d70ebb8811dc3a72b5726336c625bdbaf04b8e6c04bcfb",
+            "bytes": 169593,
+            "sha256": "2c161680b666d223899a8c1de8f08a1b66ebb8b20b515c1087990c3361f18852",
             "preview": "assets/charts/zh/python-pareto.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/pareto.emf",
             "format": "EMF",
-            "bytes": 77216,
-            "sha256": "fc013ac65c2f607dea79a161ddcac8df5e0e883b2ce8a2712c3d9a69d49247da",
+            "bytes": 76836,
+            "sha256": "2f99bbca4f554ad880f7c25dcfb56d7ddc7f264362c74d29428b327caf16e5f6",
             "preview": "assets/charts/zh/matlab-pareto.webp",
-            "records": 2009,
+            "records": 2007,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1798,17 +1798,17 @@
         "python": {
           "path": "downloads/figures/python/pareto.png",
           "format": "PNG",
-          "bytes": 144290,
-          "sha256": "382f0bfa22c11e27a0f9169764b1690d03d3f1c18ff6ebf00b9ae42dd74cbdb8",
+          "bytes": 179186,
+          "sha256": "bda737b8d9726e700c14e6281de3341617862c0cc939ba8e27ac136296219479",
           "preview": "assets/charts/python-pareto.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/pareto.emf",
           "format": "EMF",
-          "bytes": 75832,
-          "sha256": "5ade060e4a26b6cd697ead124ee2ba21d860b33a6d0d815ee6144962e98dbff2",
+          "bytes": 75384,
+          "sha256": "725996b871c4f2d67794a6126ecf8468d284f17c59c1fcef082e76456c9b7c45",
           "preview": "assets/charts/matlab-pareto.webp",
-          "records": 2002,
+          "records": 2000,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -1817,6 +1817,374 @@
             }
           ],
           "detailPreview": "assets/charts/detail/matlab-pareto.webp"
+        }
+      }
+    },
+    {
+      "id": "contingency",
+      "family": "space",
+      "title": "支路退出后的负荷转供",
+      "description": "图中标出停运支路和转供路径。联络线满载后，负荷点仍有 3 kW 无法送达。",
+      "tags": "转供路径 · 联络容量 · 未供功率",
+      "extra": false,
+      "featured": true,
+      "source": "engineering",
+      "atlas_highlight": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/contingency.png",
+            "format": "PNG",
+            "bytes": 144783,
+            "sha256": "085e800fc363b609d158fc84299f2da9c157e1e652a27782ab650e17bd496184",
+            "preview": "assets/charts/python-contingency.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/contingency.emf",
+            "format": "EMF",
+            "bytes": 33832,
+            "sha256": "114bed62fe4d26b543456f60c5de6cea5c3299d9117370362a1ce2c6d90fc405",
+            "preview": "assets/charts/matlab-contingency.webp",
+            "records": 810,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-contingency.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/contingency.png",
+            "format": "PNG",
+            "bytes": 136912,
+            "sha256": "2090b626bc8ab7c451d61714f94dc5fdaf212c00c57d360132200a0fbd2d9510",
+            "preview": "assets/charts/zh/python-contingency.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/contingency.emf",
+            "format": "EMF",
+            "bytes": 37140,
+            "sha256": "973ad3431fc07fbc85385f70e9cd973fc78b95612bebcb73db19e795b16fe206",
+            "preview": "assets/charts/zh/matlab-contingency.webp",
+            "records": 837,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-contingency.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/contingency.png",
+          "format": "PNG",
+          "bytes": 144783,
+          "sha256": "085e800fc363b609d158fc84299f2da9c157e1e652a27782ab650e17bd496184",
+          "preview": "assets/charts/python-contingency.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/contingency.emf",
+          "format": "EMF",
+          "bytes": 33832,
+          "sha256": "114bed62fe4d26b543456f60c5de6cea5c3299d9117370362a1ce2c6d90fc405",
+          "preview": "assets/charts/matlab-contingency.webp",
+          "records": 810,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-contingency.webp"
+        }
+      }
+    },
+    {
+      "id": "marginal-cost",
+      "family": "evaluation",
+      "title": "备用要求的边际代价",
+      "description": "左图定位备用要求跨过哪一档容量。右图核对已分配的备用量，再读增加 1 MW 的代价。",
+      "tags": "分段边际成本 · 容量台阶 · 备用分配",
+      "extra": false,
+      "featured": true,
+      "source": "engineering",
+      "atlas_highlight": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/marginal-cost.png",
+            "format": "PNG",
+            "bytes": 145605,
+            "sha256": "47aa7fd0022538eea0ce0190ee29ad47c8690982fa86598a3c308e54a2a9a7f7",
+            "preview": "assets/charts/python-marginal-cost.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/marginal-cost.emf",
+            "format": "EMF",
+            "bytes": 34748,
+            "sha256": "a7cadb5a9030b4afcd9e1be74ae45bf97b581568516d69dac87df47c437e5e62",
+            "preview": "assets/charts/matlab-marginal-cost.webp",
+            "records": 703,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-marginal-cost.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/marginal-cost.png",
+            "format": "PNG",
+            "bytes": 138001,
+            "sha256": "30e2d1780910ae00db871d55139f10e3a952f73427746b83150abd64ebfd7ef0",
+            "preview": "assets/charts/zh/python-marginal-cost.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/marginal-cost.emf",
+            "format": "EMF",
+            "bytes": 38744,
+            "sha256": "96d0d3ad02d4ddcdfaa211010f7b6b60b1cc99fb28ce75b3740ec41da73b3e02",
+            "preview": "assets/charts/zh/matlab-marginal-cost.webp",
+            "records": 750,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-marginal-cost.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/marginal-cost.png",
+          "format": "PNG",
+          "bytes": 145605,
+          "sha256": "47aa7fd0022538eea0ce0190ee29ad47c8690982fa86598a3c308e54a2a9a7f7",
+          "preview": "assets/charts/python-marginal-cost.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/marginal-cost.emf",
+          "format": "EMF",
+          "bytes": 34748,
+          "sha256": "a7cadb5a9030b4afcd9e1be74ae45bf97b581568516d69dac87df47c437e5e62",
+          "preview": "assets/charts/matlab-marginal-cost.webp",
+          "records": 703,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-marginal-cost.webp"
+        }
+      }
+    },
+    {
+      "id": "error-horizon",
+      "family": "evaluation",
+      "title": "多步预测误差与覆盖",
+      "description": "同一批时点配对后，比较各提前量的绝对误差差值。下方给出配对样本数，标明无法比较的工况。",
+      "tags": "多步预测 · 配对绝对误差 · 有效覆盖",
+      "extra": false,
+      "featured": true,
+      "source": "engineering",
+      "atlas_highlight": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/error-horizon.png",
+            "format": "PNG",
+            "bytes": 121287,
+            "sha256": "95a4084aa1bb57bbd9115e2b61015cc863c7a6314c3aff1fb4df3ce36a05231a",
+            "preview": "assets/charts/python-error-horizon.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/error-horizon.emf",
+            "format": "EMF",
+            "bytes": 65908,
+            "sha256": "6ffd3df4fe3619efc71f8de61d8f6266c304ead7f827518646789292919c47c6",
+            "preview": "assets/charts/matlab-error-horizon.webp",
+            "records": 1741,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-error-horizon.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/error-horizon.png",
+            "format": "PNG",
+            "bytes": 110142,
+            "sha256": "a59c6b1a682856cf85cebcba70bceda8fccba847aaadf4fd50ef8faa4a8f70de",
+            "preview": "assets/charts/zh/python-error-horizon.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/error-horizon.emf",
+            "format": "EMF",
+            "bytes": 68544,
+            "sha256": "5a68f5d10fd9cf659de2762e993bf1059ed5bcf76c449a79a8c5d120e289b862",
+            "preview": "assets/charts/zh/matlab-error-horizon.webp",
+            "records": 1760,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-error-horizon.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/error-horizon.png",
+          "format": "PNG",
+          "bytes": 121287,
+          "sha256": "95a4084aa1bb57bbd9115e2b61015cc863c7a6314c3aff1fb4df3ce36a05231a",
+          "preview": "assets/charts/python-error-horizon.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/error-horizon.emf",
+          "format": "EMF",
+          "bytes": 65908,
+          "sha256": "6ffd3df4fe3619efc71f8de61d8f6266c304ead7f827518646789292919c47c6",
+          "preview": "assets/charts/matlab-error-horizon.webp",
+          "records": 1741,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-error-horizon.webp"
+        }
+      }
+    },
+    {
+      "id": "response-delay",
+      "family": "distribution",
+      "title": "调节响应时延与超时",
+      "description": "先从时间分布读出超时比例，再沿同一批指令核对确认等待和执行时长，定位超时变化来自哪一段。",
+      "tags": "响应时延 · 超时比例 · 确认等待",
+      "extra": false,
+      "featured": true,
+      "source": "engineering",
+      "atlas_highlight": true,
+      "languages": {
+        "en": {
+          "python": {
+            "path": "downloads/figures/python/response-delay.png",
+            "format": "PNG",
+            "bytes": 156439,
+            "sha256": "57987e40162d99811251ad0e22f2f16aa6943972d896879dbad41d342e630f48",
+            "preview": "assets/charts/python-response-delay.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/response-delay.emf",
+            "format": "EMF",
+            "bytes": 44720,
+            "sha256": "fea0a93c97834af30d95b4cbe3371f974b97d48bb7427c8e75fe04df67809575",
+            "preview": "assets/charts/matlab-response-delay.webp",
+            "records": 1036,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              }
+            ],
+            "detailPreview": "assets/charts/detail/matlab-response-delay.webp"
+          }
+        },
+        "zh": {
+          "python": {
+            "path": "downloads/figures/python/zh/response-delay.png",
+            "format": "PNG",
+            "bytes": 135466,
+            "sha256": "9dd0ecf738933482dc66f717b484fc181a892f3e076b43f1bf5080a6d95d1341",
+            "preview": "assets/charts/zh/python-response-delay.webp"
+          },
+          "matlab": {
+            "path": "downloads/figures/matlab/zh/response-delay.emf",
+            "format": "EMF",
+            "bytes": 47784,
+            "sha256": "4035740ceb9a8baed0040f9effe3ad3f2103c2c6fd2f26d317abda5e48d4e24b",
+            "preview": "assets/charts/zh/matlab-response-delay.webp",
+            "records": 1066,
+            "embeddedRasterRecords": 0,
+            "fonts": [
+              {
+                "family": "Times New Roman",
+                "weight": 400
+              },
+              {
+                "family": "微软雅黑",
+                "weight": 700
+              }
+            ],
+            "detailPreview": "assets/charts/detail/zh/matlab-response-delay.webp"
+          }
+        }
+      },
+      "outputs": {
+        "python": {
+          "path": "downloads/figures/python/response-delay.png",
+          "format": "PNG",
+          "bytes": 156439,
+          "sha256": "57987e40162d99811251ad0e22f2f16aa6943972d896879dbad41d342e630f48",
+          "preview": "assets/charts/python-response-delay.webp"
+        },
+        "matlab": {
+          "path": "downloads/figures/matlab/response-delay.emf",
+          "format": "EMF",
+          "bytes": 44720,
+          "sha256": "fea0a93c97834af30d95b4cbe3371f974b97d48bb7427c8e75fe04df67809575",
+          "preview": "assets/charts/matlab-response-delay.webp",
+          "records": 1036,
+          "embeddedRasterRecords": 0,
+          "fonts": [
+            {
+              "family": "Times New Roman",
+              "weight": 400
+            }
+          ],
+          "detailPreview": "assets/charts/detail/matlab-response-delay.webp"
         }
       }
     }

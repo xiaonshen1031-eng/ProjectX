@@ -96,6 +96,25 @@ class ProjectDeliveryLanguageTests(unittest.TestCase):
         result = delivery.audit(self.args)
         self.assertEqual(result["errors"], ["Visual review is not bound to the current DOCX SHA-256"])
 
+    def test_result_review_requires_current_paragraph_and_substantive_fields(self):
+        self.args.require_result_analysis = True
+        self.assertEqual(delivery.audit(self.args)["result_analysis_check"], "review_unbound_or_incomplete")
+        anchor = Document(self.docx).paragraphs[0].text
+        review = delivery.load(self.args.visual_review)
+        finding = {"anchor": anchor, "question": "Where does charge capacity run out?",
+                   "comparison": "Same period before and after dispatch", "evidence": ["Capacity and allocation in period 2"],
+                   "explanation": "Available capacity is fully allocated", "decision": "Shift some scheduled charge out of period 2",
+                   "connection": "Check where each affected vehicle can accept the shifted charge"}
+        review["result_analysis"] = {"status": "pass", "docx_sha256": delivery.file_hash(self.docx), "findings": [finding]}
+        self.record("visual.json", review)
+        self.assertEqual(delivery.audit(self.args)["result_analysis_check"], "review_bound")
+        finding.pop("connection")
+        finding["anchor"] = "Paragraph from a different draft."
+        self.record("visual.json", review)
+        errors = delivery.audit(self.args)["errors"]
+        self.assertTrue(any("unique exact paragraph" in error for error in errors))
+        self.assertTrue(any("lacks connection" in error for error in errors))
+
     def test_concrete_scientific_information_constraint_can_be_reviewed(self):
         self.write_docx("The model cannot update before a forecast error matures.")
         visual = delivery.load(self.args.visual_review)

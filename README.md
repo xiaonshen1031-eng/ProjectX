@@ -2,7 +2,7 @@
 
 ProjectX 是面向委托研究的开源技能。研究助手读取任务书后，用已有数据建立模型并复算关键约束。报告依据客户模板编排，便于读者从工程判断查到对应图件和计算条件。
 
-[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能 v1.2.2](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.2.2.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [绘图源码](gallery/README.md)
+[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能 v1.3.0](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.3.0.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [绘图源码](gallery/README.md)
 
 Copyright © NCEPU-Senior · Author: XiaoN
 
@@ -19,19 +19,19 @@ Copyright © NCEPU-Senior · Author: XiaoN
 
 Word 流程支持 MathType 原生公式、三线表及图题交叉引用。PPT 流程按照客户模板布置工况和结果，可核对原生图表、嵌入工作簿及原比例页面。
 
-v1.2.2 按 NPS Research Paper 3.2.4 的 Project 规范修订绘图模板和分配算例。图中用固定的角色色、线型和位置表达基准及阈值。算例正文从触界时段解释调度余地，再用需求总量解释容量不足的工况。 [版本验证](skill/senior-projectx/references/release-validation.md)
+v1.3.0 将六类工程图的选型、输入规范和可运行模板收入技能。结果章节沿着同工况差异追到起作用的约束，再说明哪个时段或方案需要重新校核。充电算例用同一时段的余量对照解释满载，再用逐车接入窗口推导可转移电量。[选图与模板](skill/senior-projectx/references/project-engineering-figures.md) · [结果分析](skill/senior-projectx/references/project-results-analysis.md) · [版本验证](skill/senior-projectx/references/release-validation.md)
 
 ## 结果可视化
 
-工程图册提供 20 类示例，可按用途浏览缩略图或搜索中英文术语。每类均提供中文和英文的 Python PNG、MATLAB EMF，共 80 份原图。中文图中汉字采用加粗微软雅黑，拉丁文和数字采用常规 Times New Roman。
+工程图册提供 24 类示例，可按用途浏览缩略图或搜索中英文术语。每类均提供中文和英文的 Python PNG、MATLAB EMF，共 96 份原图。中文图中汉字采用加粗微软雅黑，拉丁文和数字采用常规 Times New Roman。
 
 | 用途 | 图型 |
 | --- | --- |
 | 时序与调度 | 轨迹包络、周期响应、时频图、逐时资源分配、负荷持续曲线、约束饱和日历、调节后负荷反弹 |
-| 分布比较 | 条件分布山峦图、雨云分布与区间比较 |
+| 分布比较 | 条件分布山峦图、雨云分布与区间比较、调节响应时延与超时 |
 | 关联与构成 | 成对关系弦图、聚类关系矩阵、桑基流图、平行坐标、调节能量收支、温控负荷热滞回 |
-| 空间与约束 | 空间场节点采样、可行域投影 |
-| 评估对比 | 校准区间、配对差分布、成本与未供电量权衡 |
+| 空间与约束 | 空间场节点采样、可行域投影、支路退出后的负荷转供 |
+| 评估对比 | 校准区间、配对差分布、成本与未供电量权衡、备用要求的边际代价、多步预测误差与覆盖 |
 
 图册采用固定种子和解析模型生成的演示数据。 [数据与绘图命令](gallery/README.md)
 

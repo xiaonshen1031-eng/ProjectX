@@ -309,7 +309,36 @@
     ["Unit load / kW", "机组功率 / kW"],
     ["Usable storage", "可用储能容量"],
     ["Warming while off", "停机时升温"],
-    ["Within both limits", "同时满足两项限值"]
+    ["Within both limits", "同时满足两项限值"],
+    ["After the branch outage", "支路退出后的转供"],
+    ["Spare branch capacity", "支路余量"],
+    ["Branch out", "停运"],
+    ["3 kW short", "未供 3 kW"],
+    ["Transfer route", "转供路径"],
+    ["Tie has no spare", "联络线已达上限"],
+    ["Before", "退出前"],
+    ["After", "转供后"],
+    ["Reserve requirement / MW", "备用要求 / MW"],
+    ["Marginal cost / USD/(MW·h)", "边际成本 / USD/(MW·h)"],
+    ["Reserve allocated at 29 MW", "29 MW 时的备用分配"],
+    ["Total procurement cost", "备用采购总支出"],
+    ["Next 1 MW adds 20 USD/h", "增加 1 MW 需 20 USD/h"],
+    ["Stable", "平稳"],
+    ["Ramp", "爬坡"],
+    ["High variability", "高波动"],
+    ["Paired error difference / kW", "配对误差差值 / kW"],
+    ["Forecast lead time / h", "预报提前量 / h"],
+    ["Missing", "缺测"],
+    ["Lower error", "误差下降"],
+    ["Median and middle 50%", "中位数及中间 50%"],
+    ["Queued confirmation", "排队确认"],
+    ["Priority confirmation", "优先确认"],
+    ["End-to-end latency / s", "端到端时延 / s"],
+    ["Commands still waiting / %", "仍未执行的指令 / %"],
+    ["22 s deadline", "22 s 时限"],
+    ["Mean phase time / s", "阶段平均用时 / s"],
+    ["Where time is spent", "响应时间分解"],
+    ["Confirm then actuate", "先确认，后执行"]
   ],
   "patterns": [
     [
@@ -405,6 +434,10 @@
     "energy-bridge": {"title": "Dispatch energy budget", "description": "Reconcile each signed contribution from load shifting, storage discharge, recharge and efficiency. Compare the resulting grid energy with the baseline total.", "tags": "Energy balance · Load shifting · Storage loss"},
     "rebound": {"title": "Post-dispatch rebound", "description": "Align same-day controlled and uncontrolled runs to the event start. Compare their power differences. Points below the diagonal show that rebound offsets only part of each event’s energy reduction.", "tags": "Matched runs · Event alignment · Rebound energy"},
     "hysteresis": {"title": "Thermal load hysteresis", "description": "Read why the same indoor temperature can correspond to two power states. The aligned timeline shows cooling switching on and off at different thresholds.", "tags": "Temperature thresholds · Thermostat switching · Power state"},
-    "pareto": {"title": "Cost and unserved-energy trade-off", "description": "Compare operating plans across storage capacities. The nondominated frontier identifies the least-cost plan that meets both the cost and reliability limits.", "tags": "Nondominated frontier · Storage capacity · Reliability limit"}
+    "pareto": {"title": "Cost and unserved-energy trade-off", "description": "Compare operating plans across storage capacities. The nondominated frontier identifies the least-cost plan that meets both the cost and reliability limits.", "tags": "Nondominated frontier · Storage capacity · Reliability limit"},
+    "contingency": {"title": "Load transfer after a branch outage", "description": "Trace the transfer path from the spare feeder. The tie reaches its rating while 3 kW of load remains unserved.", "tags": "Transfer path · Tie rating · Unserved power"},
+    "marginal-cost": {"title": "Marginal cost of additional reserve", "description": "Find the marginal block at the current reserve requirement. The allocation at right explains the cost of procuring one more megawatt.", "tags": "Merit order · Capacity blocks · Reserve allocation"},
+    "error-horizon": {"title": "Forecast errors across lead times", "description": "Compare paired absolute-error differences for each lead time. The coverage strip shows sample counts and explicitly marks a missing comparison.", "tags": "Lead time · Paired error · Coverage"},
+    "response-delay": {"title": "Actuation latency and deadline misses", "description": "Read deadline misses from the latency distributions. Phase durations for the same commands show whether confirmation or actuation explains the difference.", "tags": "Latency · Missed deadlines · Command confirmation"}
   }
 }

@@ -6,56 +6,12 @@ from pathlib import Path
 
 import numpy as np
 
+from engineering_extensions import contingency, error_horizon, marginal_cost, response_delay
+from engineering_geometry import band, key, line, panel, points, rect, steps, text
+
 
 HERE = Path(__file__).resolve().parent
 DT = 0.25
-
-
-def panel(position, xlim, ylim, *, xlabel="", ylabel="", xtick=None, ytick=None,
-          xticklabels=None, yticklabels=None, grid="", axis=True):
-    return {
-        "position": position, "xlim": xlim, "ylim": ylim, "xlabel": xlabel, "ylabel": ylabel,
-        "xtick": xtick, "ytick": ytick, "xticklabels": xticklabels, "yticklabels": yticklabels,
-        "grid": grid, "axis": axis, "layers": [],
-    }
-
-
-def layer(a, kind, x, y, **attrs):
-    a["layers"].append({"kind": kind, "x": x, "y": y, **attrs})
-
-
-def line(a, x, y, color="ink", width=1.5, style="-"):
-    layer(a, "line", x, y, color=color, width=width, style=style)
-
-
-def polygon(a, x, y, face, edge="none", width=0.7):
-    layer(a, "polygon", x, y, face=face, edge=edge, width=width)
-
-
-def rect(a, left, right, bottom, top, face, edge="none", width=0.7):
-    polygon(a, [left, right, right, left], [bottom, bottom, top, top], face, edge, width)
-
-
-def points(a, x, y, *, marker="o", face="white", edge="ink", size=7, width=1.05):
-    layer(a, "points", np.atleast_1d(x), np.atleast_1d(y), marker=marker, face=face,
-          edge=edge, size=size, width=width)
-
-
-def text(a, x, y, label, *, size=15, align="left", color="ink"):
-    layer(a, "text", x, y, label=label, size=size, align=align, color=color)
-
-
-def band(a, x, low, high, color):
-    polygon(a, np.r_[x, x[::-1]], np.r_[low, high[::-1]], color)
-
-
-def steps(values, step=1):
-    edges = np.arange(len(values) + 1) * step
-    return np.repeat(edges, 2)[1:-1], np.repeat(values, 2)
-
-
-def key(position):
-    return panel(position, [0, 1], [0, 1], axis=False)
 
 
 def shift_examples():
@@ -90,7 +46,7 @@ def duration():
     x, peak = steps(chains[0], 100 / base.size)
     band(a, x, np.full_like(x, cap), np.maximum(peak, cap), "exceedance_wash")
     line(a, [0, 100], [cap, cap], style="--")
-    text(a, 55, cap + 2.2, "70 kW capacity", size=13)
+    text(a, 55, cap + 2.2, "70 kW capacity", size=18)
     for series, color, style in zip(chains, ["observation", "state"], [":", "-"]):
         xx, yy = steps(series, 100 / base.size)
         line(a, xx, yy, color, 2.25, style)
@@ -104,8 +60,8 @@ def duration():
         line(b, position, seq, color, 2.25, style)
         points(b, position[n], seq[n], marker="s" if color == "observation" else "o",
                face="white", edge=color)
-        text(b, xmax * .94, seq[n] + ymax * .065, f"{seq[n]:.1f} kWh", align="right", size=13)
-        text(b, xmax * .94, seq[n] - ymax * .075, f"{n} h", align="right", size=13)
+        text(b, xmax * .94, seq[n] + ymax * .065, f"{seq[n]:.1f} kWh", align="right", size=19)
+        text(b, xmax * .94, seq[n] - ymax * .075, f"{n} h", align="right", size=18)
 
     legend = key([.09, .873, .86, .075])
     line(legend, [.01, .064], [.5, .5], "observation", 2.25, ":")
@@ -136,8 +92,8 @@ def saturation():
         for hr in range(24):
             color = "exceedance_wash" if overload[row, hr] else "alternative_wash" if near[row, hr] else "state_wash"
             rect(a, hr - .5, hr + .5, y - .5, y + .5, color, "white")
-        for mask, marker, role, size in [(near, "o", "alternative", 4.6),
-                                          (overload, "s", "exceedance", 6.6)]:
+        for mask, marker, role, size in [(near, "o", "alternative", 6.0),
+                                          (overload, "s", "exceedance", 8.0)]:
             hours = np.flatnonzero(mask[row])
             if len(hours):
                 points(a, hours, np.full(len(hours), y), marker=marker,
@@ -183,12 +139,12 @@ def energy_bridge():
         rect(a, i - .31, i + .31, min(before, after), max(before, after), fill, role, 1.65)
         line(a, [i + .31, i + .69], [after, after], "ink", 1.1, ":")
         anchor = min(before, after) - 10 if current < 0 else max(before, after) + 10
-        text(a, i, anchor, f"{current:+d}", align="center", size=15)
+        text(a, i, anchor, f"{current:+d}", align="center", size=19)
     rect(a, 5.69, 6.31, running[-1], 0, "state", "ink", 1.3)
     text(a, 6, running[-1] - 11, f"{running[-1]:+d}", align="center")
 
     right = key([.72, .18, .245, .7])
-    text(right, .03, .92, "Grid electricity / kWh", size=18)
+    text(right, .03, .92, "Grid electricity / kWh", size=22)
     text(right, .03, .78, "Baseline energy")
     text(right, .98, .78, f"{reference}", align="right", size=18)
     text(right, .03, .65, "Scheduled energy")
@@ -196,8 +152,8 @@ def energy_bridge():
     line(right, [.03, .98], [.56, .56], "grid", 1.2)
     for i, label_text in enumerate(labels, 1):
         y = .47 - (i - 1) * .078
-        text(right, .03, y, f"{i:02d}", size=13)
-        text(right, .16, y, label_text, size=13)
+        text(right, .03, y, f"{i:02d}", size=17)
+        text(right, .16, y, label_text, size=18)
     return {"data": {"baselineKWh": reference, "incrementsKWh": steps_kwh, "cumulativeChangeKWh": running,
                      "gridKWh": final, "shiftBalanceKWh": steps_kwh[:2].sum(),
                      "storageLossKWh": steps_kwh[2:4].sum(), "componentLabels": labels},
@@ -230,8 +186,8 @@ def rebound():
     for row in diff:
         line(a, step_x, steps(row, DT)[1], "grid", .7)
     line(a, step_x, steps(mean, DT)[1], "ink", 2.65)
-    text(a, .75, 10.8, "Control event", align="center", size=14)
-    text(a, 2.75, 10.8, "Recovery window", align="center", size=14)
+    text(a, .75, 10.8, "Control event", align="center", size=18)
+    text(a, 2.75, 10.8, "Recovery window", align="center", size=18)
 
     width = 27
     b = panel([.70, .15, .26, .67], [0, width], [0, width], xlabel="Event reduction / kWh",
@@ -291,8 +247,8 @@ def hysteresis():
     points(a, [24.45], [4.8], marker="<", face="exceedance", edge="exceedance", size=10)
     text(a, 24.45, 1.25, "Warming while off", align="center")
     text(a, 24.45, 5.36, "Cooling while on", align="center")
-    text(a, 23.62, 3.1, "Off", align="right", size=13)
-    text(a, 25.27, 3.1, "On", size=13)
+    text(a, 23.62, 3.1, "Off", align="right", size=18)
+    text(a, 25.27, 3.1, "On", size=18)
 
     b = panel([.60, .49, .35, .32], [0, 8], [23.2, 25.8], ylabel="Indoor temperature / °C",
               xtick=[], ytick=[23.7, 24.5, 25.2])
@@ -344,8 +300,8 @@ def pareto():
     rect(a, xlim[0], cost_cap, 0, energy_cap, "state_wash")
     line(a, xlim, [energy_cap, energy_cap], "ink", 1.1, ":")
     line(a, [cost_cap, cost_cap], ylim, "ink", 1.1, ":")
-    text(a, 66, 5.5, "Within both limits", size=13)
-    text(a, 192, 147, "Cost limit", size=12.5)
+    text(a, 66, 5.5, "Within both limits", size=18)
+    text(a, 192, 147, "Cost limit", size=18)
     markers = ["o", "s", "^", "v"]
     colors = ["observation", "alternative", "exceedance", "state"]
     for b, marker, role in zip(np.unique(battery), markers, colors):
@@ -355,17 +311,17 @@ def pareto():
     points(a, cost[chosen], unserved[chosen], marker="d", face="attention", edge="ink", size=10)
 
     side = key([.755, .185, .205, .67])
-    text(side, .03, .96, "Usable storage", size=17)
+    text(side, .03, .96, "Usable storage", size=22)
     for i, (b, marker, role) in enumerate(zip(np.unique(battery), markers, colors)):
         ypos = .83 - i * .108
         points(side, .07, ypos, marker=marker, face="white", edge=role, size=8)
-        text(side, .19, ypos, f"{b} kWh", size=14)
+        text(side, .19, ypos, f"{b} kWh", size=18)
     line(side, [.02, .12], [.38, .38], "ink", 1.6, "--")
     text(side, .19, .38, "Nondominated")
     points(side, .07, .265, marker="d", face="attention", edge="ink", size=9)
     text(side, .19, .265, "Least-cost feasible")
-    text(side, .19, .155, f"{cost[chosen]:.1f} USD", size=14)
-    text(side, .19, .080, f"{unserved[chosen]:.1f} kWh/day", size=14)
+    text(side, .19, .155, f"{cost[chosen]:.1f} USD", size=19)
+    text(side, .19, .080, f"{unserved[chosen]:.1f} kWh/day", size=19)
     return {"data": {"firmReserveKW": firm, "usableStorageKWh": battery, "scenarioDeficitKW": deficit,
                      "dailyCostUSD": cost, "unservedKWhPerDay": unserved, "frontierIndices": frontier,
                      "chosenIndex": chosen, "costCapUSD": cost_cap, "unservedCapKWh": energy_cap},
@@ -383,7 +339,8 @@ def serial(obj):
 
 
 def export():
-    builders = [duration, saturation, energy_bridge, rebound, hysteresis, pareto]
+    builders = [duration, saturation, energy_bridge, rebound, hysteresis, pareto,
+                contingency, marginal_cost, error_horizon, response_delay]
     result = {"schema": "projectx.illustrative-engineering.v1",
               "source": "Analytic or seeded illustrative examples; no client observations",
               "charts": {builder.__name__.replace("_", "-"): builder() for builder in builders}}

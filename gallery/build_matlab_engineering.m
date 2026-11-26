@@ -29,14 +29,15 @@ ink = gallery_color('ink');
 gridColor = gallery_color('grid');
 for i = 1:numel(panels)
     spec = panels(i);
-    a = axes(fig, 'Position', spec.position, 'FontName', 'Times New Roman', 'FontSize', 13, ...
+    % At 166 mm inserted width, axis labels are 9.4 pt and ticks are 8.2 pt.
+    a = axes(fig, 'Position', spec.position, 'FontName', 'Times New Roman', 'FontSize', 20, ...
         'Box', 'off', 'XColor', ink, 'YColor', ink, 'LineWidth', .7, ...
         'XLim', spec.xlim, 'YLim', spec.ylim, 'GridColor', gridColor, ...
         'GridAlpha', 1, 'TickDir', 'out', 'TickLength', [.004 .004]);
     hold(a, 'on');
     if ~spec.axis, axis(a, 'off'); end
-    if ~isempty(spec.xlabel), xlabel(a, spec.xlabel, 'FontSize', 16); end
-    if ~isempty(spec.ylabel), ylabel(a, spec.ylabel, 'FontSize', 16); end
+    if ~isempty(spec.xlabel), xlabel(a, spec.xlabel, 'FontSize', 23); end
+    if ~isempty(spec.ylabel), ylabel(a, spec.ylabel, 'FontSize', 23); end
     if ~isempty(spec.xtick) || (isempty(spec.xtick) && isempty(spec.xticklabels) && ...
             (spec.axis && isempty(spec.xlabel)))
         a.XTick = spec.xtick;

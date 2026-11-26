@@ -59,7 +59,7 @@ def render_page(page):
         raise ValueError('Chart IDs must be unique and have bilingual metadata')
     before, remainder = page.split(START)
     _, after = remainder.split(END)
-    browse_order = sorted(catalog, key=lambda chart: chart.get('source') != 'engineering')
+    browse_order = sorted(catalog, key=lambda chart: (not chart.get('atlas_highlight'), chart.get('source') != 'engineering'))
     cards = '\n'.join(render_card(chart, english[chart['id']]) for chart in browse_order)
     page = f'{before}{START}\n{cards}\n          {END}{after}'
     for name, value in [('atlas-count', len(catalog)), ('atlas-files', 4 * len(catalog))]:

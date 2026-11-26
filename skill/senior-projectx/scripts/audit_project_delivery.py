@@ -30,6 +30,41 @@ def visual_review_matches_pdf(review: dict, pdf_path: Path) -> bool:
     return bool(declared) and declared == file_hash(pdf_path).lower()
 
 
+def check_result_analysis(review: object, docx_path: Path, paragraphs: list[str]) -> list[str]:
+    """Check the source and coverage record of a human/agent semantic review."""
+    if not isinstance(review, dict) or review.get("status") != "pass":
+        return ["A completed Project result-analysis review is required"]
+    if not docx_path.is_file() or review.get("docx_sha256") != file_hash(docx_path):
+        return ["Project result-analysis review does not refer to the current DOCX"]
+    findings = review.get("findings")
+    if not isinstance(findings, list) or not findings:
+        return ["Project result-analysis review lacks reviewed findings"]
+
+    errors = []
+    previous = -1
+    for index, finding in enumerate(findings, 1):
+        label = f"Project result-analysis finding {index}"
+        if not isinstance(finding, dict):
+            errors.append(f"{label} is invalid")
+            continue
+        anchor = finding.get("anchor")
+        if not isinstance(anchor, str) or not anchor.strip() or paragraphs.count(anchor.strip()) != 1:
+            errors.append(f"{label} has no unique exact paragraph in the current DOCX")
+        else:
+            position = paragraphs.index(anchor.strip())
+            if position <= previous:
+                errors.append(f"{label} is repeated or out of reading order")
+            previous = position
+        for field in ("question", "comparison", "explanation", "decision", "connection"):
+            value = finding.get(field)
+            if not isinstance(value, str) or not value.strip():
+                errors.append(f"{label} lacks {field}")
+        sources = finding.get("evidence")
+        if not isinstance(sources, list) or not sources or any(not isinstance(item, str) or not item.strip() for item in sources):
+            errors.append(f"{label} lacks located evidence")
+    return errors
+
+
 def audit(args) -> dict:
     manifest = load(args.manifest)
     errors, warnings = [], []
@@ -57,11 +92,13 @@ def audit(args) -> dict:
         if not (8 <= typography.get("tick_pt", 0) <= 10 and 8 <= typography.get("legend_pt", 0) <= 10 and 9 <= typography.get("axis_label_pt", 0) <= 11):
             errors.append(f"Figure final-size typography outside Project default: {figure.get('id')}")
     writing = None
+    paragraphs = []
     if not args.docx.is_file(): errors.append("Final DOCX is missing")
     else:
         doc = Document(args.docx)
         if not doc.paragraphs: errors.append("Final DOCX contains no visible paragraphs")
-        text = "\n".join(p.text for p in doc.paragraphs)
+        paragraphs = [p.text.strip() for p in doc.paragraphs]
+        text = "\n".join(paragraphs)
         if "[按当前项目材料填写]" in text: errors.append("Template placeholder remains in final DOCX")
         if any(token in text for token in (r"\[", r"\]")): errors.append("ToggleTeX source remains in final DOCX")
         try:
@@ -116,12 +153,18 @@ def audit(args) -> dict:
     if len(screenshots) != page_count or any(not p.is_file() for p in screenshots):
         errors.append("Visual review page images are incomplete")
     if review.get("status") != "pass": errors.append("Visual page review did not pass")
+    analysis_status = "not_requested"
+    if getattr(args, "require_result_analysis", False):
+        analysis_errors = check_result_analysis(review.get("result_analysis"), args.docx, paragraphs)
+        errors.extend(analysis_errors)
+        analysis_status = "review_unbound_or_incomplete" if analysis_errors else "review_bound"
     return {
         "schema": "senior_projectx.project.delivery_audit.v1", "status": "pass" if not errors else "fail",
         "document_type": "project", "page_count": page_count, "errors": errors, "warnings": warnings,
         "mathtype_authenticity": equation,
         "office_math_audit": office_math,
         "writing_audit": writing,
+        "result_analysis_check": analysis_status,
         "scope": "Shared final prose requirements plus Project task/data/result/figure/formula/document delivery; no conference anonymity, journal highlights, or reviewer-score requirements.",
     }
 
@@ -134,6 +177,7 @@ def main(argv=None) -> int:
     p.add_argument("--pdf", required=True, type=Path); p.add_argument("--visual-review", required=True, type=Path)
     p.add_argument("--mathtype-evidence", type=Path); p.add_argument("--json-out", type=Path)
     p.add_argument("--review-decisions", type=Path, help="Current-text-bound scientific-content decisions for the shared final language gate; the current DOCX is always screened.")
+    p.add_argument("--require-result-analysis", action="store_true", help="Require a completed current-DOCX result_analysis entry in the existing visual review record.")
     args = p.parse_args(argv); result = audit(args); payload = json.dumps(result, ensure_ascii=False, indent=2)
     if args.json_out: args.json_out.write_text(payload, encoding="utf-8")
     sys.stdout.buffer.write((payload + "\n").encode("utf-8")); return 0 if result["status"] == "pass" else 2

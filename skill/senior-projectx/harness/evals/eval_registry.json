@@ -92,6 +92,21 @@
       ],
       "artifacts": [],
       "notes": "Project sample regenerated and reviewed with the current NPS writing rules."
+    },
+    {
+      "eval_id": "release-1.3.0-source",
+      "timestamp": "2026-11-26T15:02:39+08:00",
+      "status": "pass",
+      "checks": [
+        "136 source regressions, no failures, errors or skips",
+        "Word 16 roundtrip: 4 pages reviewed and 18 editable Office Math objects",
+        "Bound semantic review and project delivery audit passed on the actual synthetic case",
+        "12 bilingual PNGs and 12 native EMFs rendered from the six packaged templates"
+      ],
+      "artifacts": [
+        "references/release-validation.md"
+      ],
+      "notes": ""
     }
   ]
 }

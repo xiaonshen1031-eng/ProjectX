@@ -148,6 +148,64 @@ def engineering_checks(charts):
     }
 
 
+def extended_engineering_checks(charts):
+    network = charts["contingency"]["data"]
+    baseline, after = (np.asarray(network[field]) for field in ("baselineFlowKW", "outageFlowKW"))
+    rating = np.asarray(network["branchRatingKW"])
+    active = np.asarray(network["inService"])
+    demand = np.asarray(network["demandKW"])
+    np.testing.assert_array_equal(baseline[:3], demand)
+    assert np.all(after[~active] == 0) and np.all(after <= rating)
+    delivered = np.array([after[0], after[1] + after[3], after[2]])
+    np.testing.assert_array_equal(delivered, network["deliveredKW"])
+    np.testing.assert_array_equal(demand - delivered, network["unservedKW"])
+    assert after[3] == rating[3] and demand[1] - delivered[1] == 3
+
+    marginal = charts["marginal-cost"]["data"]
+    unit_cost = np.asarray(marginal["unitCostUSDPerMWh"])
+    block = np.asarray(marginal["blockCapacityMW"])
+    required = marginal["requirementMW"]
+
+    def procurement(requirement):
+        left = requirement
+        allocation = np.zeros_like(block)
+        for index in np.argsort(unit_cost):
+            allocation[index] = min(left, block[index])
+            left -= allocation[index]
+        assert left == 0
+        return allocation, np.dot(allocation, unit_cost)
+
+    allocation, cost = procurement(required)
+    np.testing.assert_array_equal(allocation, marginal["allocationMW"])
+    assert cost == marginal["procurementCostUSDPerHour"]
+    assert procurement(required + 1)[1] - cost == marginal["nextMWCostUSDPerHour"]
+
+    forecast = charts["error-horizon"]["data"]
+    pair_counts = np.asarray(forecast["pairCounts"])
+    for row, pairs in enumerate(forecast["baselineAndRevisedAbsoluteErrorKW"]):
+        for col, pair in enumerate(pairs):
+            assert len(pair) == pair_counts[row, col]
+            summary = forecast["quartilesKW"][row][col]
+            if len(pair) > 0:
+                error = np.asarray(pair)
+                assert np.all(error >= 0)
+                np.testing.assert_allclose(np.quantile(error[:, 1] - error[:, 0], [.25, .5, .75]), summary)
+            else:
+                assert summary == []
+
+    response = charts["response-delay"]["data"]
+    ack = np.asarray(response["confirmationS"])
+    apply = np.asarray(response["actuationS"])
+    latency = ack + apply
+    assert np.isfinite(latency).all() and latency.shape == (2, response["commandCount"])
+    np.testing.assert_allclose(latency, response["latencyS"])
+    np.testing.assert_array_equal(np.sum(latency > response["deadlineS"], axis=1), response["lateCounts"])
+    np.testing.assert_allclose(np.column_stack((ack.mean(axis=1), np.repeat(apply.mean(), 2))), response["meanPhaseS"])
+    return {"unserved_power_kw": int((demand-delivered).sum()), "reserve_cost_usd_per_hour": int(cost),
+            "forecast_matched_pairs": int(pair_counts.sum()), "forecast_missing_cells": int(np.sum(pair_counts == 0)),
+            "deadline_miss_counts": response["lateCounts"]}
+
+
 def main():
     basic, extra = load("demo-data.json"), load("extra-data.json")
     trajectory = basic["trajectory"]
@@ -166,6 +224,7 @@ def main():
     np.testing.assert_allclose(quantiles, extra["raincloud"]["quantiles"])
     forest_ci = np.asarray(extra["forest"]["ci"])
     assert np.all(forest_ci[:, 0] <= forest_ci[:, 1])
+    engineered = load("engineering-data.json")["charts"]
     print(json.dumps({
         "data_scope": "independent synthetic illustration",
         "sankey_conserved_total": flow_balance(extra["sankey"]),
@@ -176,7 +235,8 @@ def main():
         "chord_largest_pair_weight": float(chord.max()),
         "forest_intervals_crossing_zero": int(((forest_ci[:, 0] <= 0) & (forest_ci[:, 1] >= 0)).sum()),
         "calibration_n": int(bins[:, 4].sum()),
-        "engineering": engineering_checks(load("engineering-data.json")["charts"]),
+        "engineering": engineering_checks(engineered),
+        "engineering_extensions": extended_engineering_checks(engineered),
     }, ensure_ascii=False, indent=2))
 
 

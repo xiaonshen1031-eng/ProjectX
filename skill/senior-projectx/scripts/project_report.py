@@ -379,8 +379,9 @@ def build_figures(periods_path: Path, allocation_path: Path, vehicles_path: Path
         record = {"demand_scale": float(row.demand_scale), "status": str(row.status)}
         if row.status == "optimal":
             values = matrix[i]
+            full = values <= 1e-7
             record.update(minimum_margin_kw=float(values.min()), mean_margin_kw=float(values.mean()),
-                          binding_period_count=int(np.count_nonzero(values <= 1e-7)))
+                          binding_period_count=int(full.sum()), binding_periods=ids[full].tolist())
             summary.text(.16, i, _margin_label(record['minimum_margin_kw'], 1), fontsize=8.5, va="center", ha="center")
             summary.text(.50, i, f"{record['mean_margin_kw']:.2f}", fontsize=8.5, va="center", ha="center")
             summary.text(.85, i, str(record["binding_period_count"]), fontsize=8.5, va="center", ha="center")
@@ -680,6 +681,37 @@ def _scenario_energy_shortfall(sensitivity_path: Path, scale: float) -> tuple[fl
     return (demand, available) if demand - available > 1e-7 else None
 
 
+def _compare_scenario_capacity(low, high, summaries: list[dict]) -> str:
+    """Connect the aggregate comparison to the periods where load can be added."""
+    difference = high.mean_margin_kw - low.mean_margin_kw
+    text = f"设备容量保持不变，需求由基准的 {low.demand_scale:.2f} 倍增至 {high.demand_scale:.2f} 倍"
+    if abs(difference) > 1e-7:
+        signed_change = "减少" if difference < 0 else "增加"
+        text += f"，时段平均余量{signed_change} {_margin_label(abs(difference), 2)} kW（图3、表2）。"
+    else:
+        text += "，时段平均余量相同（图3、表2）。"
+    periods = {item["demand_scale"]: item.get("binding_periods") for item in summaries if item["status"] == "optimal"}
+    before, after = periods.get(low.demand_scale), periods.get(high.demand_scale)
+    if before is None or after is None:
+        return text + "要判断某辆车还能增充多少，须核对其接入窗内各时段的容量余量。"
+    added = [period for period in after if period not in before]
+    relieved = [period for period in before if period not in after]
+    if added and relieved:
+        text += f"时段 {relieved[0]} 重现余量，时段 {added[0]} 达到容量上限。"
+    elif added:
+        text += f"在高需求情景中，时段 {added[0]} 也达到容量上限。" if before else f"高需求使时段 {added[0]} 达到容量上限。"
+    elif relieved:
+        text += f"重排后，原满载的时段 {relieved[0]} 出现余量。"
+    elif after:
+        text += "两种需求下仍是同一批时段满载。"
+    else:
+        text += "两种需求下的各时段都保有余量。"
+    if after:
+        tight = added[0] if added else after[0]
+        return text + f"因此要在时段 {tight} 继续增充，须先在相应车辆的接入窗内寻找能承接这部分功率的时段。"
+    return text + "高需求下还能增充多少，取决于车辆可接入时段积累的电量。"
+
+
 def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Path], result_path: Path,
                  validation_path: Path, brief_path: Path, figure_manifest_path: Path,
                  sensitivity_path: Path, output_path: Path, formula_manifest_path: Path) -> dict:
@@ -700,7 +732,7 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
 
     doc.add_heading("摘要", level=1)
     minimum_margin = float(validation["minimum_capacity_margin_kw"])
-    _add_body(doc, f"用连续线性规划为各车辆安排充电功率。将功率限制在各自的接入窗口后，基准计划满足全部离站电量要求，变压器的最小容量余量为 {minimum_margin:.2f} kW。可增充电量取决于车辆接入时段内的逐段余量。")
+    _add_body(doc, f"用连续线性规划为各车辆安排充电功率。基准计划满足全部离站电量要求，变压器最小容量余量为 {_margin_label(minimum_margin, 2)} kW。核定可增充电量时，按各车接入窗内的时段余量逐段计算。")
     _add_body(doc, "关键词　充电资源分配、连续线性规划、容量约束、敏感性分析")
 
     doc.add_heading("1 项目概述与研究任务", level=1)
@@ -733,30 +765,34 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
     tight_index = int(np.argmin(result["capacity_margin_kw"]))
     tight = validation.get("tightest_period", result.get("tightest_period", tight_index))
     headroom, charge = result.get("headroom_kw", []), result.get("period_total_charge_kw", [])
-    bottleneck = f"容量余量最小的是时段 {tight}（图1）。"
+    process_evidence = process.get("numerical_evidence", {})
+    if not np.isclose(float(result["capacity_margin_kw"][tight_index]), minimum_margin, atol=1e-7, rtol=0):
+        raise ValueError("Reported minimum margin differs from the independent capacity reconstruction")
+    bottleneck = f"时段 {tight} 的容量余量最小（图1）。"
     if tight_index < min(len(headroom), len(charge)):
-        bottleneck = (f"时段 {tight} 可供充电 {headroom[tight_index]:.2f} kW，"
-                      f"计划分配 {charge[tight_index]:.2f} kW（图1）。")
+        bottleneck = f"时段 {tight} 可供充电 {headroom[tight_index]:.2f} kW，计划使用其中 {charge[tight_index]:.2f} kW（图1）。"
     if abs(minimum_margin) <= 1e-7:
-        uniform_margin = process.get("numerical_evidence", {}).get("uniform_minimum_margin_kw")
-        if uniform_margin is not None and uniform_margin > 1e-7:
-            bottleneck += f"按接入窗均分时，变压器最小余量为 {uniform_margin:.2f} kW。加权调度用满了时段 {tight} 的可分配功率。"
+        uniform_margin = process_evidence.get("uniform_margin_kw", [])
+        if tight_index < min(len(headroom), len(uniform_margin)) and uniform_margin[tight_index] > 1e-7:
+            extra = _margin_label(uniform_margin[tight_index], 2)
+            bottleneck = (f"在相同基础负荷下，均分参考给时段 {tight} 留出 {extra} kW 余量。"
+                          f"加权计划将该时段的充电功率提高到 {_margin_label(headroom[tight_index], 2)} kW，正好达到容量上限（图1）。")
         else:
             bottleneck += "该时段的变压器容量已经用满。"
-        bottleneck += "要在该时段增加充电功率，须先把已安排的充电移到相应车辆接入窗内还有余量的时段。"
+        bottleneck += "若要在该时段增充，先要移开已安排的部分充电。"
     else:
-        bottleneck += f"原分配维持时，该时段最多还能增加 {minimum_margin:.2f} kW 充电功率，具体增量取决于接入车辆的剩余功率上限。"
+        bottleneck += f"该时段在设备侧最多还能增加 {_margin_label(minimum_margin, 2)} kW。图2再核对这部分功率能分给哪些车辆。"
     _add_body(doc, bottleneck)
     balance = next(a for a in figure_manifest["artifacts"] if a["id"] == "figure_balance")
     p = doc.add_paragraph(); _paragraph_role(p, "figure"); p.paragraph_format.keep_with_next = True
     p.add_run().add_picture(balance["path"], width=Cm(balance["width_cm"]))
     _add_caption(doc, balance["caption"]).paragraph_format.keep_with_next = True
     delivered = result.get("vehicle_delivered_energy_kwh", {})
-    delivery_text = "图2把各时段的充电功率按接入窗口排开，格内功率乘时长后按车累加。"
+    delivery_text = "图2沿着满载时段的分配逐车核对接入窗。转出的功率应落到同一辆车仍接入的时段，并受该时段容量余量和车端功率上限约束。"
     if delivered:
-        delivery_text += f"该计划共交付 {sum(delivered.values()):.3g} kWh，右列逐车核对交付量及其离站需求。"
+        delivery_text += f"当前计划共交付 {sum(delivered.values()):.3g} kWh。调换时段后，各车的离站电量仍须逐一满足。"
     else:
-        delivery_text += "右列的交付电量据此与各车离站需求核对。"
+        delivery_text += "转移完成后按图2的逐车口径重新核对离站电量。"
     _add_body(doc, delivery_text)
     doc.add_heading("5 工况变化与敏感性分析", level=1)
     sens = next(a for a in figure_manifest["artifacts"] if a["id"] == "figure_sensitivity")
@@ -771,33 +807,26 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
     feasible = sensitivity[sensitivity.status == "optimal"].sort_values("demand_scale")
     if feasible["demand_scale"].nunique() > 1:
         lo, hi = feasible.iloc[0], feasible.iloc[-1]
-        comparison = (f"需求倍率由 {lo.demand_scale:.2f} 增至 {hi.demand_scale:.2f} 时，"
-                      f"平均容量余量由 {lo.mean_margin_kw:.2f} 变为 {hi.mean_margin_kw:.2f} kW（图3、表2）。")
         summaries = sens.get("numerical_evidence", {}).get("scenario_summary", [])
-        binding_counts = {row["demand_scale"]: row["binding_period_count"] for row in summaries if row["status"] == "optimal"}
-        if lo.demand_scale in binding_counts and hi.demand_scale in binding_counts:
-            comparison += f"满载时段由 {binding_counts[lo.demand_scale]} 个变为 {binding_counts[hi.demand_scale]} 个。"
-        _add_body(doc, comparison)
-    _add_body(doc, "保持原计划时，接入时段的可增充电功率取变压器余量与该车剩余功率上限的较小值。各段可增充电功率乘对应时长后相加，得到单车可增充的电量。")
+        _add_body(doc, _compare_scenario_capacity(lo, hi, summaries))
+    _add_body(doc, "核对车辆接入窗时，以变压器余量和车端剩余功率中较小的一项确定每个时段可接纳的功率。将该功率乘以时长后按窗累计，得到其他车辆计划固定时该车最多可接纳的电量。")
     infeasible = sensitivity[sensitivity.status == "infeasible"]
     if not infeasible.empty:
         scale = infeasible["demand_scale"].min()
         shortfall = _scenario_energy_shortfall(sensitivity_path, scale)
         if shortfall:
             demand, available = shortfall
-            _add_body(doc, f"需求倍率 {scale:.2f} 时，车辆合计需要 {demand:.3g} kWh。将各时段的可分配功率按时长累计，得到 {available:.3g} kWh 的供电上限，电量缺口至少为 {demand - available:.3g} kWh。")
+            _add_body(doc, f"若需求达到基准的 {scale:.2f} 倍，需交付 {demand:.3g} kWh，整段变压器可用功率按时长累计只有 {available:.3g} kWh。即使各车可以在所有时段灵活接入，仍至少缺 {demand - available:.3g} kWh。要满足这组需求，须增加供电量或转移一部分充电需求。")
         else:
             _add_body(doc, f"需求倍率 {scale:.2f} 时，在现有接入窗口、车端功率上限和变压器容量下，车辆的电量要求无法同时满足。")
 
-    doc.add_heading("6 需求满足与容量占用", level=1)
+    doc.add_heading("6 校核结果与工程结论", level=1)
     checks = [["最大电量差值", f"{validation['maximum_energy_residual_kwh']:.3g}", "kWh"],
               ["最大容量越界量", f"{validation['maximum_capacity_violation_kw']:.3g}", "kW"],
               ["最小容量余量", f"{minimum_margin:.2f}", "kW"]]
     _add_caption(doc, "表3 电量与容量指标")
     _add_table(doc, ["指标", "数值", "单位"], checks, [8.0, 4.0, 3.6])
-    _add_body(doc, "表3的电量差值由逐车比较交付电量和离站需求得到，取各车偏差的最大绝对值。容量越界量按时段核对，取总负荷超出额定容量的最大正差值。")
-    doc.add_heading("7 结论及工程建议", level=1)
-    _add_body(doc, "基础负荷变化后，按更新的余量重排充电时序。变压器有余量的时段须落在车辆接入窗口内。若车辆还能延长接入时间，应把延长段的供电能力计入分配，再核定是否需要增容。设备按档位控制时，重排须采用可用的实际功率档位。")
+    _add_body(doc, "表3显示，基准计划在容量内交付了各车所需电量。追加充电可安排到本车仍接入且有余量的时段，转去的电量仍须在离站前交付。若接入窗内的可供电量不足，应按缺口增加供电量或调整部分车辆的充电安排。")
     doc.core_properties.author = ""; doc.core_properties.last_modified_by = ""
     output_path.parent.mkdir(parents=True, exist_ok=True); doc.save(output_path)
     is_office_math = equation_backend == "office_math"

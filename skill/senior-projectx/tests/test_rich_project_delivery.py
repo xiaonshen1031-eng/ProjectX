@@ -4,6 +4,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from zipfile import ZipFile
 import pandas as pd
 
@@ -59,6 +60,7 @@ class RichProjectDeliveryTests(unittest.TestCase):
             self.assertEqual(atlas['render_contract']['scales'][0]['vmin'], 0)
             self.assertEqual(atlas['render_contract']['roles']['allocation']['color'], '#00A878')
             self.assertEqual(atlas['numerical_evidence']['scenario_summary'][2]['binding_period_count'], 1)
+            self.assertEqual(atlas['numerical_evidence']['scenario_summary'][2]['binding_periods'], [2])
             self.assertAlmostEqual(manifest['artifacts'][0]['numerical_evidence']['uniform_minimum_margin_kw'], 4.2666666667)
             clipped = copy.deepcopy(manifest)
             clipped['artifacts'][-1]['render_contract']['scales'][0]['vmin'] = 1
@@ -100,6 +102,17 @@ class RichProjectDeliveryTests(unittest.TestCase):
         layer.update(additive_definition_documented=True, component_totals_checked=True)
         errors = []; validate_publication_encoding(fig, 'fig', errors)
         self.assertEqual(errors, [])
+
+    def test_report_tracks_migrating_capacity_bottleneck_at_equal_binding_counts(self):
+        low = SimpleNamespace(demand_scale=1.0, mean_margin_kw=8.5)
+        high = SimpleNamespace(demand_scale=1.2, mean_margin_kw=5.0)
+        summaries = [
+            {'demand_scale': 1.0, 'status': 'optimal', 'binding_periods': [2]},
+            {'demand_scale': 1.2, 'status': 'optimal', 'binding_periods': [4]},
+        ]
+        paragraphs = report._compare_scenario_capacity(low, high, summaries)
+        self.assertRegex(paragraphs, r'时段 2[^。]*余量，时段 4[^。]*容量上限')
+        self.assertRegex(paragraphs, r'时段 4[^。]*增充[^。]*接入窗')
 
     def test_observed_points_remain_available_inside_sourced_conditional_diagnostics(self):
         fig = {'plot_type': 'composite_diagnostic', 'plot_layers': [

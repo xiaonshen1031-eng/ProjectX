@@ -3,7 +3,7 @@ name: senior-projectx
 description: "面向横向委托研究、工程技术报告和项目汇报，完成资料与数据分析、物理或数学建模、计算与对比分析、中文结果阐释、Word原生公式与图表排版，以及基于客户模板的PPT制作和修订。适用于任务书约束下的完整研究或指定专题、章节、图件和格式修改。"
 metadata:
   display_name: Senior-ProjectX
-  version: "1.2.2"
+  version: "1.3.0"
   author: XiaoN
   copyright: "Copyright © NCEPU-Senior"
 ---
@@ -62,17 +62,17 @@ python scripts/project_research.py brief project_manifest.json --task-id T1 --re
 
 ## 连贯的中文技术分析
 
-撰写与修改前阅读 [语言与定稿要求](references/writing-and-release.md)，具体语言诊断见 [中英文写作指南](references/bilingual-writing-playbook.md)。报告从研究对象、模型关系进入计算量，再用这些量回答工程问题。长短句随推理关系安排，前后段落通过同一数量、条件、公式或发现衔接。
+撰写与修改前阅读 [语言与定稿要求](references/writing-and-release.md)。生成或修订算例分析时先用 [从算例读出工程结论](references/project-results-analysis.md) 组织实际比较、原因和工程判断。后段接住前段留下的事实或边界，例如由削减量追到同一批负荷的回补，由原峰转到控制设备容量的新峰。
 
 审读范围覆盖摘要、正文、图题、表格及结论。按原始数据和比较条件重写宽泛的自我评价，把真实的不利结果放在影响判断的位置。删掉由套话承接的句子后，检查上一句给出的量怎样进入下一句。文件路径、调参记录及校验状态归入计算附件。
 
-结果按工程问题组织，说明比较条件、关键数值或变化、已有模型支持的原因及其影响。表给出准确数值，图呈现结构、分布与过程，文字解释关系；同一发现集中分析一次，不逐格复述表格。最大值、均值、分位数、功率、电量、响应与恢复分别使用准确含义，区域总峰值从同步序列求和后计算。
+用同工况对照定位变化，再回查实际的轨迹、约束或状态，说明它怎样改变可用调度、校核位置或方案取舍。先解释最有决定性的结果，再展开后续推断。若只能确定联合效应，写清比较覆盖的条件，按可用证据收住单项归因。峰值、均值、分位数、功率和电量采用准确口径，区域总峰从同步序列求和后计算。
 
 ```powershell
 python scripts/check_writing_quality.py report.docx --manuscript-mode project --language chinese --require-clean --json-out review/writing.json
 ```
 
-逐项结合上下文处理提示。实际模型定义、必要条件或经核实的观测可用当前文本绑定的 `--review-decisions` 说明。出稿前通读每节以及两侧衔接，读到数字就核对来源，读到成因就追到状态方程、实际比较或可验证的机制。对于反复出现的“和”“与”“以及”，先弄清各项的关系，再按先后、条件或因果重组句子。确实属于同一集合的对象使用并列。
+逐项结合上下文处理提示。实际模型定义、必要条件或经核实的观测可用当前文本绑定的 `--review-decisions` 说明。出稿前连读主要结果及结论。遮住数字和图表号后仍应能看出成因、承接和判断，随后恢复数字逐项核对。反复出现“和”“与”“以及”时，优先写出对象之间的顺序、条件或作用关系，必要的并列照常保留。
 
 ## 图件与结果呈现
 
@@ -84,7 +84,7 @@ python scripts/check_writing_quality.py report.docx --manuscript-mode project --
 
 报告图的中文用已安装的微软雅黑加粗或批准的中文字体，英文与数字用 Times New Roman。默认最终插入尺寸下轴标签9—11 pt，刻度与图例8—10 pt；按当前明确要求调整。中文分类刻度与混合标签同样检查。保持宽高比，不默认添加总标题或防御性页脚，检查独立矢量图和实际插入页面的字形、边框、图例、裁剪与遮挡。
 
-`templates/python_project_figure_template.py`、`templates/matlab_project_figure_template.m` 提供中文工程图起点；其他图型模板按实际问题选择。图例、曲线、指标、地图节点和区域名称保持对应，不能借调整版式改变数据位置或含义。
+需要判断持续超限、约束日历、调节能量去向、窗后反弹、温控切换或成本与可靠性取舍时，使用 [六类工程图的选型和可运行模板](references/project-engineering-figures.md)。将当前工况及比较基准传入模板，再用原始记录复核图中阈值、累计量和成对关系。通用绘图仍可从 Python、MATLAB Project 模板起步。
 
 ## Word排版、公式和参考文献
 
@@ -132,7 +132,7 @@ python scripts/project_equation_layout.py --docx manuscript/report.docx --manife
 
 按 [质量与交付工具](references/qa-and-automation.md) 选择适用检查。最终Word导出PDF并检查所有实际页面，核查段落衔接、图表数值、有效字体与行距、三线表、公式本体居中及右侧编号、引文顺序、脱离图题和裁切。源程序无报错不能证明页面正确。只在确实完成后声明检查通过。
 
-完整分配算例可运行 `audit_project_delivery.py`，它检查当前DOCX及对应材料；其他研究主题或纯排版修订使用匹配该问题的检查，不把算例求解器状态当作通用交付条件。
+完整分配算例可运行 `audit_project_delivery.py`。新写或重写结果章节时使用 `--require-result-analysis` 把实质审读绑定到当前稿件。其他研究主题或纯排版修订使用匹配该问题的检查。
 
 ## 经验维护与回归
 

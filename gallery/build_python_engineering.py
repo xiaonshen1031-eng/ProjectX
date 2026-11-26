@@ -16,9 +16,10 @@ def render(series):
         style(ax)
         ax.set_xlim(spec["xlim"])
         ax.set_ylim(spec["ylim"])
-        ax.set_xlabel(spec["xlabel"], fontsize=16)
-        ax.set_ylabel(spec["ylabel"], fontsize=16)
-        ax.tick_params(labelsize=13, pad=4)
+        # The 406.4 mm canvas scales to a 166 mm report width: 9.4 pt axes, 8.2 pt ticks.
+        ax.set_xlabel(spec["xlabel"], fontsize=23)
+        ax.set_ylabel(spec["ylabel"], fontsize=23)
+        ax.tick_params(labelsize=20, pad=4)
         if spec["xtick"] is not None:
             ax.set_xticks(spec["xtick"], labels=spec["xticklabels"])
         if spec["ytick"] is not None:

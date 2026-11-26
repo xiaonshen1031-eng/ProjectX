@@ -304,6 +304,14 @@
       "expected_behavior": "仅修改副本，保存关闭重开核对变化，再整体恢复副本并验证源稿哈希。",
       "forbidden_behavior": "只计数对象、关闭其他用户文件、单独恢复单元格却留下不一致缓存。",
       "relevant_rule": "scripts/project_ppt_edit_check.ps1"
+    },
+    {
+      "case_id": "result_bottleneck_migrates_with_same_binding_count",
+      "task_type": "project_word",
+      "input_summary": "高低需求的满载时段数相同，触界位置由一个时段转到另一个时段。",
+      "expected_behavior": "指明腾出余量的原时段和达到上限的新时段，再按新时段说明增充条件。",
+      "forbidden_behavior": "仅复写平均余量和满载时段数，或沿用旧瓶颈位置。",
+      "relevant_rule": "references/project-results-analysis.md"
     }
   ]
 }
