@@ -71,6 +71,7 @@ class RichProjectDeliveryTests(unittest.TestCase):
             shift = manifest['artifacts'][1]['numerical_evidence']['single_vehicle_shift']
             self.assertEqual((shift['vehicle'], shift['origin'], shift['destination']), ('EV-02', 2, 4))
             self.assertEqual((shift['energy_kwh'], shift['released_kw'], shift['departure_energy_kwh']), (11, 11, 22))
+            self.assertAlmostEqual(shift['destination_margin_after_kw'], 6)
             clipped = copy.deepcopy(manifest)
             clipped['artifacts'][-1]['render_contract']['scales'][0]['vmin'] = 1
             self.assertTrue(any('clips' in e for e in policy.audit(clipped)['errors']))
@@ -120,8 +121,8 @@ class RichProjectDeliveryTests(unittest.TestCase):
             {'demand_scale': 1.2, 'status': 'optimal', 'binding_periods': [4]},
         ]
         paragraphs = report._compare_scenario_capacity(low, high, summaries)
-        self.assertRegex(paragraphs, r'时段 2[^。]*余量，时段 4[^。]*容量上限')
-        self.assertRegex(paragraphs, r'时段 4[^。]*加充[^。]*挪到')
+        self.assertRegex(paragraphs, r'时段 2[^。]*余量[^。]*为正，时段 4[^。]*容量上限')
+        self.assertRegex(paragraphs, r'时段 4[^。]*新增充电[^。]*有余量的接入时段')
 
     def test_one_vehicle_shift_preserves_energy_at_unequal_interval_lengths(self):
         allocation = np.array([[6.0, 0.0, 0.0]])

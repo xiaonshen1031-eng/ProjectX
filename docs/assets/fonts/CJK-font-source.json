@@ -3,6 +3,6 @@
   "license": "SIL Open Font License 1.1",
   "licenseFile": "NotoSansSC-OFL.txt",
   "subset": "Characters used in public HTML, JavaScript, CSS and video captions",
-  "characters": 587,
-  "bytes": 153280
+  "characters": 584,
+  "bytes": 152028
 }

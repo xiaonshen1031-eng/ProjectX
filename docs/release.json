@@ -1,14 +1,14 @@
 {
   "name": "Senior-ProjectX",
   "displayName": "ProjectX",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "date": "2026-11-26",
   "license": "MIT",
   "author": "XiaoN",
   "copyright": "Copyright © NCEPU-Senior",
-  "download": "downloads/Senior-ProjectX-v1.3.1.zip",
-  "bytes": 445188,
-  "sha256": "c93e3fd8db87b1c23e21bbc37a411c1f916aaa06230b42ae3deab402479a9ab8",
+  "download": "downloads/Senior-ProjectX-v1.3.2.zip",
+  "bytes": 445423,
+  "sha256": "6fa1afd9e71b663112554b01ae28eda88d2cf71dbe4df04bafd216d67146e76c",
   "source": "https://github.com/xiaonshen1031-eng/ProjectX",
   "tests": {
     "regressions": 137,

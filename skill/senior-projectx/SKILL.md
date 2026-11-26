@@ -3,7 +3,7 @@ name: senior-projectx
 description: "面向横向委托研究、工程技术报告和项目汇报，完成资料与数据分析、物理或数学建模、计算与对比分析、中文结果阐释、Word原生公式与图表排版，以及基于客户模板的PPT制作和修订。适用于任务书约束下的完整研究或指定专题、章节、图件和格式修改。"
 metadata:
   display_name: Senior-ProjectX
-  version: "1.3.1"
+  version: "1.3.2"
   author: XiaoN
   copyright: "Copyright © NCEPU-Senior"
 ---
@@ -62,11 +62,11 @@ python scripts/project_research.py brief project_manifest.json --task-id T1 --re
 
 ## 连贯的中文技术分析
 
-撰写与修改前阅读 [语言与定稿要求](references/writing-and-release.md)。生成或修订算例分析时先用 [从算例读出工程结论](references/project-results-analysis.md) 组织实际比较、原因和工程判断。后段接住前段留下的事实或边界，例如由削减量追到同一批负荷的回补，由原峰转到控制设备容量的新峰。
+撰写与修改前阅读 [语言与定稿要求](references/writing-and-release.md)。算例分析采用自然、正式的科研和工程语体，参照 [从算例读出工程结论](references/project-results-analysis.md) 组织比较与归因。后段使用上一段已经确定的事实或条件，例如由削减电量分析同批负荷的回补，由原峰时刻转入新峰时刻的容量校核。
 
-审读范围覆盖摘要、正文、图题、表格及结论。按原始数据和比较条件重写宽泛的自我评价，把真实的不利结果放在影响判断的位置。删掉由套话承接的句子后，检查上一句给出的量怎样进入下一句。文件路径、调参记录及校验状态归入计算附件。
+审读范围覆盖摘要、正文、图题、表格及结论。结果段从实际比较及其工程含义展开，删除防御性表述、自我评价和按试验过程罗列的文字。缺额、越界及适用条件在影响判断处交代。文件路径、调参记录及校验状态归入计算附件。
 
-用同工况对照定位变化，再回查实际的轨迹、约束或状态，说明它怎样改变可用调度、校核位置或方案取舍。先解释最有决定性的结果，再展开后续推断。若只能确定联合效应，写清比较覆盖的条件，按可用证据收住单项归因。峰值、均值、分位数、功率和电量采用准确口径，区域总峰从同步序列求和后计算。
+在可比工况下识别变化，结合实际轨迹、约束或状态说明原因，再说明它对调度、校核位置或方案选择的影响。证据支持联合效应时，说明参与变化的条件及其共同后果。峰值、均值、分位数、功率和电量采用准确口径，区域总峰从同步序列求和后计算。
 
 ```powershell
 python scripts/check_writing_quality.py report.docx --manuscript-mode project --language chinese --require-clean --json-out review/writing.json

@@ -2,7 +2,7 @@
 
 ProjectX 是面向委托研究的开源技能。研究助手读取任务书后，用已有数据建立模型并复算关键约束。报告依据客户模板编排，便于读者从工程判断查到对应图件和计算条件。
 
-[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能 v1.3.1](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.3.1.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [绘图源码](gallery/README.md)
+[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能 v1.3.2](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.3.2.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [绘图源码](gallery/README.md)
 
 Copyright © NCEPU-Senior · Author: XiaoN
 
@@ -19,7 +19,7 @@ Copyright © NCEPU-Senior · Author: XiaoN
 
 Word 流程支持 MathType 原生公式、三线表及图题交叉引用。PPT 流程按照客户模板布置工况和结果，可核对原生图表、嵌入工作簿及原比例页面。
 
-v1.3.1 重写了充电样章中的结果解释。用实际分配表核对一辆车能挪多少电量，再用逐车分配解释需求增加后为什么有新的时段满载。 [选图与模板](skill/senior-projectx/references/project-engineering-figures.md) · [结果分析](skill/senior-projectx/references/project-results-analysis.md) · [版本验证](skill/senior-projectx/references/release-validation.md)
+v1.3.2 采用自然、正式的科研与工程语体组织结果分析。充电样章从满载时段的容量约束，推导可转移电量及调整后的余量，再分析需求变化引起的新增满载时段。 [选图与模板](skill/senior-projectx/references/project-engineering-figures.md) · [结果分析](skill/senior-projectx/references/project-results-analysis.md) · [版本验证](skill/senior-projectx/references/release-validation.md)
 
 ## 结果可视化
 

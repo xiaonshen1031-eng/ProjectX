@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "skill_version": "1.3.1",
-  "last_modified": "2026-11-26T15:26:38+08:00",
+  "skill_version": "1.3.2",
+  "last_modified": "2026-11-26T15:38:39+08:00",
   "last_regression": {
     "eval_id": "release-1.3.1-source",
     "status": "pass",
@@ -301,6 +301,12 @@
       "previous_version": "1.3.0",
       "timestamp": "2026-11-26T15:26:37+08:00",
       "summary": "用可复算的单车移时和新增满载时段解释算例，简化写作指南。"
+    },
+    {
+      "version": "1.3.2",
+      "previous_version": "1.3.1",
+      "timestamp": "2026-11-26T15:38:39+08:00",
+      "summary": "采用正式而自然的科研与工程语体，删除口语转场、实验报告性套语和防御性表述。"
     }
   ]
 }

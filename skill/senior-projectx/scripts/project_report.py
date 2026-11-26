@@ -129,6 +129,7 @@ def _single_vehicle_shift(allocation, available, limits, margin, duration, perio
     return {
         "vehicle": str(vehicles[vehicle]), "origin": int(periods[source]), "destination": int(periods[destination]),
         "energy_kwh": float(energy), "destination_charge_increase_kw": float(energy / duration[destination]),
+        "destination_margin_after_kw": float(max(0, margin[destination] - energy / duration[destination])),
         "released_kw": float(energy / duration[source]),
         "departure_energy_kwh": float(allocation[vehicle] @ duration),
     }
@@ -734,23 +735,23 @@ def _compare_scenario_capacity(low, high, summaries: list[dict]) -> str:
     relieved = [period for period in before if period not in after]
     example = high_record.get("newly_full_example") if float(low.demand_scale) == 1.0 else None
     if example and example["period"] in added and not relieved:
-        items = [f"{car} 多用 {_margin_label(power, 2)} kW" for car, power in example["increases_kw"].items()]
+        items = [f"{car} 的充电功率增加 {_margin_label(power, 2)} kW" for car, power in example["increases_kw"].items()]
         room = _margin_label(example["baseline_margin_kw"], 2)
-        text += f"时段 {example['period']} 原有 {room} kW 余量，" + "，".join(items) + "，正好把余量用完。"
+        text += f"时段 {example['period']} 原有 {room} kW 余量，" + "，".join(items) + "，两车新增功率之和恰好占满该时段的余量。"
     elif added and relieved:
-        text += f"时段 {relieved[0]} 重现余量，时段 {added[0]} 达到容量上限。"
+        text += f"时段 {relieved[0]} 的余量恢复为正，时段 {added[0]} 达到容量上限。"
     elif added:
         text += f"在高需求情景中，时段 {added[0]} 也达到容量上限。" if before else f"高需求使时段 {added[0]} 达到容量上限。"
     elif relieved:
-        text += f"重排后，原满载的时段 {relieved[0]} 出现余量。"
+        text += f"调整分配后，原满载的时段 {relieved[0]} 恢复了容量余量。"
     elif after:
         text += "两种需求下仍是同一批时段满载。"
     else:
         text += "两种需求下的各时段都保有余量。"
     if after:
         tight = added[0] if added else after[0]
-        return text + f"要在时段 {tight} 加充，得先看已经安排在那里充电的车能挪到哪个时段。"
-    return text + "高需求下还能增充多少，取决于车辆可接入时段积累的电量。"
+        return text + f"时段 {tight} 新增充电需求的可行性，取决于已有充电能否转移至其他有余量的接入时段。"
+    return text + "高需求条件下的可增充电量取决于车辆接入时段内可利用的容量。"
 
 
 def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Path], result_path: Path,
@@ -780,7 +781,7 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
     _add_body(doc, "充电站在车辆离站前交付规定电量。基础负荷先占用变压器容量，其余功率由同时接入的车辆分配。计划须落实到每辆车的接入时段，并据此核算设备余量。")
 
     doc.add_heading("2 研究对象、资料与数据", level=1)
-    _add_body(doc, "表1列出了算例用到的两组数据。用变压器容量减去同一时段的基础负荷，得到还能用来充电的功率。车辆从到站起可接入，离站时段起不再安排充电。模型据此分配各车所需的电量，每个时段的分配都受车端功率上限约束。两组数据均为合成算例。")
+    _add_body(doc, "表1列出合成算例的时段数据和车辆数据。各时段可分配的充电功率为变压器容量与同期基础负荷之差。车辆仅在到站至离站之间接入，模型在车端功率上限内分配各车所需电量。")
     rows = []
     for audit in audits:
         is_period = "base_load_kw" in audit["profiles"]
@@ -817,13 +818,13 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
         if tight_index < min(len(headroom), len(uniform_margin)) and uniform_margin[tight_index] > 1e-7:
             extra = _margin_label(uniform_margin[tight_index], 2)
             power = _margin_label(headroom[tight_index], 2)
-            bottleneck = (f"时段 {tight} 是基准计划最紧的时段。变压器还可供充电 {power} kW，加权计划用满了这部分容量（图1）。"
-                          f"同一时段，如果各车把充电均匀排在自己的接入窗内，变压器还有 {extra} kW 余量。")
+            bottleneck = (f"基准调度在时段 {tight} 达到容量上限（图1）。扣除基础负荷后可用于充电的 {power} kW 已全部分配。"
+                          f"各车在接入窗口内均匀充电的参考方案，在同一时段仍有 {extra} kW 余量。")
         else:
             bottleneck += "该时段的变压器容量已经用满。"
-        bottleneck += "要给新的充电需求留出空间，先看原先排在这个时段的充电能挪走多少。"
+        bottleneck += "要在该时段安排新增充电，需核查已分配车辆在其他接入时段的可转移电量。"
     else:
-        bottleneck += f"该时段在设备侧最多还能增加 {_margin_label(minimum_margin, 2)} kW。图2再核对这部分功率能分给哪些车辆。"
+        bottleneck += f"该时段在设备侧最多还能增加 {_margin_label(minimum_margin, 2)} kW。图2给出各车的接入窗口，据此确定可分配的车辆。"
     _add_body(doc, bottleneck)
     balance = next(a for a in figure_manifest["artifacts"] if a["id"] == "figure_balance")
     p = doc.add_paragraph(); _paragraph_role(p, "figure"); p.paragraph_format.keep_with_next = True
@@ -833,17 +834,23 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
     move = window_evidence.get("single_vehicle_shift")
     if move and abs(minimum_margin) <= 1e-7 and move["origin"] == tight:
         energy = f"{move['energy_kwh']:.6g}"
-        added = f"{move['destination_charge_increase_kw']:.6g}"
+        added = float(move["destination_charge_increase_kw"])
         released = f"{move['released_kw']:.6g}"
         delivered = f"{move['departure_energy_kwh']:.6g}"
-        delivery_text = (f"图2里，{move['vehicle']} 在时段 {move['destination']} 也可充电。"
-                         f"这一时段能给它多分 {added} kW，变压器仍在容量内。把原排在时段 {tight} 的 {energy} kWh 挪过去，"
-                         f"时段 {tight} 就能腾出 {released} kW，这辆车离站时仍能充到 {delivered} kWh。")
+        destination_room = move.get("destination_margin_after_kw")
+        reserve = (f"时段 {move['destination']} 仍有 {_margin_label(destination_room, 2)} kW 设备余量，"
+                   if destination_room is not None else "")
+        if not np.isclose(added, move["released_kw"], atol=1e-7, rtol=0):
+            reserve = f"时段 {move['destination']} 增加 {added:.6g} kW。" + reserve
+        delivery_text = (f"时段 {move['destination']} 仍处于 {move['vehicle']} 的接入窗口（图2）。"
+                         f"将该车在时段 {tight} 的 {energy} kWh 充电量转移至时段 {move['destination']}，"
+                         f"可释放时段 {tight} 的 {released} kW 充电容量。调整后，"
+                         f"{reserve}{move['vehicle']} 的离站电量仍为 {delivered} kWh。")
     elif "single_vehicle_shift" in window_evidence and not move and abs(minimum_margin) <= 1e-7:
-        delivery_text = (f"时段 {tight} 已安排的车辆里，找不到一辆能把部分充电直接挪到另一个时段。"
-                         "要腾出该时段的容量，还得检查多辆车能否一起重排。")
+        delivery_text = (f"保持其余车辆的分配不变，时段 {tight} 的单车可转移电量为零。"
+                         "该时段的可释放容量取决于多车联合调整后的逐时余量。")
     else:
-        delivery_text = "图2标出了各车能充电的时段。要换时段，先看车在新时段是否接入，再看车端和变压器还剩多少功率。调整完还要核对车辆离站时的电量。"
+        delivery_text = "图2给出各车的接入窗口及其逐时分配。调整充电时段时，接收时段须同时满足车辆接入、车端功率及变压器容量约束，调整后的逐车累计电量应满足离站要求。"
     _add_body(doc, delivery_text)
     doc.add_heading("5 工况变化与敏感性分析", level=1)
     sens = next(a for a in figure_manifest["artifacts"] if a["id"] == "figure_sensitivity")
@@ -868,14 +875,14 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
             if first_change is not None and first_change in set(feasible.demand_scale):
                 lo, hi = baseline.iloc[0], feasible[feasible.demand_scale == first_change].iloc[0]
         _add_body(doc, _compare_scenario_capacity(lo, hi, summaries))
-    _add_body(doc, "其他车辆照原计划充电时，每个接入时段能多分给同一辆车的功率，取变压器余量和车端剩余功率中较小的一项。用这个功率乘上各自的时长，再把各段电量加起来，就能算出这辆车还可多充多少电。")
+    _add_body(doc, "保持其他车辆分配不变，单车在各接入时段的可增充功率取变压器余量与车端剩余功率的较小值。将各时段的可增充功率乘以持续时间后求和，得到该车在接入窗口内的可增充电量。")
     infeasible = sensitivity[sensitivity.status == "infeasible"]
     if not infeasible.empty:
         scale = infeasible["demand_scale"].min()
         shortfall = _scenario_energy_shortfall(sensitivity_path, scale)
         if shortfall:
             demand, available = shortfall
-            _add_body(doc, f"需求达到基准的 {scale:.2f} 倍后，仅靠改换充电时段已经不够。车辆共需 {demand:.3g} kWh，即使把各时段的变压器余量都用于充电，也只能供 {available:.3g} kWh，至少还差 {demand - available:.3g} kWh。增供前还要检查，各车的接入时间够不够用。")
+            _add_body(doc, f"需求为基准的 {scale:.2f} 倍时，车辆合计需要 {demand:.3g} kWh。将各时段可用于充电的变压器余量按时长累计，可供电量上界为 {available:.3g} kWh，对应至少 {demand - available:.3g} kWh 的缺口。增供方案还需满足各车接入窗口内的充电能力。")
         else:
             _add_body(doc, f"需求倍率 {scale:.2f} 时，在现有接入窗口、车端功率上限和变压器容量下，车辆的电量要求无法同时满足。")
 
@@ -885,7 +892,7 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
               ["最小容量余量", f"{minimum_margin:.2f}", "kW"]]
     _add_caption(doc, "表3 电量与容量指标")
     _add_table(doc, ["指标", "数值", "单位"], checks, [8.0, 4.0, 3.6])
-    _add_body(doc, "按基准计划，各车能在离站前充到所需电量，变压器也能承担各时段的负荷（表3）。排入新的充电需求后，还要逐车核对离站电量，并重新校核各时段的容量。")
+    _add_body(doc, "基准调度满足各车的离站电量需求，逐时总负荷均在变压器容量以内（表3）。需求变化后，应使用更新的分配结果重新校核这两项约束。")
     doc.core_properties.author = ""; doc.core_properties.last_modified_by = ""
     output_path.parent.mkdir(parents=True, exist_ok=True); doc.save(output_path)
     is_office_math = equation_backend == "office_math"
