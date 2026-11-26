@@ -3,7 +3,7 @@ name: senior-projectx
 description: "面向横向委托研究、工程技术报告和项目汇报，完成资料与数据分析、物理或数学建模、计算与对比分析、中文结果阐释、Word原生公式与图表排版，以及基于客户模板的PPT制作和修订。适用于任务书约束下的完整研究或指定专题、章节、图件和格式修改。"
 metadata:
   display_name: Senior-ProjectX
-  version: "1.3.3"
+  version: "1.3.4"
   author: XiaoN
   copyright: "Copyright © NCEPU-Senior"
 ---
@@ -66,7 +66,7 @@ python scripts/project_research.py brief project_manifest.json --task-id T1 --re
 
 审读范围覆盖摘要、正文、图题、表格及结论。结果段从实际比较及其工程含义展开，直接给出变化的时段、受限条件及计算所得的运行后果。删除防御性表述与试验过程流水账，审阅指令归入工作记录。缺额、越界及适用条件在影响判断处交代。
 
-在可比工况下识别变化，结合实际轨迹、约束或状态说明原因，再说明它对调度、校核位置或方案选择的影响。证据支持联合效应时，说明参与变化的条件及其共同后果。峰值、均值、分位数、功率和电量采用准确口径，区域总峰从同步序列求和后计算。
+在可比工况下识别变化，结合实际轨迹、约束或状态说明原因。结论应指出已确认的结果能支持哪项工程决定，例如可调整的调度时段、最低供电需求或方案的适用条件。证据支持联合效应时，说明参与变化的条件及其共同后果。峰值、均值、分位数、功率和电量采用准确口径，区域总峰从同步序列求和后计算。
 
 ```powershell
 python scripts/check_writing_quality.py report.docx --manuscript-mode project --language chinese --require-clean --json-out review/writing.json

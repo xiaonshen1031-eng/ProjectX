@@ -2,7 +2,7 @@
 
 ProjectX 是面向委托研究的开源技能。研究助手读取任务书后，用已有数据建立模型并复算关键约束。报告依据客户模板编排，便于读者从工程判断查到对应图件和计算条件。
 
-[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能 v1.3.3](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.3.3.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [绘图源码](gallery/README.md)
+[访问网站](https://xiaonshen1031-eng.github.io/ProjectX/) · [下载技能 v1.3.4](https://xiaonshen1031-eng.github.io/ProjectX/downloads/Senior-ProjectX-v1.3.4.zip) · [完整技能](skill/senior-projectx/SKILL.md) · [绘图源码](gallery/README.md)
 
 Copyright © NCEPU-Senior · Author: XiaoN
 
@@ -19,7 +19,7 @@ Copyright © NCEPU-Senior · Author: XiaoN
 
 Word 流程支持 MathType 原生公式、三线表及图题交叉引用。PPT 流程按照客户模板布置工况和结果，可核对原生图表、嵌入工作簿及原比例页面。
 
-v1.3.3 的结果分析直接说明时段负荷、容量余量及运行后果。充电样章用单车移时解释时段容量如何变化，再由全站可供电量上界说明高需求工况的电量缺口。 [选图与模板](skill/senior-projectx/references/project-engineering-figures.md) · [结果分析](skill/senior-projectx/references/project-results-analysis.md) · [版本验证](skill/senior-projectx/references/release-validation.md)
+v1.3.4 将充电算例的分配结果用于两个工程判断。移时后的容量可分给当时接入的车辆。需求超过供电上界时，电量缺口给出维持全部需求所需的最低增供量。 [选图与模板](skill/senior-projectx/references/project-engineering-figures.md) · [结果分析](skill/senior-projectx/references/project-results-analysis.md) · [版本验证](skill/senior-projectx/references/release-validation.md)
 
 ## 结果可视化
 

@@ -832,7 +832,8 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
     _add_caption(doc, balance["caption"]).paragraph_format.keep_with_next = True
     window_evidence = balance.get("numerical_evidence", {})
     move = window_evidence.get("single_vehicle_shift")
-    if move and abs(minimum_margin) <= 1e-7 and move["origin"] == tight:
+    applicable_move = move and abs(minimum_margin) <= 1e-7 and move["origin"] == tight
+    if applicable_move:
         energy = f"{move['energy_kwh']:.6g}"
         added = float(move["destination_charge_increase_kw"])
         released = f"{move['released_kw']:.6g}"
@@ -877,6 +878,7 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
         _add_body(doc, _compare_scenario_capacity(lo, hi, summaries))
     _add_body(doc, "保持其他车辆分配不变，单车在各接入时段的可增充功率取变压器余量与车端剩余功率的较小值。将各时段的可增充功率乘以持续时间后求和，得到该车在接入窗口内的可增充电量。")
     infeasible = sensitivity[sensitivity.status == "infeasible"]
+    shortfall = None
     if not infeasible.empty:
         scale = infeasible["demand_scale"].min()
         shortfall = _scenario_energy_shortfall(sensitivity_path, scale)
@@ -886,13 +888,26 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
         else:
             _add_body(doc, f"需求倍率 {scale:.2f} 时，在现有接入窗口、车端功率上限和变压器容量下，车辆的电量要求无法同时满足。")
 
-    doc.add_heading("6 基准方案可行性与运行边界", level=1)
+    doc.add_heading("6 结论与工程应用", level=1)
     checks = [["最大电量差值", f"{validation['maximum_energy_residual_kwh']:.3g}", "kWh"],
               ["最大容量越界量", f"{validation['maximum_capacity_violation_kw']:.3g}", "kW"],
               ["最小容量余量", f"{minimum_margin:.2f}", "kW"]]
     _add_caption(doc, "表3 电量与容量指标")
     _add_table(doc, ["指标", "数值", "单位"], checks, [8.0, 4.0, 3.6])
-    _add_body(doc, "基准调度满足各车的离站电量需求，逐时总负荷均在变压器容量以内（表3）。对于单车，只有接入窗口内的容量余量可用于充电。对于全站，变压器容量与同期基础负荷共同决定调度周期内的可供电量上界。")
+    conclusion = "基准调度满足各车的离站电量需求，逐时总负荷均在变压器容量以内（表3）。"
+    if applicable_move:
+        conclusion += (f"采用图2的移时方案后，时段 {tight} 释放的 {move['released_kw']:.6g} kW "
+                       "可供该时段接入的车辆增充，实际分配仍受车端功率上限约束。")
+    elif minimum_margin > 1e-7:
+        conclusion += (f"在既有分配保持不变时，时段 {tight} 的新增充电功率以 {_margin_label(minimum_margin, 2)} kW 为设备侧上限，"
+                       "可用功率按当时接入车辆的剩余功率确定。")
+    else:
+        conclusion += f"时段 {tight} 达到容量上限。该时段的新增充电安排取决于已有分配能否转至其他接入时段。"
+    _add_body(doc, conclusion)
+    if shortfall is not None:
+        deficit = shortfall[0] - shortfall[1]
+        _add_body(doc, f"若维持 {scale:.2f} 倍工况的全部需求，本周期至少需增加 {deficit:.3g} kWh 的可供电量。"
+                       "设备供电条件维持不变时，须将相应电量的充电需求移出本周期。")
     doc.core_properties.author = ""; doc.core_properties.last_modified_by = ""
     output_path.parent.mkdir(parents=True, exist_ok=True); doc.save(output_path)
     is_office_math = equation_backend == "office_math"

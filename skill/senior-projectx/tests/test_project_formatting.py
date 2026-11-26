@@ -160,6 +160,7 @@ class ProjectFormattingTests(unittest.TestCase):
             for token in ["PRIVATE_INTERNAL_PATH", "JSON 指针", "章节 brief", "证据链", "success 布尔", "复核职责", "核查", "证据表明", "重新校核"]:
                 self.assertNotIn(token, text)
             self.assertIn("合成", text)  # Do not erase the factual source classification.
+            self.assertIn("时段 0 的新增充电功率以 1.00 kW 为设备侧上限", text)
             hard_breaks = doc.element.xpath(".//w:br[@w:type='page']|.//w:pageBreakBefore")
             self.assertFalse(hard_breaks, "The allocation example should flow across pages")
             result_captions = [p for p in doc.paragraphs if p.text.startswith(("图1 ", "图2 "))]
