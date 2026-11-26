@@ -884,9 +884,9 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
         shortfall = _scenario_energy_shortfall(sensitivity_path, scale)
         if shortfall:
             demand, available = shortfall
-            _add_body(doc, f"需求为基准的 {scale:.2f} 倍时，车辆合计需要 {demand:.3g} kWh。各时段可用于充电的变压器余量按时长累计，可供电量上界为 {available:.3g} kWh。由此得到至少 {demand - available:.3g} kWh 的电量缺口，充电时段调整无法改变这一上界。")
+            _add_body(doc, f"需求为基准的 {scale:.2f} 倍时，车辆合计需要 {demand:.3g} kWh。各时段可用于充电的变压器余量按时长累计，可供电量上界为 {available:.3g} kWh，由此得到至少 {demand - available:.3g} kWh 的电量缺口。")
         else:
-            _add_body(doc, f"需求倍率 {scale:.2f} 时，在现有接入窗口、车端功率上限和变压器容量下，车辆的电量要求无法同时满足。")
+            _add_body(doc, f"需求倍率为 {scale:.2f} 时，逐车离站需求超出现有接入窗口、车端功率上限和变压器容量共同限定的分配范围。")
 
     doc.add_heading("6 结论与工程应用", level=1)
     checks = [["最大电量差值", f"{validation['maximum_energy_residual_kwh']:.3g}", "kWh"],
@@ -896,18 +896,18 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
     _add_table(doc, ["指标", "数值", "单位"], checks, [8.0, 4.0, 3.6])
     conclusion = "基准调度满足各车的离站电量需求，逐时总负荷均在变压器容量以内（表3）。"
     if applicable_move:
-        conclusion += (f"采用图2的移时方案后，时段 {tight} 释放的 {move['released_kw']:.6g} kW "
-                       "可供该时段接入的车辆增充，实际分配仍受车端功率上限约束。")
+        conclusion += (f"图2的移时方案为时段 {tight} 释放了 {move['released_kw']:.6g} kW 充电功率，"
+                       "可据此安排该时段已接入车辆的新增充电需求。")
     elif minimum_margin > 1e-7:
-        conclusion += (f"在既有分配保持不变时，时段 {tight} 的新增充电功率以 {_margin_label(minimum_margin, 2)} kW 为设备侧上限，"
-                       "可用功率按当时接入车辆的剩余功率确定。")
+        conclusion += (f"时段 {tight} 的 {_margin_label(minimum_margin, 2)} kW 容量余量，"
+                       "可作为现有计划下分配新增充电功率的设备侧额度。")
     else:
-        conclusion += f"时段 {tight} 达到容量上限。该时段的新增充电安排取决于已有分配能否转至其他接入时段。"
+        conclusion += f"时段 {tight} 是基准调度的满载时段，可作为新增需求下优先调整充电分配的时段。"
     _add_body(doc, conclusion)
     if shortfall is not None:
         deficit = shortfall[0] - shortfall[1]
-        _add_body(doc, f"若维持 {scale:.2f} 倍工况的全部需求，本周期至少需增加 {deficit:.3g} kWh 的可供电量。"
-                       "设备供电条件维持不变时，须将相应电量的充电需求移出本周期。")
+        _add_body(doc, f"{scale:.2f} 倍需求工况对应 {deficit:.3g} kWh 的最低增供电量，"
+                       "可作为安排本周期新增供电的量化依据。")
     doc.core_properties.author = ""; doc.core_properties.last_modified_by = ""
     output_path.parent.mkdir(parents=True, exist_ok=True); doc.save(output_path)
     is_office_math = equation_backend == "office_math"
