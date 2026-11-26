@@ -107,6 +107,19 @@
         "references/release-validation.md"
       ],
       "notes": ""
+    },
+    {
+      "eval_id": "release-1.3.1-source",
+      "timestamp": "2026-11-26T15:26:38+08:00",
+      "status": "pass",
+      "checks": [
+        "137 source regressions",
+        "Advancing a real baseline slot from power constraint to a recomputed single-vehicle shift"
+      ],
+      "artifacts": [
+        "references/release-validation.md"
+      ],
+      "notes": ""
     }
   ]
 }

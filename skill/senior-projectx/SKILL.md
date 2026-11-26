@@ -3,7 +3,7 @@ name: senior-projectx
 description: "面向横向委托研究、工程技术报告和项目汇报，完成资料与数据分析、物理或数学建模、计算与对比分析、中文结果阐释、Word原生公式与图表排版，以及基于客户模板的PPT制作和修订。适用于任务书约束下的完整研究或指定专题、章节、图件和格式修改。"
 metadata:
   display_name: Senior-ProjectX
-  version: "1.3.0"
+  version: "1.3.1"
   author: XiaoN
   copyright: "Copyright © NCEPU-Senior"
 ---

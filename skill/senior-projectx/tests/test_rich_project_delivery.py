@@ -7,6 +7,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from zipfile import ZipFile
 import pandas as pd
+import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / 'scripts'))
@@ -61,7 +62,15 @@ class RichProjectDeliveryTests(unittest.TestCase):
             self.assertEqual(atlas['render_contract']['roles']['allocation']['color'], '#00A878')
             self.assertEqual(atlas['numerical_evidence']['scenario_summary'][2]['binding_period_count'], 1)
             self.assertEqual(atlas['numerical_evidence']['scenario_summary'][2]['binding_periods'], [2])
+            onset = atlas['numerical_evidence']['scenario_summary'][3]['newly_full_example']
+            self.assertEqual(onset['period'], 3)
+            self.assertAlmostEqual(onset['baseline_margin_kw'], 2)
+            self.assertAlmostEqual(onset['increases_kw']['EV-02'], 1.1)
+            self.assertAlmostEqual(onset['increases_kw']['EV-05'], .9)
             self.assertAlmostEqual(manifest['artifacts'][0]['numerical_evidence']['uniform_minimum_margin_kw'], 4.2666666667)
+            shift = manifest['artifacts'][1]['numerical_evidence']['single_vehicle_shift']
+            self.assertEqual((shift['vehicle'], shift['origin'], shift['destination']), ('EV-02', 2, 4))
+            self.assertEqual((shift['energy_kwh'], shift['released_kw'], shift['departure_energy_kwh']), (11, 11, 22))
             clipped = copy.deepcopy(manifest)
             clipped['artifacts'][-1]['render_contract']['scales'][0]['vmin'] = 1
             self.assertTrue(any('clips' in e for e in policy.audit(clipped)['errors']))
@@ -112,7 +121,22 @@ class RichProjectDeliveryTests(unittest.TestCase):
         ]
         paragraphs = report._compare_scenario_capacity(low, high, summaries)
         self.assertRegex(paragraphs, r'时段 2[^。]*余量，时段 4[^。]*容量上限')
-        self.assertRegex(paragraphs, r'时段 4[^。]*增充[^。]*接入窗')
+        self.assertRegex(paragraphs, r'时段 4[^。]*加充[^。]*挪到')
+
+    def test_one_vehicle_shift_preserves_energy_at_unequal_interval_lengths(self):
+        allocation = np.array([[6.0, 0.0, 0.0]])
+        window = np.array([[True, False, True]])
+        limits, margin, duration = np.array([9.0]), np.array([0.0, 20.0, 2.0]), np.array([0.5, 1.0, 1.0])
+        evidence = report._single_vehicle_shift(allocation, window, limits, margin, duration, [10, 11, 12], ['A'], 0)
+        self.assertEqual(evidence['destination'], 12)
+        self.assertEqual(evidence['departure_energy_kwh'], 3)
+        moved = allocation.copy()
+        moved[0, 0] -= evidence['released_kw']
+        moved[0, 2] += evidence['destination_charge_increase_kw']
+        np.testing.assert_allclose(moved @ duration, allocation @ duration)
+        np.testing.assert_allclose(moved, [[2.0, 0.0, 2.0]])
+        self.assertIsNone(report._single_vehicle_shift(allocation, window, limits, np.array([0, 20, 0]), duration,
+                                                       [10, 11, 12], ['A'], 0))
 
     def test_observed_points_remain_available_inside_sourced_conditional_diagnostics(self):
         fig = {'plot_type': 'composite_diagnostic', 'plot_layers': [

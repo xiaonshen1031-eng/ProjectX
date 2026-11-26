@@ -12,9 +12,9 @@
   <link rel="canonical" href="https://xiaonshen1031-eng.github.io/ProjectX/">
   <link rel="icon" href="assets/icon.svg?v=blue" type="image/svg+xml">
   <link rel="preload" href="assets/fonts/Manrope.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/ProjectX-SansSC.woff2?v=130" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=130">
-  <script src="app.js?v=130" defer></script>
+  <link rel="preload" href="assets/fonts/ProjectX-SansSC.woff2?v=131" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="styles.css?v=131">
+  <script src="app.js?v=131" defer></script>
   <script src="load-preview.js?v=122" defer></script>
   <title>ProjectX — Find the limit. Make the call.</title>
 </head>
@@ -35,7 +35,7 @@
       </nav>
       <div class="header-actions">
         <a class="nav-source" href="https://github.com/xiaonshen1031-eng/ProjectX">GitHub <span aria-hidden="true">↗</span></a>
-        <a class="button header-download" data-download download href="downloads/Senior-ProjectX-v1.3.0.zip">下载技能 <span aria-hidden="true">↓</span></a>
+        <a class="button header-download" data-download download href="downloads/Senior-ProjectX-v1.3.1.zip">下载技能 <span aria-hidden="true">↓</span></a>
         <button type="button" class="menu-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="展开导航"><span></span><span></span></button>
       </div>
     </div>
@@ -48,13 +48,13 @@
           <div class="hero-copy">
             <p class="hero-kicker"><span class="status-dot" aria-hidden="true"></span>委托研究的开源技能</p>
             <h1 id="hero-title" lang="en"><span>Find the limit.</span><em>Make the call.</em></h1>
-            <p class="hero-description">容量在哪一刻用满？换个工况，方案还成立吗？ProjectX 从任务书拆出这些问题，把计算和图表写进技术报告，让客户能沿着结论复算。</p>
+            <p class="hero-description">换个工况，原来的方案还成立吗？ProjectX 帮你查清哪个限制改变了结果，把原因写进技术报告，再把参数和计算脚本交给客户复算。</p>
             <div class="hero-actions">
-              <a class="button button-white" data-download download href="downloads/Senior-ProjectX-v1.3.0.zip">下载 ProjectX <span aria-hidden="true">↓</span></a>
+              <a class="button button-white" data-download download href="downloads/Senior-ProjectX-v1.3.1.zip">下载 ProjectX <span aria-hidden="true">↓</span></a>
               <button type="button" class="button button-ghost watch-video"><span class="play-icon" aria-hidden="true"></span>观看演示</button>
               <a class="hero-atlas-link" href="#gallery">浏览工程图册 <span aria-hidden="true">↘</span></a>
             </div>
-            <p class="hero-version"><span data-version>v1.3.0</span><span class="version-divider" aria-hidden="true"></span><a href="#start">查看本版更新 ↘</a></p>
+            <p class="hero-version"><span data-version>v1.3.1</span><span class="version-divider" aria-hidden="true"></span><a href="#release-note">查看本版更新 ↘</a></p>
           </div>
           <div class="hero-console" aria-labelledby="plot-title">
             <div class="console-top">
@@ -85,7 +85,7 @@
         <dl class="hero-proof">
           <div><dt>工程图型</dt><dd><span data-atlas-count>24</span> <small>类</small></dd></div>
           <div><dt>双语原图</dt><dd><span data-atlas-files>96</span> <small>份</small></dd></div>
-          <div><dt>通过回归检查</dt><dd><span data-test-count>136</span> <small>项</small></dd></div>
+          <div><dt>通过回归检查</dt><dd><span data-test-count>137</span> <small>项</small></dd></div>
         </dl>
       </div>
     </section>
@@ -94,7 +94,7 @@
       <div class="shell">
         <div class="section-heading">
           <div><p class="eyebrow" lang="en">Follow the evidence</p><h2 id="workflow-title">研究流程</h2></div>
-          <p>点选一个阶段，查看它处理哪项输入，以及结果如何用于下一步。</p>
+          <p>沿用上面的充电算例。从车辆何时到站开始，算出哪一个时段满载，再看能把哪辆车的充电挪开。</p>
         </div>
         <div class="workflow-layout">
           <div class="workflow-tabs" role="tablist" aria-label="研究阶段" aria-orientation="vertical">
@@ -157,7 +157,7 @@
         </div>
         <div class="chart-grid" id="chart-grid">
           <!-- atlas cards -->
-          <figure class="chart-card" id="chart-contingency" data-chart="contingency" data-family="space" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="支路退出后的负荷转供" data-description-zh="图中标出停运支路和转供路径。联络线满载后，负荷点仍有 3 kW 无法送达。" data-tags-zh="转供路径 · 联络容量 · 未供功率" data-title-en="Load transfer after a branch outage" data-description-en="Trace the transfer path from the spare feeder. The tie reaches its rating while 3 kW of load remains unserved." data-tags-en="Transfer path · Tie rating · Unserved power">
+          <figure class="chart-card" id="chart-contingency" data-chart="contingency" data-family="space" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="支路退出后的负荷转供" data-description-zh="支路停运后，联络线送出 15 kW，达到上限。L2 还有 3 kW 的负荷未能供电。" data-tags-zh="转供路径 · 联络容量 · 未供功率" data-title-en="Load transfer after a branch outage" data-description-en="After the outage, the tie carries its full 15 kW. Another 3 kW of load at L2 remains unserved." data-tags-en="Transfer path · Tie rating · Unserved power">
             <a class="chart-image" data-open href="downloads/figures/python/zh/contingency.png" aria-label="查看支路退出后的负荷转供大图">
               <img src="assets/charts/zh/python-contingency.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
               <span class="expand-mark" aria-hidden="true">↗</span>
@@ -168,7 +168,7 @@
               <a class="chart-download" href="downloads/figures/python/zh/contingency.png" download="contingency-zh.png" aria-label="下载支路退出后的负荷转供的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
             </figcaption>
           </figure>
-          <figure class="chart-card" id="chart-marginal-cost" data-chart="marginal-cost" data-family="evaluation" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="备用要求的边际代价" data-description-zh="左图定位备用要求跨过哪一档容量。右图核对已分配的备用量，再读增加 1 MW 的代价。" data-tags-zh="分段边际成本 · 容量台阶 · 备用分配" data-title-en="Marginal cost of additional reserve" data-description-en="Find the marginal block at the current reserve requirement. The allocation at right explains the cost of procuring one more megawatt." data-tags-en="Merit order · Capacity blocks · Reserve allocation">
+          <figure class="chart-card" id="chart-marginal-cost" data-chart="marginal-cost" data-family="evaluation" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="备用要求的边际代价" data-description-zh="备用需求为 29 MW 时，前两档已用满。再买 1 MW 仍由 B3 提供，每小时多花 20 美元。超过 36 MW 才进入下一档。" data-tags-zh="分段边际成本 · 容量台阶 · 备用分配" data-title-en="Marginal cost of additional reserve" data-description-en="The first two blocks are full at 29 MW. One more megawatt comes from B3 and costs $20 per hour. The next block starts above 36 MW." data-tags-en="Merit order · Capacity blocks · Reserve allocation">
             <a class="chart-image" data-open href="downloads/figures/python/zh/marginal-cost.png" aria-label="查看备用要求的边际代价大图">
               <img src="assets/charts/zh/python-marginal-cost.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
               <span class="expand-mark" aria-hidden="true">↗</span>
@@ -179,7 +179,7 @@
               <a class="chart-download" href="downloads/figures/python/zh/marginal-cost.png" download="marginal-cost-zh.png" aria-label="下载备用要求的边际代价的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
             </figcaption>
           </figure>
-          <figure class="chart-card" id="chart-error-horizon" data-chart="error-horizon" data-family="evaluation" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="多步预测误差与覆盖" data-description-zh="同一批时点配对后，比较各提前量的绝对误差差值。下方给出配对样本数，标明无法比较的工况。" data-tags-zh="多步预测 · 配对绝对误差 · 有效覆盖" data-title-en="Forecast errors across lead times" data-description-en="Compare paired absolute-error differences for each lead time. The coverage strip shows sample counts and explicitly marks a missing comparison." data-tags-en="Lead time · Paired error · Coverage">
+          <figure class="chart-card" id="chart-error-horizon" data-chart="error-horizon" data-family="evaluation" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="多步预测误差与覆盖" data-description-zh="按工况和提前量分别配对，零线以下表示修订后误差更小。高波动工况下，提前 6 小时的误差差值中位数为正，提前 8 小时没有配对样本。" data-tags-zh="多步预测 · 配对绝对误差 · 有效覆盖" data-title-en="Forecast errors across lead times" data-description-en="Pair forecasts within each regime and lead time. Values below zero favor the revised forecast. For high variability, the median difference is positive at six hours and no pairs are available at eight." data-tags-en="Lead time · Paired error · Coverage">
             <a class="chart-image" data-open href="downloads/figures/python/zh/error-horizon.png" aria-label="查看多步预测误差与覆盖大图">
               <img src="assets/charts/zh/python-error-horizon.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
               <span class="expand-mark" aria-hidden="true">↗</span>
@@ -190,7 +190,7 @@
               <a class="chart-download" href="downloads/figures/python/zh/error-horizon.png" download="error-horizon-zh.png" aria-label="下载多步预测误差与覆盖的中文 PNG 原图">PNG <span aria-hidden="true">↓</span></a>
             </figcaption>
           </figure>
-          <figure class="chart-card" id="chart-response-delay" data-chart="response-delay" data-family="distribution" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="调节响应时延与超时" data-description-zh="先从时间分布读出超时比例，再沿同一批指令核对确认等待和执行时长，定位超时变化来自哪一段。" data-tags-zh="响应时延 · 超时比例 · 确认等待" data-title-en="Actuation latency and deadline misses" data-description-en="Read deadline misses from the latency distributions. Phase durations for the same commands show whether confirmation or actuation explains the difference." data-tags-en="Latency · Missed deadlines · Command confirmation">
+          <figure class="chart-card" id="chart-response-delay" data-chart="response-delay" data-family="distribution" data-python-source="build_python_engineering.py" data-matlab-source="build_matlab_engineering.m" data-title-zh="调节响应时延与超时" data-description-zh="按 22 秒时限，优先确认把超时指令从 26 条降到 3 条，两组各 36 条。执行平均都约 9.5 秒，省下的时间来自更短的确认等待。" data-tags-zh="响应时延 · 超时比例 · 确认等待" data-title-en="Actuation latency and deadline misses" data-description-en="Under a 22-second deadline, priority confirmation cuts misses from 26 of 36 commands to 3 of 36. Actuation takes about 9.5 seconds in both runs. The time savings come from shorter waits for confirmation." data-tags-en="Latency · Missed deadlines · Command confirmation">
             <a class="chart-image" data-open href="downloads/figures/python/zh/response-delay.png" aria-label="查看调节响应时延与超时大图">
               <img src="assets/charts/zh/python-response-delay.webp" alt="" width="1440" height="864" loading="lazy" decoding="async">
               <span class="expand-mark" aria-hidden="true">↗</span>
@@ -488,10 +488,10 @@
           <p><a class="release-link" href="https://github.com/xiaonshen1031-eng/ProjectX/blob/main/skill/senior-projectx/references/release-validation.md">查看版本验证记录 ↗</a></p>
         </div>
         <div class="download-box">
-          <div class="download-version"><strong data-version>v1.3.0</strong><span>Senior-ProjectX · MIT</span></div>
-          <p>内含六类可复绘工程图。充电算例从满载时段追到车辆接入窗口，进一步说明哪些需求能靠移时满足，哪些受供电总量限制。</p>
-          <a class="button button-white" data-download href="downloads/Senior-ProjectX-v1.3.0.zip" download>下载完整技能包 <span aria-hidden="true">↓</span></a>
-          <div class="download-details"><span data-download-size>ZIP · 433 KiB</span><a href="https://github.com/xiaonshen1031-eng/ProjectX">GitHub 源码 ↗</a></div>
+          <div class="download-version"><strong data-version>v1.3.1</strong><span>Senior-ProjectX · MIT</span></div>
+          <p id="release-note">充电样章复算了 EV-02 换时段后能腾出多少功率，再检查需求增加时哪个时段也会用满。下载包内含六类可用自己数据重画的图表模板。</p>
+          <a class="button button-white" data-download href="downloads/Senior-ProjectX-v1.3.1.zip" download>下载完整技能包 <span aria-hidden="true">↓</span></a>
+          <div class="download-details"><span data-download-size>ZIP · 435 KiB</span><a href="https://github.com/xiaonshen1031-eng/ProjectX">GitHub 源码 ↗</a></div>
         </div>
         <div class="prompt-card">
           <div class="prompt-heading"><strong>启动项目的参考提示</strong><button type="button" class="copy-button" id="copy-prompt">复制提示 ↗</button></div>

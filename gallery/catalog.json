@@ -132,9 +132,9 @@
     {"id": "rebound", "family": "time", "title": "调节后负荷反弹", "description": "以调节开始为零点，比较同一天有无控制的功率差。右图按同日配对回补电量和削减电量。对角线下方的点表示回补抵消了部分削减。", "tags": "配对工况 · 事件对齐 · 回补电量", "extra": true, "featured": false, "source": "engineering"},
     {"id": "hysteresis", "family": "relation", "title": "温控负荷的热滞回", "description": "用开机和停机的两个温度阈值解释同一温度下的不同功率状态，并在时序中核对这些切换。", "tags": "室温阈值 · 温控开关 · 功率状态", "extra": true, "featured": false, "source": "engineering"},
     {"id": "pareto", "family": "evaluation", "title": "成本与未供电量的权衡", "description": "绘制各储能容量下的运行候选方案。用非支配边界识别同时满足成本和可靠性限值的最低成本方案。", "tags": "非支配边界 · 储能容量 · 可靠性限值", "extra": true, "featured": false, "source": "engineering"},
-    {"id": "contingency", "family": "space", "title": "支路退出后的负荷转供", "description": "图中标出停运支路和转供路径。联络线满载后，负荷点仍有 3 kW 无法送达。", "tags": "转供路径 · 联络容量 · 未供功率", "extra": false, "featured": true, "source": "engineering", "atlas_highlight": true},
-    {"id": "marginal-cost", "family": "evaluation", "title": "备用要求的边际代价", "description": "左图定位备用要求跨过哪一档容量。右图核对已分配的备用量，再读增加 1 MW 的代价。", "tags": "分段边际成本 · 容量台阶 · 备用分配", "extra": false, "featured": true, "source": "engineering", "atlas_highlight": true},
-    {"id": "error-horizon", "family": "evaluation", "title": "多步预测误差与覆盖", "description": "同一批时点配对后，比较各提前量的绝对误差差值。下方给出配对样本数，标明无法比较的工况。", "tags": "多步预测 · 配对绝对误差 · 有效覆盖", "extra": false, "featured": true, "source": "engineering", "atlas_highlight": true},
-    {"id": "response-delay", "family": "distribution", "title": "调节响应时延与超时", "description": "先从时间分布读出超时比例，再沿同一批指令核对确认等待和执行时长，定位超时变化来自哪一段。", "tags": "响应时延 · 超时比例 · 确认等待", "extra": false, "featured": true, "source": "engineering", "atlas_highlight": true}
+    {"id": "contingency", "family": "space", "title": "支路退出后的负荷转供", "description": "支路停运后，联络线送出 15 kW，达到上限。L2 还有 3 kW 的负荷未能供电。", "tags": "转供路径 · 联络容量 · 未供功率", "extra": false, "featured": true, "source": "engineering", "atlas_highlight": true},
+    {"id": "marginal-cost", "family": "evaluation", "title": "备用要求的边际代价", "description": "备用需求为 29 MW 时，前两档已用满。再买 1 MW 仍由 B3 提供，每小时多花 20 美元。超过 36 MW 才进入下一档。", "tags": "分段边际成本 · 容量台阶 · 备用分配", "extra": false, "featured": true, "source": "engineering", "atlas_highlight": true},
+    {"id": "error-horizon", "family": "evaluation", "title": "多步预测误差与覆盖", "description": "按工况和提前量分别配对，零线以下表示修订后误差更小。高波动工况下，提前 6 小时的误差差值中位数为正，提前 8 小时没有配对样本。", "tags": "多步预测 · 配对绝对误差 · 有效覆盖", "extra": false, "featured": true, "source": "engineering", "atlas_highlight": true},
+    {"id": "response-delay", "family": "distribution", "title": "调节响应时延与超时", "description": "按 22 秒时限，优先确认把超时指令从 26 条降到 3 条，两组各 36 条。执行平均都约 9.5 秒，省下的时间来自更短的确认等待。", "tags": "响应时延 · 超时比例 · 确认等待", "extra": false, "featured": true, "source": "engineering", "atlas_highlight": true}
   ]
 }
