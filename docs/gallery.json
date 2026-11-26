@@ -16,9 +16,9 @@
     {
       "id": "gantt",
       "family": "time",
-      "title": "资源调度甘特与功率分解",
-      "description": "连接各对象的可用窗口、实际分配和分组功率，解释总体变化的来源。",
-      "tags": "时间窗 · 资源分配 · 功率构成",
+      "title": "资源分配与容量余量",
+      "description": "上下两组图共用时间轴。逐车分配累加后得到总功率，容量余量最小的时段用菱形标出。",
+      "tags": "分配窗口 · 电量 · 容量余量",
       "extra": true,
       "featured": true,
       "languages": {
@@ -26,17 +26,17 @@
           "python": {
             "path": "downloads/figures/python/gantt.png",
             "format": "PNG",
-            "bytes": 106627,
-            "sha256": "8fdbc0b1b32de97a4c04b9428fd3130cc7313ebee94cfc43eab095b4675b8d8a",
+            "bytes": 96912,
+            "sha256": "5eae185cb0feb0a76c15f09391d326595fdf68b61bc42cbb0f9b6213b8b206b0",
             "preview": "assets/charts/python-gantt.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/gantt.emf",
             "format": "EMF",
-            "bytes": 91912,
-            "sha256": "6d68c5eb6700c94b2033bc5815bb96790ebceb8874b5eaaca6745c9206739e2b",
+            "bytes": 107120,
+            "sha256": "5bff6baaa243779559bdfd874395f83d0dd76222d22e31efda74700b587fb26d",
             "preview": "assets/charts/matlab-gantt.webp",
-            "records": 2814,
+            "records": 3206,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -51,17 +51,17 @@
           "python": {
             "path": "downloads/figures/python/zh/gantt.png",
             "format": "PNG",
-            "bytes": 104338,
-            "sha256": "50dc378e67dcb9064969620ed60df2995a50070d93eed527c457374f88e51f45",
+            "bytes": 97101,
+            "sha256": "126ce2a34c632b540bdb2eba11f1354aa8920a45d0d1ce217d7a9c36cf621a81",
             "preview": "assets/charts/zh/python-gantt.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/gantt.emf",
             "format": "EMF",
-            "bytes": 96976,
-            "sha256": "cb4076b6a11891434a956163316d6ecfae73c8f7da66dc7319fb2ed7bac77bac",
+            "bytes": 114224,
+            "sha256": "2f09debb3e18ab81c8abf8de4fc6c2255698fbc5445ce75e062181bae162d886",
             "preview": "assets/charts/zh/matlab-gantt.webp",
-            "records": 2864,
+            "records": 3279,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -81,17 +81,17 @@
         "python": {
           "path": "downloads/figures/python/gantt.png",
           "format": "PNG",
-          "bytes": 106627,
-          "sha256": "8fdbc0b1b32de97a4c04b9428fd3130cc7313ebee94cfc43eab095b4675b8d8a",
+          "bytes": 96912,
+          "sha256": "5eae185cb0feb0a76c15f09391d326595fdf68b61bc42cbb0f9b6213b8b206b0",
           "preview": "assets/charts/python-gantt.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/gantt.emf",
           "format": "EMF",
-          "bytes": 91912,
-          "sha256": "6d68c5eb6700c94b2033bc5815bb96790ebceb8874b5eaaca6745c9206739e2b",
+          "bytes": 107120,
+          "sha256": "5bff6baaa243779559bdfd874395f83d0dd76222d22e31efda74700b587fb26d",
           "preview": "assets/charts/matlab-gantt.webp",
-          "records": 2814,
+          "records": 3206,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -106,9 +106,9 @@
     {
       "id": "sankey",
       "family": "relation",
-      "title": "多阶段桑基流图",
-      "description": "用相连的流带展开多阶段分配，保持各阶段的总量对应。",
-      "tags": "阶段流向 · 构成 · 总量对应",
+      "title": "多阶段分配与流量平衡",
+      "description": "沿带宽追踪三级分配。从各节点读取流量，再核对每一级的总量。",
+      "tags": "阶段分配 · 节点总量 · 流量守恒",
       "extra": true,
       "featured": true,
       "languages": {
@@ -116,17 +116,17 @@
           "python": {
             "path": "downloads/figures/python/sankey.png",
             "format": "PNG",
-            "bytes": 262274,
-            "sha256": "5884f0343e323a01c21194ed30966ee73df5692b607e61fb063c19631d147ee6",
+            "bytes": 252386,
+            "sha256": "9cb5a05307ac2b5f7951a70ae0be561186fdd6a22b5c9bc2469bccd13ca6ebb2",
             "preview": "assets/charts/python-sankey.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/sankey.emf",
             "format": "EMF",
-            "bytes": 80320,
-            "sha256": "aa0db4e4ebb67d3d999fb06672ca136c7fe27e0421b2de0f4a18572d40316f67",
+            "bytes": 84312,
+            "sha256": "6049c492dca537ae0cecfe1d85cebbe41241f05e9c452f2bcf859fa09c6f32ae",
             "preview": "assets/charts/matlab-sankey.webp",
-            "records": 993,
+            "records": 1055,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -141,17 +141,17 @@
           "python": {
             "path": "downloads/figures/python/zh/sankey.png",
             "format": "PNG",
-            "bytes": 258830,
-            "sha256": "b6486f152cc837c22a7001fbd833f824a97eb431f531d5698dce8572a95f6e0f",
+            "bytes": 248696,
+            "sha256": "cac21c03f02aaa211e14f50e4d1b3cd7983bc1a1a8080d87e8918e029c49de00",
             "preview": "assets/charts/zh/python-sankey.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/sankey.emf",
             "format": "EMF",
-            "bytes": 81012,
-            "sha256": "4fc01f1e584511ac2827423928a593fa2b64d4b2a7f4d5358819334e896ee4e2",
+            "bytes": 85676,
+            "sha256": "f9db9f0a60b9c3eb4c96037b235d4555ac25a71e0a77219865b29a3dd70744a5",
             "preview": "assets/charts/zh/matlab-sankey.webp",
-            "records": 996,
+            "records": 1067,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -171,17 +171,17 @@
         "python": {
           "path": "downloads/figures/python/sankey.png",
           "format": "PNG",
-          "bytes": 262274,
-          "sha256": "5884f0343e323a01c21194ed30966ee73df5692b607e61fb063c19631d147ee6",
+          "bytes": 252386,
+          "sha256": "9cb5a05307ac2b5f7951a70ae0be561186fdd6a22b5c9bc2469bccd13ca6ebb2",
           "preview": "assets/charts/python-sankey.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/sankey.emf",
           "format": "EMF",
-          "bytes": 80320,
-          "sha256": "aa0db4e4ebb67d3d999fb06672ca136c7fe27e0421b2de0f4a18572d40316f67",
+          "bytes": 84312,
+          "sha256": "6049c492dca537ae0cecfe1d85cebbe41241f05e9c452f2bcf859fa09c6f32ae",
           "preview": "assets/charts/matlab-sankey.webp",
-          "records": 993,
+          "records": 1055,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -197,7 +197,7 @@
       "id": "raincloud",
       "family": "distribution",
       "title": "雨云分布与区间比较",
-      "description": "把密度、观测分布、四分位区间和尾部范围放在同一比较中。",
+      "description": "在同一行查看原始观测及其密度。箱体覆盖中间一半样本，须线标出第 10 和第 90 百分位。",
       "tags": "分布形态 · 原始点 · 区间统计",
       "extra": true,
       "featured": true,
@@ -206,17 +206,17 @@
           "python": {
             "path": "downloads/figures/python/raincloud.png",
             "format": "PNG",
-            "bytes": 80343,
-            "sha256": "baf4f0130b9503719f0d63507798033d009fdaaabecf73b984c380100f44c8a3",
+            "bytes": 132330,
+            "sha256": "50a607d950294e53a6f21ce1f897340e21516c30db5a17f3a173868e24ae58ff",
             "preview": "assets/charts/python-raincloud.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/raincloud.emf",
             "format": "EMF",
-            "bytes": 677264,
-            "sha256": "6a3f94768ea8fcfbc2976d7183c222983c9b16f1cf16d0474d968f037bb4db44",
+            "bytes": 689308,
+            "sha256": "082d877d9eb0c9288f22d448256f63613f1350bee3112a736397359bb75c549f",
             "preview": "assets/charts/matlab-raincloud.webp",
-            "records": 22563,
+            "records": 22613,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -231,17 +231,17 @@
           "python": {
             "path": "downloads/figures/python/zh/raincloud.png",
             "format": "PNG",
-            "bytes": 77802,
-            "sha256": "8fce8eb2e8dd26c2d043b9638dc9a3cad8a7148645824f2cc4c1e6441d64f9f7",
+            "bytes": 132105,
+            "sha256": "4235ef8b13c19ac4412953e02fb46d02e88aa7c9ef6e334ebb01105d4a1af843",
             "preview": "assets/charts/zh/python-raincloud.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/raincloud.emf",
             "format": "EMF",
-            "bytes": 677892,
-            "sha256": "02841514faa58f8dede5a98b03a43f261e41911b1014c6201a85f795e1e5a412",
+            "bytes": 692028,
+            "sha256": "955ee756f4a2013678b4d43a51832399a58991d72cb33f2ba3c53b059ca08cbb",
             "preview": "assets/charts/zh/matlab-raincloud.webp",
-            "records": 22572,
+            "records": 22659,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -261,17 +261,17 @@
         "python": {
           "path": "downloads/figures/python/raincloud.png",
           "format": "PNG",
-          "bytes": 80343,
-          "sha256": "baf4f0130b9503719f0d63507798033d009fdaaabecf73b984c380100f44c8a3",
+          "bytes": 132330,
+          "sha256": "50a607d950294e53a6f21ce1f897340e21516c30db5a17f3a173868e24ae58ff",
           "preview": "assets/charts/python-raincloud.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/raincloud.emf",
           "format": "EMF",
-          "bytes": 677264,
-          "sha256": "6a3f94768ea8fcfbc2976d7183c222983c9b16f1cf16d0474d968f037bb4db44",
+          "bytes": 689308,
+          "sha256": "082d877d9eb0c9288f22d448256f63613f1350bee3112a736397359bb75c549f",
           "preview": "assets/charts/matlab-raincloud.webp",
-          "records": 22563,
+          "records": 22613,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -287,7 +287,7 @@
       "id": "parallel",
       "family": "relation",
       "title": "多指标平行坐标",
-      "description": "在统一尺度下连接多项指标，呈现不同方案的结构和组内分布。",
+      "description": "每条线代表一个方案。相邻轴上的线束出现交叉时，可以比较方案在两项指标上的排序变化。",
       "tags": "多指标 · 方案群组 · 分布包络",
       "extra": true,
       "featured": true,
@@ -296,17 +296,17 @@
           "python": {
             "path": "downloads/figures/python/parallel.png",
             "format": "PNG",
-            "bytes": 925280,
-            "sha256": "b904b0a3d5875d8d5a58ffac8435f526f05859906ff93b65377ecacb1ca0502c",
+            "bytes": 956550,
+            "sha256": "98e3a7d64666907642cba5bd2e1fa0d59f1ae5e8c35d0a63b9c3d6534167af4b",
             "preview": "assets/charts/python-parallel.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/parallel.emf",
             "format": "EMF",
-            "bytes": 39716,
-            "sha256": "4209d5774a876ec92992eaed9b3626a92595312cf1539789a88da2a4ea22f7db",
+            "bytes": 76004,
+            "sha256": "99bd2ce4c5becf7277c199735685a2632ad966b99ffb38626b023dc86fc4504a",
             "preview": "assets/charts/matlab-parallel.webp",
-            "records": 1019,
+            "records": 2547,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -321,17 +321,17 @@
           "python": {
             "path": "downloads/figures/python/zh/parallel.png",
             "format": "PNG",
-            "bytes": 924938,
-            "sha256": "8aa9635e94136928515ffc564d8a8a7e87dc3e235bb03ebe9103ae80ade19215",
+            "bytes": 955342,
+            "sha256": "fb58f89c8f2082bef40e392076b32480699ddf35d94a033328e9ebbcaa60872a",
             "preview": "assets/charts/zh/python-parallel.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/parallel.emf",
             "format": "EMF",
-            "bytes": 49204,
-            "sha256": "a45db9b7a280e1c245edd2e2ec1811d4a3cfe859a040c7acb6b109d09d1ab7eb",
+            "bytes": 85492,
+            "sha256": "b076d5270363aec49b2789119d3fe23bc7019bb849d8939a818d86ac19a8b3ec",
             "preview": "assets/charts/zh/matlab-parallel.webp",
-            "records": 1106,
+            "records": 2634,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -351,17 +351,17 @@
         "python": {
           "path": "downloads/figures/python/parallel.png",
           "format": "PNG",
-          "bytes": 925280,
-          "sha256": "b904b0a3d5875d8d5a58ffac8435f526f05859906ff93b65377ecacb1ca0502c",
+          "bytes": 956550,
+          "sha256": "98e3a7d64666907642cba5bd2e1fa0d59f1ae5e8c35d0a63b9c3d6534167af4b",
           "preview": "assets/charts/python-parallel.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/parallel.emf",
           "format": "EMF",
-          "bytes": 39716,
-          "sha256": "4209d5774a876ec92992eaed9b3626a92595312cf1539789a88da2a4ea22f7db",
+          "bytes": 76004,
+          "sha256": "99bd2ce4c5becf7277c199735685a2632ad966b99ffb38626b023dc86fc4504a",
           "preview": "assets/charts/matlab-parallel.webp",
-          "records": 1019,
+          "records": 2547,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -376,9 +376,9 @@
     {
       "id": "spatial",
       "family": "space",
-      "title": "空间场与节点网络",
-      "description": "把连续空间分布与节点连接放在同一坐标系中，观察局部强度与网络结构。",
-      "tags": "空间分布 · 节点 · 网络叠加",
+      "title": "空间场、节点采样与连接",
+      "description": "在左图定位网络节点。右图按采样场强排序，可查各节点落在场强分布的哪一端。",
+      "tags": "空间场 · 节点采样 · 网络连接",
       "extra": false,
       "featured": true,
       "languages": {
@@ -386,17 +386,17 @@
           "python": {
             "path": "downloads/figures/python/spatial.png",
             "format": "PNG",
-            "bytes": 337613,
-            "sha256": "bf1db23c67c4326a08e57aee7dfc7f42b3ab01a99360b4adb25f832ea969040b",
+            "bytes": 345419,
+            "sha256": "2dfd0f85931da1b0c8205807827aca64bafabccaaf20d59dbdb6fc75c029e3be",
             "preview": "assets/charts/python-spatial.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/spatial.emf",
             "format": "EMF",
-            "bytes": 181688,
-            "sha256": "b0cb72a107e43fcc5b54a1084d523a77ca692c7525ea20c3a080a65a82110d99",
+            "bytes": 201504,
+            "sha256": "89c0b035d3336d0cbd71e6361ba9eb15c077c9ee15eb61f1245b904a6c2fb7c4",
             "preview": "assets/charts/matlab-spatial.webp",
-            "records": 5393,
+            "records": 5825,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -411,17 +411,17 @@
           "python": {
             "path": "downloads/figures/python/zh/spatial.png",
             "format": "PNG",
-            "bytes": 333120,
-            "sha256": "d7b52b7dc82558f31fcf00fd0b158bcd54b17c2ccfc7bed7606be23eaea2fae7",
+            "bytes": 342015,
+            "sha256": "64806fe13f2f8010d3b86ddb18611920992338aab75e5f227d098d1369418aef",
             "preview": "assets/charts/zh/python-spatial.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/spatial.emf",
             "format": "EMF",
-            "bytes": 181400,
-            "sha256": "2741933419faf5a30db14afe995c32dc424a330201a194ae793659cff12b9333",
+            "bytes": 201372,
+            "sha256": "45002df0744484f2458deb5535b39f00c2f8e653fc944f50078f9e558d4ebe35",
             "preview": "assets/charts/zh/matlab-spatial.webp",
-            "records": 5389,
+            "records": 5822,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -441,17 +441,17 @@
         "python": {
           "path": "downloads/figures/python/spatial.png",
           "format": "PNG",
-          "bytes": 337613,
-          "sha256": "bf1db23c67c4326a08e57aee7dfc7f42b3ab01a99360b4adb25f832ea969040b",
+          "bytes": 345419,
+          "sha256": "2dfd0f85931da1b0c8205807827aca64bafabccaaf20d59dbdb6fc75c029e3be",
           "preview": "assets/charts/python-spatial.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/spatial.emf",
           "format": "EMF",
-          "bytes": 181688,
-          "sha256": "b0cb72a107e43fcc5b54a1084d523a77ca692c7525ea20c3a080a65a82110d99",
+          "bytes": 201504,
+          "sha256": "89c0b035d3336d0cbd71e6361ba9eb15c077c9ee15eb61f1245b904a6c2fb7c4",
           "preview": "assets/charts/matlab-spatial.webp",
-          "records": 5393,
+          "records": 5825,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -466,9 +466,9 @@
     {
       "id": "feasibility",
       "family": "space",
-      "title": "可行域与状态投影",
-      "description": "同时呈现约束边界、状态投影路径与位移，说明状态如何进入可行区域。",
-      "tags": "等值线 · 可行边界 · 投影路径",
+      "title": "可行域投影与紧约束",
+      "description": "箭头把原状态连到最近可行点。右侧列出移动距离，并标明投影碰到哪条边界。",
+      "tags": "可行域 · 欧氏投影 · 紧约束",
       "extra": false,
       "featured": true,
       "languages": {
@@ -476,17 +476,17 @@
           "python": {
             "path": "downloads/figures/python/feasibility.png",
             "format": "PNG",
-            "bytes": 254393,
-            "sha256": "f85822357191ce31a78cf58fa8637da36146400ff2acb5237e4f84e5bcdde08a",
+            "bytes": 177861,
+            "sha256": "e10eeec163fef7e6620bb7c8f7766aa0ed61fd91ee7fee19543098cf846708aa",
             "preview": "assets/charts/python-feasibility.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/feasibility.emf",
             "format": "EMF",
-            "bytes": 106504,
-            "sha256": "6d169c9ef39718fd2b0945119433054d6e4cb70d34d66146ce02ad12c15a0ba4",
+            "bytes": 87896,
+            "sha256": "cdf12c7fa714e6166610596dd690ba0c8a6ef43ddbf401f5afaa78e55eaec6da",
             "preview": "assets/charts/matlab-feasibility.webp",
-            "records": 1850,
+            "records": 1751,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -501,17 +501,17 @@
           "python": {
             "path": "downloads/figures/python/zh/feasibility.png",
             "format": "PNG",
-            "bytes": 250643,
-            "sha256": "4a588aed2d6aed3c0665b9388129d6bc4091c0cb40e18945378f54159caecb23",
+            "bytes": 177551,
+            "sha256": "4dc327c30c25d80d9533cf1556a251c0cadb9a08b78a0e3618287297e408609e",
             "preview": "assets/charts/zh/python-feasibility.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/feasibility.emf",
             "format": "EMF",
-            "bytes": 107156,
-            "sha256": "2f1bac17537ce77d88a549d5368aff24cd0b9815a261e46889487bd314f89f83",
+            "bytes": 91808,
+            "sha256": "f744284db681df196699b3a8d9adf0eef3b0bbec09b4e6eb1b676feaed2cfefe",
             "preview": "assets/charts/zh/matlab-feasibility.webp",
-            "records": 1860,
+            "records": 1793,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -531,17 +531,17 @@
         "python": {
           "path": "downloads/figures/python/feasibility.png",
           "format": "PNG",
-          "bytes": 254393,
-          "sha256": "f85822357191ce31a78cf58fa8637da36146400ff2acb5237e4f84e5bcdde08a",
+          "bytes": 177861,
+          "sha256": "e10eeec163fef7e6620bb7c8f7766aa0ed61fd91ee7fee19543098cf846708aa",
           "preview": "assets/charts/python-feasibility.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/feasibility.emf",
           "format": "EMF",
-          "bytes": 106504,
-          "sha256": "6d169c9ef39718fd2b0945119433054d6e4cb70d34d66146ce02ad12c15a0ba4",
+          "bytes": 87896,
+          "sha256": "cdf12c7fa714e6166610596dd690ba0c8a6ef43ddbf401f5afaa78e55eaec6da",
           "preview": "assets/charts/matlab-feasibility.webp",
-          "records": 1850,
+          "records": 1751,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -556,9 +556,9 @@
     {
       "id": "trajectory",
       "family": "time",
-      "title": "轨迹包络与约束诊断",
-      "description": "轨迹与分布包络对应上界，再用同一时间轴展开约束余量。",
-      "tags": "时序包络 · 边界 · 余量",
+      "title": "轨迹包络与约束余量",
+      "description": "沿时间轴对齐均值和第 90 百分位。两条余量曲线显示高位工况离上限还有多少距离。",
+      "tags": "时序包络 · 上限边界 · 分位余量",
       "extra": false,
       "featured": false,
       "languages": {
@@ -566,17 +566,17 @@
           "python": {
             "path": "downloads/figures/python/trajectory.png",
             "format": "PNG",
-            "bytes": 160750,
-            "sha256": "28743b945cf9e33e0953888a8c696af686d95d672811d452fcecaea5aded46d3",
+            "bytes": 187168,
+            "sha256": "536454bda1bdbd412e437c1df2260a5f84d41343d19e6c4f5c324c00d4d50f30",
             "preview": "assets/charts/python-trajectory.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/trajectory.emf",
             "format": "EMF",
-            "bytes": 53820,
-            "sha256": "1b75e5e05f1a06a0f4ebf3710e5074d1af640f3e122bd92f12a783daa12aa7c4",
+            "bytes": 72908,
+            "sha256": "f50c2ba1089fa6c0e511cd96cf03e0a8d2a543b523d337800490ce8223a188e7",
             "preview": "assets/charts/matlab-trajectory.webp",
-            "records": 935,
+            "records": 1420,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -591,17 +591,17 @@
           "python": {
             "path": "downloads/figures/python/zh/trajectory.png",
             "format": "PNG",
-            "bytes": 160370,
-            "sha256": "d27e8732d15089305cb6de5973050aa19fce61ab7e663db368d17767788c162b",
+            "bytes": 186819,
+            "sha256": "1ba1eb859e90d0042d78fd62c2e9bbcdb78844faabc395019ba71766e28d2489",
             "preview": "assets/charts/zh/python-trajectory.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/trajectory.emf",
             "format": "EMF",
-            "bytes": 55868,
-            "sha256": "c2c00de945878ff23fe5167dfc89ba99bd38d48184436c5a6e69c90ae3de72a9",
+            "bytes": 76100,
+            "sha256": "7895014630b818cdc07e92acfe397bc549d8e11d93655d62ffa90d63778947c0",
             "preview": "assets/charts/zh/matlab-trajectory.webp",
-            "records": 969,
+            "records": 1465,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -621,17 +621,17 @@
         "python": {
           "path": "downloads/figures/python/trajectory.png",
           "format": "PNG",
-          "bytes": 160750,
-          "sha256": "28743b945cf9e33e0953888a8c696af686d95d672811d452fcecaea5aded46d3",
+          "bytes": 187168,
+          "sha256": "536454bda1bdbd412e437c1df2260a5f84d41343d19e6c4f5c324c00d4d50f30",
           "preview": "assets/charts/python-trajectory.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/trajectory.emf",
           "format": "EMF",
-          "bytes": 53820,
-          "sha256": "1b75e5e05f1a06a0f4ebf3710e5074d1af640f3e122bd92f12a783daa12aa7c4",
+          "bytes": 72908,
+          "sha256": "f50c2ba1089fa6c0e511cd96cf03e0a8d2a543b523d337800490ce8223a188e7",
           "preview": "assets/charts/matlab-trajectory.webp",
-          "records": 935,
+          "records": 1420,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -647,7 +647,7 @@
       "id": "ridges",
       "family": "distribution",
       "title": "条件分布山峦图",
-      "description": "沿条件展开分布形状，用中位数和四分位距呈现位置与离散程度。",
+      "description": "密度峰显示各工况的常见取值。用中位数和四分位区间比较分布的位移。",
       "tags": "密度 · 中位数 · 四分位距",
       "extra": false,
       "featured": false,
@@ -656,17 +656,17 @@
           "python": {
             "path": "downloads/figures/python/ridges.png",
             "format": "PNG",
-            "bytes": 148172,
-            "sha256": "46d89a3a3934559d59a4b840f769ac5455a63592e392fc3df769cb80443feec6",
+            "bytes": 143868,
+            "sha256": "8288fc457f9ae17c0327939518525e3c03bf0237219b81b1b239c13e22f638cb",
             "preview": "assets/charts/python-ridges.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/ridges.emf",
             "format": "EMF",
-            "bytes": 100556,
-            "sha256": "2bb5d675dac3ae967134d7ac7770d5e29c39f2c123ccabf350cffcdc6f0e443b",
+            "bytes": 98348,
+            "sha256": "0d074902e8cb3ab6f74a467d9a9c7c29307faee2b12eb58fd6683dd8e49191ad",
             "preview": "assets/charts/matlab-ridges.webp",
-            "records": 899,
+            "records": 814,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -681,17 +681,17 @@
           "python": {
             "path": "downloads/figures/python/zh/ridges.png",
             "format": "PNG",
-            "bytes": 145702,
-            "sha256": "80b8f6c2852a1e0fcd4765c4a2de7fa371e4d2242d85e7ebef53079eff0bcac1",
+            "bytes": 141303,
+            "sha256": "d675aa67e3f1d2f1c350976a0176a95bb039046495abd737a5d935032c0fef21",
             "preview": "assets/charts/zh/python-ridges.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/ridges.emf",
             "format": "EMF",
-            "bytes": 102120,
-            "sha256": "c44683d118c9e00de6210525618ecd338eb650b05d03b44cc43b93aa1035e80e",
+            "bytes": 99912,
+            "sha256": "4bb6178d30c657c4a164b28bcc42460af61fc406480147266cb2f902fb77b933",
             "preview": "assets/charts/zh/matlab-ridges.webp",
-            "records": 912,
+            "records": 827,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -711,17 +711,17 @@
         "python": {
           "path": "downloads/figures/python/ridges.png",
           "format": "PNG",
-          "bytes": 148172,
-          "sha256": "46d89a3a3934559d59a4b840f769ac5455a63592e392fc3df769cb80443feec6",
+          "bytes": 143868,
+          "sha256": "8288fc457f9ae17c0327939518525e3c03bf0237219b81b1b239c13e22f638cb",
           "preview": "assets/charts/python-ridges.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/ridges.emf",
           "format": "EMF",
-          "bytes": 100556,
-          "sha256": "2bb5d675dac3ae967134d7ac7770d5e29c39f2c123ccabf350cffcdc6f0e443b",
+          "bytes": 98348,
+          "sha256": "0d074902e8cb3ab6f74a467d9a9c7c29307faee2b12eb58fd6683dd8e49191ad",
           "preview": "assets/charts/matlab-ridges.webp",
-          "records": 899,
+          "records": 814,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -736,9 +736,9 @@
     {
       "id": "chord",
       "family": "relation",
-      "title": "弦带与关系矩阵",
-      "description": "弦带宽度与矩阵权重对应，连接整体网络结构和具体的成对关系。",
-      "tags": "弦带 · 联系强度 · 成对关系",
+      "title": "成对关系弦图与权重矩阵",
+      "description": "弦带宽度来自右侧矩阵。带框单元格标出最大权重，可据此查回对应的一对节点。",
+      "tags": "关系网络 · 权重矩阵 · 最大成对权重",
       "extra": false,
       "featured": false,
       "languages": {
@@ -746,17 +746,17 @@
           "python": {
             "path": "downloads/figures/python/chord.png",
             "format": "PNG",
-            "bytes": 250157,
-            "sha256": "5ef21ac3763211713baf464abe3141add35f0601433ba4adba7eb8767d3da166",
+            "bytes": 246251,
+            "sha256": "c74dd6f829ce048d9f407d9cea723091b4a693f89273d3db2b78fbce54411e2f",
             "preview": "assets/charts/python-chord.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/chord.emf",
             "format": "EMF",
-            "bytes": 147252,
-            "sha256": "c6f4853ab6d0caa87433f0cbe1f68655f4ad7b61c8d36e35e0600300682df3f1",
+            "bytes": 148260,
+            "sha256": "40068674b493ddb6b75ff6b90531c8d7f6e48aae7bb59442d8b70251ee49ae11",
             "preview": "assets/charts/matlab-chord.webp",
-            "records": 1897,
+            "records": 1953,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -771,17 +771,17 @@
           "python": {
             "path": "downloads/figures/python/zh/chord.png",
             "format": "PNG",
-            "bytes": 249324,
-            "sha256": "c487c17f2fe4eca2195aac95b3a028e524904a6d458ea6cb9b995bd7426f565e",
+            "bytes": 246298,
+            "sha256": "011f4796750d8255982e48ce183c88a467385ece291a983b134290bf590dad01",
             "preview": "assets/charts/zh/python-chord.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/chord.emf",
             "format": "EMF",
-            "bytes": 146904,
-            "sha256": "66d471e13e724a67af68cbbe44d345aae16152545310f3f84ffe7632456bce2e",
+            "bytes": 147968,
+            "sha256": "4ad05bc8a915737a1a04c3596f5cb98ad534b75e0a6db9d53cd06b2898d83c9a",
             "preview": "assets/charts/zh/matlab-chord.webp",
-            "records": 1897,
+            "records": 1953,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -801,17 +801,17 @@
         "python": {
           "path": "downloads/figures/python/chord.png",
           "format": "PNG",
-          "bytes": 250157,
-          "sha256": "5ef21ac3763211713baf464abe3141add35f0601433ba4adba7eb8767d3da166",
+          "bytes": 246251,
+          "sha256": "c74dd6f829ce048d9f407d9cea723091b4a693f89273d3db2b78fbce54411e2f",
           "preview": "assets/charts/python-chord.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/chord.emf",
           "format": "EMF",
-          "bytes": 147252,
-          "sha256": "c6f4853ab6d0caa87433f0cbe1f68655f4ad7b61c8d36e35e0600300682df3f1",
+          "bytes": 148260,
+          "sha256": "40068674b493ddb6b75ff6b90531c8d7f6e48aae7bb59442d8b70251ee49ae11",
           "preview": "assets/charts/matlab-chord.webp",
-          "records": 1897,
+          "records": 1953,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -827,7 +827,7 @@
       "id": "cluster",
       "family": "relation",
       "title": "聚类关系矩阵",
-      "description": "统一聚类树与矩阵的对象顺序，呈现关系分组、方向与强度。",
+      "description": "聚类树和矩阵按相同顺序排列变量。沿色块读出组内相关系数，再查看组间相关的正负。",
       "tags": "层级聚类 · 相关系数 · 同序排列",
       "extra": false,
       "featured": false,
@@ -836,15 +836,15 @@
           "python": {
             "path": "downloads/figures/python/cluster.png",
             "format": "PNG",
-            "bytes": 117638,
-            "sha256": "ddf76d9af56ac982170079a9a4fc80a1e16b2f82d8eed9ef41df8adf74aa5bb3",
+            "bytes": 124967,
+            "sha256": "a1147600c7b173f34e6485137f6a17c272af3a0b95b424f23b0770b38eed4ac0",
             "preview": "assets/charts/python-cluster.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/cluster.emf",
             "format": "EMF",
-            "bytes": 112988,
-            "sha256": "d15c6a05763fa2c599941ee4617a8681ce824a90ac7fb39da92cf6e9ac8aab38",
+            "bytes": 113084,
+            "sha256": "2f9445b3815837fabd02902aad34835cbc652fa69a017e7069b8d1debea82348",
             "preview": "assets/charts/matlab-cluster.webp",
             "records": 3360,
             "embeddedRasterRecords": 0,
@@ -861,15 +861,15 @@
           "python": {
             "path": "downloads/figures/python/zh/cluster.png",
             "format": "PNG",
-            "bytes": 120170,
-            "sha256": "fde698d76b7bd07f09508477b7d3f8e2b034589eac3a5c8e57cd773db202ff12",
+            "bytes": 127331,
+            "sha256": "2875feb0c0ebe9c56fe04934ca5f7ef5955778d3c2d93cc020909a38609a6efa",
             "preview": "assets/charts/zh/python-cluster.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/cluster.emf",
             "format": "EMF",
-            "bytes": 112204,
-            "sha256": "eadf7bd622d1ce8b5580d5142b3a3489487266b973db10abac710a724493c53d",
+            "bytes": 112300,
+            "sha256": "4fc67246c01e98b33f5efb284012aaab3eccddf79fa8e43b00e3631a4d0308f4",
             "preview": "assets/charts/zh/matlab-cluster.webp",
             "records": 3349,
             "embeddedRasterRecords": 0,
@@ -891,15 +891,15 @@
         "python": {
           "path": "downloads/figures/python/cluster.png",
           "format": "PNG",
-          "bytes": 117638,
-          "sha256": "ddf76d9af56ac982170079a9a4fc80a1e16b2f82d8eed9ef41df8adf74aa5bb3",
+          "bytes": 124967,
+          "sha256": "a1147600c7b173f34e6485137f6a17c272af3a0b95b424f23b0770b38eed4ac0",
           "preview": "assets/charts/python-cluster.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/cluster.emf",
           "format": "EMF",
-          "bytes": 112988,
-          "sha256": "d15c6a05763fa2c599941ee4617a8681ce824a90ac7fb39da92cf6e9ac8aab38",
+          "bytes": 113084,
+          "sha256": "2f9445b3815837fabd02902aad34835cbc652fa69a017e7069b8d1debea82348",
           "preview": "assets/charts/matlab-cluster.webp",
           "records": 3360,
           "embeddedRasterRecords": 0,
@@ -916,9 +916,9 @@
     {
       "id": "polar",
       "family": "time",
-      "title": "环形时序分布",
-      "description": "沿环形时间轴比较周期变化，由内向外对应四种条件。",
-      "tags": "周期结构 · 条件分层 · 环形图谱",
+      "title": "周期响应与工况间极差",
+      "description": "四圈共用小时刻度。环形色带显示各工况的响应，右侧极差曲线定位工况分化最大的小时。",
+      "tags": "周期响应 · 环带索引 · 工况极差",
       "extra": true,
       "featured": false,
       "languages": {
@@ -926,17 +926,17 @@
           "python": {
             "path": "downloads/figures/python/polar.png",
             "format": "PNG",
-            "bytes": 228840,
-            "sha256": "87ed2b4cb9cf45e7c869d834d15b4c56a77ebaa811f27a2e197f316742f8abcd",
+            "bytes": 256929,
+            "sha256": "d53c02a44c28ad89ce97187ea44365cdfe403c6f29366b00d4da71986de9edee",
             "preview": "assets/charts/python-polar.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/polar.emf",
             "format": "EMF",
-            "bytes": 158096,
-            "sha256": "5001a504b04a3eaadcfa153cac93a11b9b085e8e578048b5f4b8d1ab75caf23b",
+            "bytes": 175128,
+            "sha256": "c5a1a15e320e1fb6aa9591fa740cd4aee6fa7b74d6c5272b64788ca420cea35c",
             "preview": "assets/charts/matlab-polar.webp",
-            "records": 3450,
+            "records": 3791,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -951,17 +951,17 @@
           "python": {
             "path": "downloads/figures/python/zh/polar.png",
             "format": "PNG",
-            "bytes": 224597,
-            "sha256": "fd92fbf66cec26d104350125c7537f49723ea66186141aedcb5c96764c8346fe",
+            "bytes": 246917,
+            "sha256": "23973e20f81a9c700ae2f849e6b26aeb8d1c1410e50a6384234328d2e17e3f75",
             "preview": "assets/charts/zh/python-polar.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/polar.emf",
             "format": "EMF",
-            "bytes": 158116,
-            "sha256": "5fbd489a7be1d4cffdff9f07483df56c1a9dbc026517aa30ae21e48a0345e7fb",
+            "bytes": 173220,
+            "sha256": "e99c3bb7674c48cbae393c3e52e85c1d8e433e0943e5d10dea83768634914297",
             "preview": "assets/charts/zh/matlab-polar.webp",
-            "records": 3447,
+            "records": 3763,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -981,17 +981,17 @@
         "python": {
           "path": "downloads/figures/python/polar.png",
           "format": "PNG",
-          "bytes": 228840,
-          "sha256": "87ed2b4cb9cf45e7c869d834d15b4c56a77ebaa811f27a2e197f316742f8abcd",
+          "bytes": 256929,
+          "sha256": "d53c02a44c28ad89ce97187ea44365cdfe403c6f29366b00d4da71986de9edee",
           "preview": "assets/charts/python-polar.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/polar.emf",
           "format": "EMF",
-          "bytes": 158096,
-          "sha256": "5001a504b04a3eaadcfa153cac93a11b9b085e8e578048b5f4b8d1ab75caf23b",
+          "bytes": 175128,
+          "sha256": "c5a1a15e320e1fb6aa9591fa740cd4aee6fa7b74d6c5272b64788ca420cea35c",
           "preview": "assets/charts/matlab-polar.webp",
-          "records": 3450,
+          "records": 3791,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -1007,7 +1007,7 @@
       "id": "calibration",
       "family": "evaluation",
       "title": "校准与分辨联合诊断",
-      "description": "结合校准区间、各区间样本量和类别概率分布，分析预测表现。",
+      "description": "用分箱样本量解读校准区间的宽度。侧图显示两类样本的预测概率在哪些区间重叠。",
       "tags": "校准区间 · 样本量 · 概率分布",
       "extra": true,
       "featured": false,
@@ -1016,17 +1016,17 @@
           "python": {
             "path": "downloads/figures/python/calibration.png",
             "format": "PNG",
-            "bytes": 175730,
-            "sha256": "97238c6d33d8235c61b41a8742b76cc8d886e49eef211590f119e854bfa6eaf0",
+            "bytes": 178240,
+            "sha256": "25c85a9a6ac44bec6fb4a6aaffae64ec7e08e7203957369d32527f6d1bcfe184",
             "preview": "assets/charts/python-calibration.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/calibration.emf",
             "format": "EMF",
-            "bytes": 92460,
-            "sha256": "df5e06f3c8b1f9826fa92e802319fee0bb52b06030b52332f3ca4dc33c71ac4a",
+            "bytes": 95112,
+            "sha256": "8e8982e2b13fec11f32f7794afdd8ebf0165790f8a7d6ecb31c6f06794276a19",
             "preview": "assets/charts/matlab-calibration.webp",
-            "records": 2064,
+            "records": 2174,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1041,17 +1041,17 @@
           "python": {
             "path": "downloads/figures/python/zh/calibration.png",
             "format": "PNG",
-            "bytes": 180824,
-            "sha256": "b3c3da03d09b1228e512d8678828f21b848d61ea65a0fcc9027d97b2770de234",
+            "bytes": 182819,
+            "sha256": "cde021c22ee035fc8fc4020301546e025663b401c0f5f6db627a60dabb650dd0",
             "preview": "assets/charts/zh/python-calibration.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/calibration.emf",
             "format": "EMF",
-            "bytes": 95096,
-            "sha256": "9d6dcad0aa53571c4319fe71e82d6329a7476a91f32efd3fbeebfec256612d85",
+            "bytes": 97748,
+            "sha256": "2ed1e04e0f45670f360acea3adf03e5c6a26ab1dcaaf72eb2e73ee203ea8c82e",
             "preview": "assets/charts/zh/matlab-calibration.webp",
-            "records": 2089,
+            "records": 2199,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1071,17 +1071,17 @@
         "python": {
           "path": "downloads/figures/python/calibration.png",
           "format": "PNG",
-          "bytes": 175730,
-          "sha256": "97238c6d33d8235c61b41a8742b76cc8d886e49eef211590f119e854bfa6eaf0",
+          "bytes": 178240,
+          "sha256": "25c85a9a6ac44bec6fb4a6aaffae64ec7e08e7203957369d32527f6d1bcfe184",
           "preview": "assets/charts/python-calibration.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/calibration.emf",
           "format": "EMF",
-          "bytes": 92460,
-          "sha256": "df5e06f3c8b1f9826fa92e802319fee0bb52b06030b52332f3ca4dc33c71ac4a",
+          "bytes": 95112,
+          "sha256": "8e8982e2b13fec11f32f7794afdd8ebf0165790f8a7d6ecb31c6f06794276a19",
           "preview": "assets/charts/matlab-calibration.webp",
-          "records": 2064,
+          "records": 2174,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -1096,9 +1096,9 @@
     {
       "id": "spectrum",
       "family": "time",
-      "title": "时频结构与频带能量",
-      "description": "对齐原始信号、时频结构和频带能量，展开频率随时间的变化。",
-      "tags": "信号 · 时频分布 · 频带能量",
+      "title": "信号、时频结构与频率功率",
+      "description": "时频图标出频率分量出现的时段。右图汇总各窗口的功率，可比较各频率的总功率贡献。",
+      "tags": "时频结构 · 频率 · STFT功率",
       "extra": true,
       "featured": false,
       "languages": {
@@ -1106,17 +1106,17 @@
           "python": {
             "path": "downloads/figures/python/spectrum.png",
             "format": "PNG",
-            "bytes": 189096,
-            "sha256": "82f57d585c66cec912c6037463daeb1662b088449233e247c22b0969c9ded39b",
+            "bytes": 185988,
+            "sha256": "0ab8515da1c2959db38de4a62b407bc9be97d290dffda43ec950a25f0b1b7f0b",
             "preview": "assets/charts/python-spectrum.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/spectrum.emf",
             "format": "EMF",
-            "bytes": 351108,
-            "sha256": "e6a02b94ca47e08156ddafee07a44bf5a791546c2ae81303423cef63fbd0d009",
+            "bytes": 351840,
+            "sha256": "4b6a55c82207f11eba102a32d7f0097e57b594ee1c1b0aee3c2ee91807e312bb",
             "preview": "assets/charts/matlab-spectrum.webp",
-            "records": 11456,
+            "records": 11414,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1131,17 +1131,17 @@
           "python": {
             "path": "downloads/figures/python/zh/spectrum.png",
             "format": "PNG",
-            "bytes": 186425,
-            "sha256": "329e64cbcd138a1aedff030371a104a8b8a55392f20be81a45d9c77da31bf619",
+            "bytes": 183367,
+            "sha256": "a395dae5d606cd07652812e04b6aa8cf2ddb2f60f74dbe4df488fdf35a096499",
             "preview": "assets/charts/zh/python-spectrum.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/spectrum.emf",
             "format": "EMF",
-            "bytes": 352856,
-            "sha256": "55f320af200d45aee529b74d035aaaa67a687018aec8172e4e614107e7926784",
+            "bytes": 354328,
+            "sha256": "95ba659b74a6f60a02f44a3b1e741c0264bcf53d3be79d6e8a7a8d00dd698a50",
             "preview": "assets/charts/zh/matlab-spectrum.webp",
-            "records": 11474,
+            "records": 11441,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1161,17 +1161,17 @@
         "python": {
           "path": "downloads/figures/python/spectrum.png",
           "format": "PNG",
-          "bytes": 189096,
-          "sha256": "82f57d585c66cec912c6037463daeb1662b088449233e247c22b0969c9ded39b",
+          "bytes": 185988,
+          "sha256": "0ab8515da1c2959db38de4a62b407bc9be97d290dffda43ec950a25f0b1b7f0b",
           "preview": "assets/charts/python-spectrum.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/spectrum.emf",
           "format": "EMF",
-          "bytes": 351108,
-          "sha256": "e6a02b94ca47e08156ddafee07a44bf5a791546c2ae81303423cef63fbd0d009",
+          "bytes": 351840,
+          "sha256": "4b6a55c82207f11eba102a32d7f0097e57b594ee1c1b0aee3c2ee91807e312bb",
           "preview": "assets/charts/matlab-spectrum.webp",
-          "records": 11456,
+          "records": 11414,
           "embeddedRasterRecords": 0,
           "fonts": [
             {
@@ -1186,9 +1186,9 @@
     {
       "id": "forest",
       "family": "evaluation",
-      "title": "配对差异与效应量森林",
-      "description": "在相同条件下展示配对差异分布、均值和区间，比较条件间的变化。",
-      "tags": "配对差异 · 条件分布 · 区间估计",
+      "title": "配对差分布与效应区间",
+      "description": "左侧是逐工况的配对差分布。右侧用零线判断同一工况的均值区间是否跨过零。",
+      "tags": "配对差 · 工况分布 · 自助法区间",
       "extra": true,
       "featured": false,
       "languages": {
@@ -1196,17 +1196,17 @@
           "python": {
             "path": "downloads/figures/python/forest.png",
             "format": "PNG",
-            "bytes": 95884,
-            "sha256": "de646e771efcbd1de9c91390d2241dbec596e52d7cf1a5249125eab795fb1287",
+            "bytes": 102373,
+            "sha256": "44da1406510f46ce440c93cc53d070c8049b8798609efd28a3bf1b8f217268d6",
             "preview": "assets/charts/python-forest.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/forest.emf",
             "format": "EMF",
-            "bytes": 159116,
-            "sha256": "3cb6fdd35464e6747e1308bc8b4b10257879cc8a16fdb6af0fdb84af6f8360e2",
+            "bytes": 174872,
+            "sha256": "3c8ac4ec97a356bcdbd1e85b8143976f2d0970ec5b2623f5d5089e70e5d340d3",
             "preview": "assets/charts/matlab-forest.webp",
-            "records": 1593,
+            "records": 2129,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1221,17 +1221,17 @@
           "python": {
             "path": "downloads/figures/python/zh/forest.png",
             "format": "PNG",
-            "bytes": 94598,
-            "sha256": "2f183317fb16322e4f1cfd1afd188c676f27ebcef70e2f10aca9e419f418feaa",
+            "bytes": 101643,
+            "sha256": "2cd6c8b2c9afaa44f296d1009d88498ab07fad96f7073457c0abd9f9dae7f841",
             "preview": "assets/charts/zh/python-forest.webp"
           },
           "matlab": {
             "path": "downloads/figures/matlab/zh/forest.emf",
             "format": "EMF",
-            "bytes": 160844,
-            "sha256": "338c403887fde858d6be6a495ea677f99e508e2214d92651a95d50abf78d3225",
+            "bytes": 177308,
+            "sha256": "780d94e30793b6a0b4d5f204ec279d1bb4bca0f72fdcccef8c7c73ca5a75f6e4",
             "preview": "assets/charts/zh/matlab-forest.webp",
-            "records": 1613,
+            "records": 2158,
             "embeddedRasterRecords": 0,
             "fonts": [
               {
@@ -1251,17 +1251,17 @@
         "python": {
           "path": "downloads/figures/python/forest.png",
           "format": "PNG",
-          "bytes": 95884,
-          "sha256": "de646e771efcbd1de9c91390d2241dbec596e52d7cf1a5249125eab795fb1287",
+          "bytes": 102373,
+          "sha256": "44da1406510f46ce440c93cc53d070c8049b8798609efd28a3bf1b8f217268d6",
           "preview": "assets/charts/python-forest.webp"
         },
         "matlab": {
           "path": "downloads/figures/matlab/forest.emf",
           "format": "EMF",
-          "bytes": 159116,
-          "sha256": "3cb6fdd35464e6747e1308bc8b4b10257879cc8a16fdb6af0fdb84af6f8360e2",
+          "bytes": 174872,
+          "sha256": "3c8ac4ec97a356bcdbd1e85b8143976f2d0970ec5b2623f5d5089e70e5d340d3",
           "preview": "assets/charts/matlab-forest.webp",
-          "records": 1593,
+          "records": 2129,
           "embeddedRasterRecords": 0,
           "fonts": [
             {

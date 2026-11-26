@@ -1,8 +1,14 @@
 """Prepare language-specific previews and native-file metadata."""
 from pathlib import Path
 import hashlib,json
-from PIL import Image
+from PIL import Image, ImageOps
 from prepare_gallery import ROOT,CATALOG,inspect_emf
+
+
+def save_preview(image, destination, size, quality):
+    # Fit a single scale to the source, including the rounded EMF pixel bounds.
+    fitted = ImageOps.pad(image.convert('RGB'), size, Image.Resampling.LANCZOS, color='white')
+    fitted.save(destination, 'WEBP', quality=quality, method=6)
 
 def main():
     manifest={'data':['gallery/demo-data.json','gallery/extra-data.json'],'source':'independent illustrative data','languages':['zh','en'],
@@ -19,13 +25,14 @@ def main():
                 preview_file=preview/(backend+'-'+slug+'.webp')
                 with Image.open(source) as image:
                     if backend=='matlab':image.load(dpi=150)
-                    image.convert('RGB').resize((1440,864),Image.Resampling.LANCZOS).save(preview_file,'WEBP',quality=92,method=6)
+                    save_preview(image, preview_file, (1440, 864), 92)
                 output={'path':source.relative_to(ROOT/'docs').as_posix(),'format':suffix.upper(),'bytes':source.stat().st_size,
                   'sha256':hashlib.sha256(source.read_bytes()).hexdigest(),'preview':preview_file.relative_to(ROOT/'docs').as_posix()}
                 if backend=='matlab':
                     output.update(inspect_emf(source));detail_file=detail/('matlab-'+slug+'.webp')
                     with Image.open(source) as image:
-                        image.load(dpi=240);image.convert('RGB').resize((2400,1440),Image.Resampling.LANCZOS).save(detail_file,'WEBP',quality=95,method=6)
+                        image.load(dpi=240)
+                        save_preview(image, detail_file, (2400, 1440), 95)
                     output['detailPreview']=detail_file.relative_to(ROOT/'docs').as_posix()
                 outputs[backend]=output
             item['languages'][language]=outputs

@@ -155,6 +155,20 @@ class EquationLayoutTests(unittest.TestCase):
                 layout.number_docx(source, manifest, output)
             self.assertFalse(output.exists())
 
+    def test_word_cached_pagination_does_not_block_numbering(self):
+        cached = layout.element("w:r")
+        cached.append(layout.element("w:lastRenderedPageBreak"))
+        source, manifest = self.fixture(extra=cached)
+        output = self.root / "numbered.docx"
+        result = layout.number_docx(source, manifest, output)
+        self.assertEqual(result["display_equations_numbered"], 1)
+        self.assertIsNone(self.parse(output).find(".//w:lastRenderedPageBreak", layout.NS))
+        hard_break = layout.element("w:r")
+        hard_break.append(layout.element("w:br", type="page"))
+        source, manifest = self.fixture(extra=hard_break)
+        with self.assertRaisesRegex(ValueError, "Unexpected non-text"):
+            layout.number_docx(source, manifest, self.root / "no_break_removal.docx")
+
     def test_section_lookup_uses_following_break_not_last_section(self):
         root = etree.fromstring(f'<w:body xmlns:w="{layout.NS["w"]}"><w:p/><w:p><w:pPr><w:sectPr>'
             '<w:pgSz w:w="10000"/><w:pgMar w:left="1000" w:right="1000"/>'

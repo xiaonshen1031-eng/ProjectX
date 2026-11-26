@@ -2,29 +2,30 @@
 
 这里提供14类图型的中英文版本，以及两套实现：**MATLAB绘制EMF**、**Python绘制PNG**，共56份原图。每种图型用于表达一种或几种相互联系的结果关系。
 
-所有数值均由`build_python.py`与`build_python_extra.py`中的解析函数和固定随机种子独立生成。两个后端读取相同的图型数据。
+两个后端读取同一份教学数据，数值来自解析函数和固定随机种子。资源分配示例按 1 h 时段给出 kW 功率，逐时积分为 kWh。容量上限采用示例峰值的 1.12 倍。其他指标按定义使用归一化量或 a.u.。
 
 | 图型 | 图中的关系 |
 | --- | --- |
-| 资源调度甘特与功率分解 | 连接各对象的可用窗口、实际分配和分组功率，解释总体变化的来源。 |
-| 多阶段桑基流图 | 用相连的流带展开多阶段分配，保持各阶段的总量对应。 |
+| 资源调度甘特、功率和容量余量 | 淡色窗口包含逐时分配，右列给电量。下方用同一时轴读分组功率、上限和最小余量。 |
+| 多阶段分配与流量平衡 | 流带连接三级节点，节点值和共同总量可核对守恒。 |
 | 雨云分布与区间比较 | 把密度、观测分布、四分位区间和尾部范围放在同一比较中。 |
 | 多指标平行坐标 | 在统一尺度下连接多项指标，呈现不同方案的结构和组内分布。 |
-| 空间场与节点网络 | 把连续空间分布与节点连接放在同一坐标系中，观察局部强度与网络结构。 |
-| 可行域与状态投影 | 同时呈现约束边界、状态投影路径与位移，说明状态如何进入可行区域。 |
-| 轨迹包络与约束诊断 | 轨迹与分布包络对应上界，再用同一时间轴展开约束余量。 |
+| 空间场与节点网络 | 网格按选区截取，场强和节点连接使用同一坐标系。右侧读同一场上的节点采样。 |
+| 可行域与状态投影 | 等比例坐标展示到最近可行点的路径。右侧给欧氏位移，字母 E、L、F 对应投影时等号成立的约束。 |
+| 轨迹包络与约束余量 | 比较均值与 P90 对应的余量，在同一时间轴上定位最紧时刻。 |
 | 条件分布山峦图 | 沿条件展开分布形状，用中位数和四分位距呈现位置与离散程度。 |
-| 弦带与关系矩阵 | 弦带宽度与矩阵权重对应，连接整体网络结构和具体的成对关系。 |
+| 弦带与关系矩阵 | 弦带宽度和矩阵来自同一权重。矩阵描边、弦带着色突出所有并列最大值。 |
 | 聚类关系矩阵 | 统一聚类树与矩阵的对象顺序，呈现关系分组、方向与强度。 |
-| 环形时序分布 | 沿环形时间轴比较周期变化，由内向外对应四种条件。 |
+| 周期响应与工况间极差 | 环带以小时为中心，由内向外对应 C01–C04。右侧用同一小时的最大值减最小值定位工况分化。 |
 | 校准与分辨联合诊断 | 结合校准区间、各区间样本量和类别概率分布，分析预测表现。 |
-| 时频结构与频带能量 | 对齐原始信号、时频结构和频带能量，展开频率随时间的变化。 |
-| 配对差异与效应量森林 | 在相同条件下展示配对差异分布、均值和区间，比较条件间的变化。 |
+| 时频结构与频率功率 | 对齐信号、时频结构和各频率的窗口功率合计。 |
+| 配对差异与效应量森林 | 每工况使用成对差，显示分布与均值区间。端点和符号区分区间全在零值一侧或跨零。 |
 
 在仓库根目录运行：
 
 ```powershell
 python -m pip install -r skill/senior-projectx/requirements.txt
+python gallery/verify_evidence.py
 python gallery/build_bilingual.py
 matlab -batch "addpath('gallery'); build_matlab([],'zh'); build_matlab_extra([],'zh'); build_matlab([],'en'); build_matlab_extra([],'en')"
 python tools/prepare_bilingual_gallery.py
@@ -32,7 +33,7 @@ python tools/audit_bilingual_fonts.py
 python tools/verify_site.py
 ```
 
-`build_bilingual.py`读取仓库中的两份独立示意数据，生成28张2400×1440 PNG。MATLAB读取相同数据，通过Windows MATLAB原生`print -dmeta -vector`导出28张EMF。`prepare_gallery.py`从实际PNG和EMF生成浏览器预览，并记录原图的格式、哈希和矢量对象检查结果。
+`verify_evidence.py`复算流带几何和节点守恒、可行投影、区间、计数及重点标注。`build_bilingual.py`生成 28 张 2400×1440 PNG。MATLAB 使用 Windows 原生 `print -dmeta -vector` 导出 28 张 EMF。`prepare_bilingual_gallery.py`读取实际 PNG 和 EMF，等比例生成浏览器预览并记录原图格式、哈希和矢量检查结果。
 
 Python原图位于`docs/downloads/figures/python/`，MATLAB原图位于`docs/downloads/figures/matlab/`。网页使用等比例WebP预览，下载保留各自原生格式。新增8种图型的实现位于`build_python_extra.py`和`build_matlab_extra.m`，完整图型注册表位于`catalog.json`。
 
@@ -40,4 +41,4 @@ EMF导出和预览需要Windows上的MATLAB及支持Windows元文件的Pillow。
 
 Copyright © NCEPU-Senior · Author: XiaoN
 
-语言与字体定义位于`figure-language.json`。Python中文版本通过`chart_language.py`处理混排，MATLAB中文版本通过`apply_figure_language.m`处理混排。英文图件保留原路径，中文图件存放于各绘图工具目录下的`zh/`；浏览器放大预览与原图下载随语言同步切换。
+两套后端共用 `figure-palette.json`。墨黑用于结构和限值，颜色按图中的分组、变化方向或连续数值选用。黄菱形只标选定极值。区间和轨迹同时用端点、形状或线型承载判断。中英文字段及字体设置位于 `figure-language.json`，英语图件保留原路径，中文图件位于对应的 `zh/` 目录。

@@ -1,0 +1,18 @@
+{
+  "categorical": ["#00A878", "#2452DC", "#BD1751", "#A878EB", "#5836CD", "#E765A2", "#16A6CA", "#131419"],
+  "sequential": ["#F6F2FF", "#DCD4FC", "#A878EB", "#2452DC", "#24145D"],
+  "signed": ["#3E2494", "#B49EEC", "#FFFFFF", "#ED829F", "#A71E4F"],
+  "colors": {
+    "ink": "#131419",
+    "grid": "#DADAE2",
+    "state": "#00A878",
+    "state_wash": "#E6F8F2",
+    "observation": "#2452DC",
+    "observation_wash": "#EAF0FF",
+    "alternative": "#5836CD",
+    "alternative_wash": "#F1EEFF",
+    "exceedance": "#BD1751",
+    "exceedance_wash": "#FFF1F5",
+    "attention": "#F3C329"
+  }
+}

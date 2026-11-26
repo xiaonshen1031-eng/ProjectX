@@ -5,6 +5,7 @@ import re
 import matplotlib
 import matplotlib.pyplot as plt
 from matplotlib import font_manager
+from matplotlib.colors import LinearSegmentedColormap
 
 
 def pick_font(names):
@@ -17,12 +18,16 @@ LATIN = pick_font(["Times New Roman", "Liberation Serif", "DejaVu Serif"])
 if not CHINESE or not LATIN:
     raise RuntimeError("Required Chinese/Latin figure font or an approved fallback is unavailable")
 
-COLORS = json.loads(Path(__file__).with_name("research_figure_palette.json").read_text(encoding="utf-8"))["colors"]
+PALETTE = json.loads(Path(__file__).with_name("research_figure_palette.json").read_text(encoding="utf-8"))
+COLORS = PALETTE["colors"]
+SEQUENTIAL = LinearSegmentedColormap.from_list("project_jade", [COLORS[key] for key in PALETTE["project_sequential"]])
 
 
 def new_figure(width_in=6.55, height_in=3.4):
     fig, ax = plt.subplots(figsize=(width_in, height_in), constrained_layout=True)
     ax.spines[["top", "right"]].set_visible(False)
+    for spine in ax.spines.values():
+        spine.set_color(COLORS["ink"])
     ax.grid(True, axis="y", color=COLORS["grid"], linewidth=0.6)
     return fig, ax
 
@@ -39,6 +44,8 @@ def finish(ax, xlabel, ylabel, output: Path):
     ax.set_ylabel(ylabel)
     # Include secondary axes/colorbars, category ticks and legend text.
     for current in ax.figure.axes:
+        for spine in current.spines.values():
+            spine.set_color(COLORS["ink"])
         for label in [current.xaxis.label, current.yaxis.label]:
             style_text(label, 10)
         for label in current.get_xticklabels() + current.get_yticklabels() + [current.xaxis.get_offset_text(), current.yaxis.get_offset_text()]:
@@ -48,7 +55,7 @@ def finish(ax, xlabel, ylabel, output: Path):
                 style_text(label, 8.5)
     output.parent.mkdir(parents=True, exist_ok=True)
     with matplotlib.rc_context({"savefig.bbox": None, "pdf.fonttype": 42, "svg.fonttype": "none"}):
-        ax.figure.savefig(output, dpi=320, facecolor="white")
+        ax.figure.savefig(output, dpi=600, facecolor=COLORS["paper"])
     plt.close(ax.figure)
 
 
@@ -69,15 +76,22 @@ def constraint_diagnostic(time, base, scheduled, capacity, output: Path, *,
         raise ValueError("Time must be strictly increasing")
     fig, (ax, residual) = plt.subplots(2, 1, sharex=True, figsize=(width_in, height_in),
                                     gridspec_kw={"height_ratios": [2.2, 1]}, constrained_layout=True)
-    ax.step(time, base, where="mid", label="基础负荷", color=COLORS["cobalt"], linestyle=":")
-    ax.step(time, base+scheduled, where="mid", label="分配后负荷", color=COLORS["iris"])
+    ax.step(time, base, where="mid", label="基础负荷", color=COLORS["cobalt"], linestyle="-.")
+    ax.step(time, base+scheduled, where="mid", label="分配后负荷", color=COLORS["jade"])
     ax.step(time, capacity, where="mid", linestyle="--", label="容量边界", color=COLORS["ink"])
     ax.legend(ncol=3, frameon=False, loc="lower center", bbox_to_anchor=(.5, 1.01))
     ax.set_ylabel(f"功率（{power_unit}）")
     margin = capacity-base-scheduled
     residual.fill_between(time, 0, np.maximum(margin, 0), step="mid", color=COLORS["jade_wash"])
     residual.fill_between(time, 0, np.minimum(margin, 0), step="mid", color=COLORS["raspberry_wash"])
-    residual.step(time, margin, where="mid", color=COLORS["ink"])
+    residual.step(time, margin, where="mid", color=COLORS["jade"])
+    violated = margin < 0
+    if violated.any():
+        residual.scatter(time[violated], margin[violated], marker="x", color=COLORS["raspberry"], zorder=4)
     residual.axhline(0, color=COLORS["ink"], linestyle="--", linewidth=.7)
     finish(residual, "时段", f"容量余量（{power_unit}）", output)
-    return {"plot_type": "temporal_diagnostic", "capacity_margin": margin.tolist()}
+    return {"plot_type": "temporal_diagnostic", "capacity_margin": margin.tolist(),
+            "minimum_margin": float(margin.min()), "unit": power_unit,
+            "zero_meaning": "capacity equals synchronized total load",
+            "roles": {"baseline": COLORS["cobalt"], "allocation": COLORS["jade"],
+                      "limit": COLORS["ink"], "violation": COLORS["raspberry"]}}

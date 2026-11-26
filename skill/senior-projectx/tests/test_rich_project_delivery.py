@@ -1,4 +1,5 @@
 import json
+import copy
 import sys
 import tempfile
 import unittest
@@ -17,6 +18,11 @@ from selftest_skill import inspect_docx_properties
 
 
 class RichProjectDeliveryTests(unittest.TestCase):
+    def test_small_positive_margin_remains_distinct_from_binding_zero(self):
+        self.assertEqual(report._margin_label(.02), '0.02')
+        self.assertEqual(report._margin_label(.0004, 1), '0.0004')
+        self.assertEqual(report._margin_label(-3.5e-15, 1), '0.0')
+
     def test_qname_corruption_rejected_even_when_zip_and_xml_parse(self):
         self.assertEqual(inspect_docx_properties(ROOT / 'templates/project_report.docx'), [])
         with tempfile.TemporaryDirectory() as tmp:
@@ -50,6 +56,19 @@ class RichProjectDeliveryTests(unittest.TestCase):
             self.assertEqual([v['plot_type'] for v in manifest['artifacts']], ['temporal_diagnostic', 'response_diagnostic', 'composite_diagnostic'])
             atlas = manifest['artifacts'][-1]
             self.assertEqual(sum('allocation_' in path for path in atlas['source']), 6)
+            self.assertEqual(atlas['render_contract']['scales'][0]['vmin'], 0)
+            self.assertEqual(atlas['render_contract']['roles']['allocation']['color'], '#00A878')
+            self.assertEqual(atlas['numerical_evidence']['scenario_summary'][2]['binding_period_count'], 1)
+            self.assertAlmostEqual(manifest['artifacts'][0]['numerical_evidence']['uniform_minimum_margin_kw'], 4.2666666667)
+            clipped = copy.deepcopy(manifest)
+            clipped['artifacts'][-1]['render_contract']['scales'][0]['vmin'] = 1
+            self.assertTrue(any('clips' in e for e in policy.audit(clipped)['errors']))
+            recolored = copy.deepcopy(manifest)
+            recolored['artifacts'][0]['render_contract']['roles']['allocation']['color'] = '#306BE8'
+            self.assertTrue(any('catalog' in e for e in policy.audit(recolored)['errors']))
+            pdf = Path(atlas['exports']['pdf']['path'])
+            pdf.write_bytes(pdf.read_bytes() + b'\n')
+            self.assertTrue(any('export missing or stale: pdf' in e for e in policy.audit(manifest)['errors']))
             missing = root / 'data/results/scenarios/allocation_0.80.csv'
             complete = missing.read_bytes()
             trace = pd.read_csv(missing)

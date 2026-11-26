@@ -28,6 +28,17 @@
     "sun",
     "rose"
   ],
+  "project_sequential": ["paper", "jade_wash", "jade"],
+  "project_semantics": {
+    "baseline": {"color": "cobalt", "line": "dash_dot", "meaning": "Measured or modeled base state before the proposed allocation."},
+    "allocation": {"color": "jade", "line": "solid", "meaning": "Actual saved allocation or its synchronized outcome."},
+    "comparison": {"color": "iris", "line": "dotted", "marker": "open_square", "meaning": "Named comparator calculated on the same scope."},
+    "limit": {"color": "ink", "line": "dashed", "meaning": "Physical constraint or reference, with its true units."},
+    "nonnegative_margin": {"scale": "project_sequential", "zero": "paper", "meaning": "Zero is a binding capacity, increasing jade denotes more remaining capacity."},
+    "violation": {"color": "raspberry", "meaning": "A negative margin or an explicitly recorded infeasible condition."},
+    "available_unused": {"color": "cobalt_wash", "edge": "ink", "meaning": "Available for allocation with a known zero assignment."},
+    "outside_window": {"color": "paper", "meaning": "Outside the allowed allocation window; distinguished by position and the availability outline."}
+  },
   "signed_stops": [
     [
       0.0,

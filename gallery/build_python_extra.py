@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon, Rectangle
 from scipy.stats import gaussian_kde
 from scipy.signal import stft
-from build_python import ROOT, INK, TEAL, GRID, PALETTE, CMAP, style, base, save
+from build_python import ROOT, INK, JADE, GRID, PALETTE, CMAP, COLORS, style, base, save
 
 SLUGS=['sankey','raincloud','polar','parallel','calibration','spectrum','forest','gantt']
 
@@ -70,97 +70,162 @@ def generate():
 
 
 def sankey(d):
-    f=base();a=f.add_axes([.05,.10,.90,.80]);a.axis('off')
+    f=base();a=f.add_axes([.04,.145,.91,.72]);a.axis('off')
     for link in d['links']:
-        color=np.array(plt.matplotlib.colors.to_rgb(PALETTE[link['color']]))*.40+.60
+        color=np.array(plt.matplotlib.colors.to_rgb(PALETTE[link['color']]))*.48+.52
         a.add_patch(Polygon(np.c_[link['x'],link['y']],color=color,ec='white',lw=.6))
     for k,i,y,h,value in d['nodes']:
         x=.08+k*.43;a.add_patch(Rectangle((x,y),.028,h,facecolor=PALETTE[int(i)],edgecolor='white'))
-        a.text(x+.04,y+h/2,f'{"ABC"[int(k)]}{int(i)+1}  {value:.0f}',va='center',fontsize=12,color=INK)
-    for x,s in zip([.08,.51,.94],['Inputs','Intermediate groups','Outputs']):a.text(x,.97,s,fontsize=15,color=INK)
-    a.set(xlim=(0,1.09),ylim=(0,1.02));return f
+        name=f'{"ABC"[int(k)]}{int(i)+1}'
+        align='right' if k==0 else 'left'
+        if k==1:
+            a.text(x+.014,y+h/2,name,ha='center',va='center',fontsize=12,color=INK,
+                   bbox={'facecolor':'white','edgecolor':'none','pad':1.3})
+        else:
+            a.text(x-.012 if k==0 else x+.04,y+h/2,f'{name}  {value:.1f}',
+                   ha=align,va='center',fontsize=13,color=INK)
+    for x,s in zip([.094,.524,.954],['Inputs','Intermediate groups','Outputs']):
+        a.text(x,1.025,s,ha='center',fontsize=15,color=INK)
+    middle=[(int(i),value) for k,i,_,_,value in d['nodes'] if k==1]
+    a.text(.524,.025,'   '.join(f'B{i+1} {value:.1f}' for i,value in middle),ha='center',fontsize=13,color=INK)
+    a.set(xlim=(-.085,1.105),ylim=(-.025,1.07))
+    f.text(.5,.091,f'Conserved total: {d["total"]:.1f} a.u.',ha='center',color=INK,fontsize=14)
+    return f
 
 
 def raincloud(d):
     f=base();a=f.add_axes([.12,.14,.81,.76]);style(a);x=np.array(d['x']);den=np.array(d['density'])
     for i in range(4):
         y=6-i*1.65;v=np.array(d['samples'][i]);q=d['quantiles'][i];color=PALETTE[i]
-        a.fill_between(x,y,y+den[i]/den.max()*.95,color=color,alpha=.8,lw=0)
-        a.plot(v,y+np.array(d['jitter'][i]),'.',ms=2.6,color=color,alpha=.5)
+        a.fill_between(x,y,y+den[i]/den.max()*.95,color=color,alpha=.66,lw=0)
+        a.plot(x,y+den[i]/den.max()*.95,color=INK,lw=.8)
+        a.plot(v,y+np.array(d['jitter'][i]),'.',ms=3,color=color,alpha=.65)
         a.plot([q[0],q[4]],[y-.4,y-.4],lw=1.4,color=INK)
         a.add_patch(Rectangle((q[1],y-.50),q[3]-q[1],.20,facecolor='white',ec=INK,lw=1.1))
         a.plot([q[2],q[2]],[y-.5,y-.3],color=INK,lw=2)
-    a.set(xlim=(-1,6.5),ylim=(.3,7.2),yticks=[6-i*1.65 for i in range(4)],yticklabels=['C01','C02','C03','C04'],xlabel='Illustrative response / a.u.');a.spines['left'].set_visible(False);return f
+    ranges=np.asarray(d['samples'])
+    a.set(xlim=(min(-1,ranges.min()-.1),max(6.5,ranges.max()+.1)),ylim=(.3,7.2),
+          yticks=[6-i*1.65 for i in range(4)],yticklabels=['C01','C02','C03','C04'],
+          xlabel='Illustrative response / a.u.')
+    a.spines['left'].set_visible(False)
+    f.text(.12,.925,'Dots: observations    Box: quartiles    Whiskers: P10-P90',fontsize=14,color=INK)
+    return f
 
 
 def polar(d):
-    f=base();a=f.add_axes([.07,.10,.76,.81]);a.set_aspect('equal');a.axis('off');v=np.array(d['values'])
+    f=base();a=f.add_axes([.04,.10,.49,.79]);a.set_aspect('equal');a.axis('off');v=np.array(d['values'])
     for i in range(4):
         for h in range(24):
-            t=np.linspace(np.pi/2-(h+1)*2*np.pi/24,np.pi/2-h*2*np.pi/24,13)
+            t=np.linspace(np.pi/2-(h+.5)*2*np.pi/24,np.pi/2-(h-.5)*2*np.pi/24,13)
             r0=.25+i*.16;r1=r0+.15
             xy=np.r_[np.c_[r1*np.cos(t),r1*np.sin(t)],np.c_[r0*np.cos(t[::-1]),r0*np.sin(t[::-1])]]
             a.add_patch(Polygon(xy,facecolor=CMAP(v[i,h]),ec='white',lw=.7))
-    t=np.pi/2-np.arange(25)*2*np.pi/24;profile=np.r_[v.mean(axis=0),v.mean(axis=0)[0]];r=.98+.16*profile/profile.max();a.plot(r*np.cos(t),r*np.sin(t),color=TEAL,lw=2)
     for h in range(0,24,3):
-        t=np.pi/2-h*2*np.pi/24;a.text(1.25*np.cos(t),1.25*np.sin(t),f'{h:02}:00',ha='center',va='center',fontsize=13,color=INK)
-    a.text(0,.045,'24 h',ha='center',fontsize=24,color=INK);a.text(0,-.10,'4 CONDITIONS',ha='center',fontsize=10,color=INK)
-    a.set(xlim=(-1.45,1.45),ylim=(-1.45,1.45));cb=f.colorbar(plt.matplotlib.cm.ScalarMappable(cmap=CMAP,norm=plt.Normalize(0,1)),cax=f.add_axes([.86,.23,.022,.51]));cb.set_label('Normalized response',fontsize=13);return f
+        t=np.pi/2-h*2*np.pi/24;a.text(1.03*np.cos(t),1.03*np.sin(t),f'{h:02}:00',ha='center',va='center',fontsize=13,color=INK)
+    a.text(0,.035,'C01-C04',ha='center',fontsize=14,color=INK)
+    a.text(0,-.085,'Inner to outer',ha='center',fontsize=12,color=INK)
+    a.set(xlim=(-1.18,1.18),ylim=(-1.18,1.18))
+    cax=f.add_axes([.51,.29,.017,.40])
+    cb=f.colorbar(plt.matplotlib.cm.ScalarMappable(cmap=CMAP,norm=plt.Normalize(0,1)),cax=cax)
+    cb.set_label('Normalized response',fontsize=13)
+    b=f.add_axes([.67,.30,.27,.39]);style(b);hours=np.arange(24)
+    spread=np.ptp(v,axis=0);peak=int(np.argmax(spread))
+    b.fill_between(hours,0,spread,step='mid',color=COLORS['alternative_wash'])
+    b.step(hours,spread,where='mid',color=COLORS['alternative'],lw=2)
+    b.plot(peak,spread[peak],'D',mfc=COLORS['attention'],mec=INK,ms=7)
+    b.annotate(f'{peak:02}:00 / {spread[peak]:.2f}',(peak,spread[peak]),xytext=(3,10),
+               textcoords='offset points',ha='right' if peak>12 else 'left',fontsize=13)
+    b.set(xlim=(0,23),ylim=(0,spread.max()*1.30),xticks=np.arange(0,24,6),
+          xlabel='Hour of day',ylabel='Between-condition range')
+    return f
 
 
 def parallel(d):
     f=base();a=f.add_axes([.10,.16,.82,.71]);style(a);p=np.array(d['profiles']);groups=np.array(d['groups']);x=np.arange(6)
-    for i in range(6):a.plot([i,i],[0,1],color='#b7c7b7',lw=1)
+    for i in range(6):a.plot([i,i],[0,1],color='#DADAE2',lw=1)
     for k in range(3):
         rows=p[groups==k];color=PALETTE[k];lo,hi=np.quantile(rows,[.1,.9],axis=0)
         a.fill_between(x,lo,hi,color=color,alpha=.12)
         for row in rows:a.plot(x,row,color=color,alpha=.20,lw=.7)
-        a.plot(x,rows.mean(axis=0),color=color,lw=2.6,label=f'Group {k+1} / n=16')
+        a.plot(x,rows.mean(axis=0),color=color,lw=2.45,ls=['-',':','--'][k],
+               marker=['o','s','D'][k],ms=4,mec=INK,label=f'Group {k+1} / n=16')
     a.set(xlim=(-.05,5.05),ylim=(0,1),xticks=x,xticklabels=[f'Metric {i+1}' for i in x],ylabel='Normalized value');a.legend(ncol=3,frameon=False,bbox_to_anchor=(.5,1.14),loc='upper center',fontsize=12);return f
 
 
 def calibration(d):
     f=base();b=np.array(d['bins']);a=f.add_axes([.09,.36,.49,.54]);style(a)
-    a.plot([0,1],[0,1],ls='--',color='#879581',lw=1.3,label='Ideal calibration')
-    a.errorbar(b[:,0],b[:,1],yerr=np.array([b[:,1]-b[:,2],b[:,3]-b[:,1]]),fmt='o-',ms=5,color=TEAL,lw=1.7,capsize=3,label='Binned fraction / 95% Wilson interval')
+    a.plot([0,1],[0,1],ls='--',color='#131419',lw=1.3,label='Ideal calibration')
+    a.errorbar(b[:,0],b[:,1],yerr=np.array([b[:,1]-b[:,2],b[:,3]-b[:,1]]),fmt='o-',ms=5,color=JADE,lw=1.7,capsize=3,label='Binned fraction / 95% Wilson interval')
     a.set(xlim=(0,1),ylim=(0,1),ylabel='Observed fraction');a.legend(frameon=False,loc='upper left',fontsize=11)
-    count=f.add_axes([.09,.14,.49,.15]);style(count);count.bar(b[:,0],b[:,4],width=.065,color='#b6cda0');count.set(xlim=(0,1),xlabel='Predicted probability',ylabel='Count')
+    count=f.add_axes([.09,.14,.49,.15]);style(count)
+    count.bar(np.arange(len(b))/len(b),b[:,4],align='edge',width=1/len(b),color=COLORS['observation_wash'],edgecolor=INK,lw=.7)
+    count.set(xlim=(0,1),xlabel='Predicted probability',ylabel='Count')
     den=f.add_axes([.68,.23,.25,.58]);style(den);x=np.array(d['x'])
     den.fill_between(x,0,d['density0'],color=PALETTE[1],alpha=.3);den.plot(x,d['density0'],color=PALETTE[1],lw=2,label='Label 0')
-    den.fill_between(x,0,d['density1'],color=TEAL,alpha=.25);den.plot(x,d['density1'],color=TEAL,lw=2,label='Label 1')
-    den.set(xlim=(0,1),xlabel='Predicted probability',ylabel='Density');den.legend(frameon=False,fontsize=11);f.text(.68,.88,f'N = {d["n"]}   Brier = {d["brier"]:.3f}',color=INK,fontsize=14);return f
+    den.fill_between(x,0,d['density1'],color=JADE,alpha=.25);den.plot(x,d['density1'],color=JADE,lw=2,label='Label 1')
+    den.set(xlim=(0,1),xlabel='Predicted probability',ylabel='Density')
+    den.legend(frameon=False,fontsize=11,ncol=2,loc='lower center',bbox_to_anchor=(.5,1.02))
+    f.text(.68,.90,f'N = {d["n"]}   Brier = {d["brier"]:.3f}',color=INK,fontsize=14)
+    return f
 
 
 def spectrum(d):
-    f=base();a=f.add_axes([.08,.76,.70,.17]);style(a);a.plot(d['time'],d['signal'],color=TEAL,lw=.8);a.set(xlim=(0,8),ylabel='Signal',xticklabels=[])
+    f=base();a=f.add_axes([.08,.76,.70,.17]);style(a);a.plot(d['time'],d['signal'],color=JADE,lw=.8);a.set(xlim=(0,8),ylabel='Signal',xticklabels=[])
     ax=f.add_axes([.08,.15,.70,.54]);style(ax);x=np.array(d['window']);y=np.array(d['frequency']);z=np.array(d['db'])
     im=ax.pcolormesh(x,y,z,cmap=CMAP,vmin=-45,vmax=0,shading='nearest');ax.set(xlim=(0,8),ylim=(0,32),xlabel='Time / s',ylabel='Frequency / Hz')
-    side=f.add_axes([.83,.15,.12,.54]);style(side);side.plot(d['energy'],y,color=TEAL,lw=1.7);side.set(ylim=(0,32),xlabel='Energy',yticklabels=[])
+    side=f.add_axes([.83,.15,.12,.54]);style(side)
+    side.fill_betweenx(y,0,d['energy'],color=COLORS['alternative_wash'])
+    side.plot(d['energy'],y,color=COLORS['alternative'],lw=1.7)
+    side.set(ylim=(0,32),xlabel='Summed STFT power',yticklabels=[])
     cb=f.colorbar(im,cax=f.add_axes([.83,.79,.12,.025]),orientation='horizontal');cb.set_label('Relative power / dB',fontsize=11);return f
 
 
 def forest(d):
     f=base();a=f.add_axes([.10,.13,.47,.76]);style(a);x=np.array(d['x']);den=np.array(d['density']);means=np.array(d['mean']);ci=np.array(d['ci'])
     for i in range(14):
-        y=13-i;a.fill_between(x,y,y+den[i]/den.max()*.72,color=CMAP(.3+i*.04),lw=.7,edgecolor='white')
-    a.axvline(0,color='#8b9c84',ls='--',lw=1);a.set(xlim=(-2.5,3),ylim=(-.3,14),yticks=np.arange(14),yticklabels=[f'C{i:02}' for i in range(14,0,-1)],xlabel='Paired difference distribution')
-    b=f.add_axes([.65,.13,.28,.76]);style(b);b.axvline(0,color='#8b9c84',ls='--',lw=1)
+        y=13-i;a.fill_between(x,y,y+den[i]/den.max()*.72,color=CMAP(.34+i*.012),lw=.7,edgecolor='white')
+    a.axvline(0,color='#131419',ls='--',lw=1);a.set(xlim=(-2.5,3),ylim=(-.3,14),yticks=np.arange(14),yticklabels=[f'C{i:02}' for i in range(14,0,-1)],xlabel='Paired difference distribution')
+    b=f.add_axes([.65,.13,.28,.76]);style(b);b.axvline(0,color='#131419',ls='--',lw=1)
     for i in range(14):
-        color=TEAL if means[i]>=0 else PALETTE[3];b.plot(ci[i],[13-i,13-i],color=color,lw=2);b.plot(means[i],13-i,'o',ms=5,color=color)
-    b.set(ylim=(-.3,14),xlim=(-1,1.3),yticks=np.arange(14),yticklabels=[],xlabel='Mean difference / 95% bootstrap CI');return f
+        color,mark=(COLORS['exceedance'],'<') if ci[i,1]<0 else ((JADE,'>') if ci[i,0]>0 else (INK,'s'))
+        b.plot(ci[i],[13-i,13-i],color=color,lw=1.7)
+        b.plot(ci[i],[13-i,13-i],'|',ms=6,color=color)
+        b.plot(means[i],13-i,mark,ms=6,mfc=color,mec=INK)
+    limits=float(ci.min()),float(ci.max());pad=(limits[1]-limits[0])*.08
+    b.set(ylim=(-.3,14),xlim=(limits[0]-pad,limits[1]+pad),yticks=np.arange(14),yticklabels=[],
+          xlabel='Mean difference / 95% bootstrap CI')
+    f.text(.10,.925,f'n = {d["n"]} / condition',fontsize=14,color=INK)
+    return f
 
 
 def gantt(d):
-    f=base();a=f.add_axes([.09,.40,.79,.53]);style(a);p=np.array(d['power']);arrival=d['arrival'];departure=d['departure']
+    f=base();a=f.add_axes([.09,.47,.73,.43]);style(a);p=np.array(d['power']);arrival=d['arrival'];departure=d['departure']
     for i in range(16):
-        y=15-i;a.add_patch(Rectangle((arrival[i],y-.35),departure[i]-arrival[i],.70,color='#edf0e8',lw=0))
+        y=15-i;a.add_patch(Rectangle((arrival[i],y-.40),departure[i]-arrival[i],.80,
+                                     color=COLORS['alternative_wash'],lw=0))
         c=np.array(plt.matplotlib.colors.to_rgb(PALETTE[i//4]))
         for h in range(24):
-            if p[i,h]>0:a.add_patch(Rectangle((h+.025,y-.34),.95,.68,facecolor=c*(.3+.7*p[i,h]/p.max())+1-(.3+.7*p[i,h]/p.max()),lw=0))
-        a.text(24.4,y,f'{p[i].sum():.1f}',va='center',fontsize=10,color=INK)
-    a.set(xlim=(0,24),ylim=(-.6,15.7),yticks=np.arange(16),yticklabels=[f'R{i:02}' for i in range(16,0,-1)],xticklabels=[]);a.text(24.4,16.0,'Energy',fontsize=11,color=INK)
-    b=f.add_axes([.09,.14,.79,.20]);style(b);groups=np.array(d['groups']);b.stackplot(np.arange(24)+.5,groups,colors=PALETTE[:4],labels=['Group 1','Group 2','Group 3','Group 4'],alpha=.8)
-    b.axhline(d['capacity'],color=PALETTE[2],ls='--',lw=1.4);b.set(xlim=(0,24),xlabel='Time / h',ylabel='Aggregate power / a.u.');b.legend(ncol=4,frameon=False,bbox_to_anchor=(.5,-.30),loc='upper center',fontsize=11);return f
+            if p[i,h]>0:a.add_patch(Rectangle((h+.025,y-.28),.95,.56,facecolor=c*(.3+.7*p[i,h]/p.max())+1-(.3+.7*p[i,h]/p.max()),lw=0))
+        a.text(24.5,y,f'{p[i].sum():.1f}',va='center',fontsize=11,color=INK)
+    a.set(xlim=(0,24),ylim=(-.6,15.7),yticks=np.arange(16),
+          yticklabels=[f'R{i:02}' for i in range(16,0,-1)],xticklabels=[])
+    a.text(24.5,16.15,'Energy / kWh',fontsize=13,color=INK)
+    b=f.add_axes([.09,.27,.73,.155]);style(b);groups=np.array(d['groups'])
+    hours=np.arange(25)
+    b.stackplot(hours,np.c_[groups,groups[:,-1]],step='post',colors=PALETTE[:4],
+                labels=['Group 1','Group 2','Group 3','Group 4'],alpha=.78)
+    b.axhline(d['capacity'],color=INK,ls='--',lw=1.35,label='Study cap')
+    b.set(xlim=(0,24),ylabel='Power / kW',xticklabels=[])
+    b.legend(ncol=5,frameon=False,bbox_to_anchor=(.5,1.04),loc='lower center',fontsize=11)
+    headroom=d['capacity']-groups.sum(axis=0);h=f.add_axes([.09,.115,.73,.10]);style(h)
+    h.fill_between(hours,0,np.r_[headroom,headroom[-1]],step='post',color=COLORS['observation_wash'])
+    h.step(hours,np.r_[headroom,headroom[-1]],where='post',color=COLORS['observation'],lw=1.45)
+    peak=int(np.argmin(headroom));h.plot(peak+.5,headroom[peak],'D',mfc=COLORS['attention'],mec=INK,ms=6)
+    h.annotate(f'{headroom[peak]:.1f}',(peak+.5,headroom[peak]),
+               xytext=(6,6),textcoords='offset points',fontsize=12,color=INK)
+    h.set(xlim=(0,24),ylim=(0,headroom.max()*1.05),xticks=np.arange(0,25,3),
+          xlabel='Time / h',ylabel='Headroom / kW')
+    return f
 
 
 def main():

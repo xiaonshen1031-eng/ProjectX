@@ -66,8 +66,39 @@ def _mixed_axis(ax, fonts: dict, *, label_size: float = 10, tick_size: float = 9
         _style_figure_text(label, fonts, tick_size)
     for label in [ax.xaxis.label, ax.yaxis.label, ax.xaxis.get_offset_text(), ax.yaxis.get_offset_text()]:
         _style_figure_text(label, fonts, label_size if label in [ax.xaxis.label, ax.yaxis.label] else tick_size)
-    ax.grid(True, axis="y", color="#D9D9D9", linewidth=0.6, alpha=0.75)
+    ax.grid(True, axis="y", color="#DADAE2", linewidth=0.5)
     ax.spines[["top", "right"]].set_visible(False)
+    for spine in ax.spines.values():
+        spine.set_color("#131419")
+        spine.set_linewidth(.7)
+    ax.tick_params(colors="#131419", width=.7)
+
+
+def _figure_text_color(fill) -> str:
+    """Choose the higher-contrast neutral text against an actual scalar fill."""
+    rgb = np.asarray(fill[:3])
+    linear = np.where(rgb <= .04045, rgb / 12.92, ((rgb + .055) / 1.055) ** 2.4)
+    luminance = float(linear @ [.2126, .7152, .0722])
+    return "#FFFFFF" if luminance < .179 else "#131419"
+
+
+def _margin_label(value: float, decimals: int = 0) -> str:
+    """A positive nonbinding margin must not acquire a printed zero."""
+    if abs(value) <= 1e-7:
+        value = 0.0
+    if value != 0 and round(value, decimals) == 0:
+        return f"{value:.2g}"
+    return f"{value:.{decimals}f}"
+
+
+def _check_figure_allocation(values, available, limits, duration, demand, source):
+    """Check the quantities a window/energy graphic would otherwise misstate."""
+    if (values < -1e-7).any() or (values > limits[:, None] + 1e-7).any():
+        raise ValueError(f"{source}: allocation is outside vehicle power bounds")
+    if (np.abs(values[~available]) > 1e-7).any():
+        raise ValueError(f"{source}: allocation occurs outside an availability window")
+    if not np.allclose(values @ duration, demand, atol=1e-6, rtol=1e-7):
+        raise ValueError(f"{source}: allocation contradicts requested vehicle energy")
 
 
 def _allocation_matrix(path: Path, roster: pd.MultiIndex, shape: tuple[int, int]) -> np.ndarray:
@@ -90,7 +121,8 @@ def build_figures(periods_path: Path, allocation_path: Path, vehicles_path: Path
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    from matplotlib.patches import Rectangle
+    from matplotlib.colors import LinearSegmentedColormap, Normalize
+    from matplotlib.patches import Patch, Rectangle
     periods = pd.read_csv(periods_path)
     vehicles = pd.read_csv(vehicles_path)
     sensitivity = pd.read_csv(sensitivity_path)
@@ -102,17 +134,40 @@ def build_figures(periods_path: Path, allocation_path: Path, vehicles_path: Path
     shape = (len(vehicles), len(ids))
     allocation = _allocation_matrix(allocation_path, roster, shape)
     x = np.arange(len(ids))
-    base = periods.base_load_kw.to_numpy()
-    capacity = periods.capacity_kw.to_numpy()
+    base = periods.base_load_kw.to_numpy(float)
+    capacity = periods.capacity_kw.to_numpy(float)
     total = allocation.sum(axis=0)
-    duration = periods.duration_h.to_numpy()
+    duration = periods.duration_h.to_numpy(float)
+    limits = vehicles.max_charge_kw.to_numpy(float)
+    demand = vehicles.energy_kwh.to_numpy(float)
+    numeric = [base, capacity, duration, limits, demand]
+    if not all(np.isfinite(values).all() for values in numeric):
+        raise ValueError("Figure inputs contain missing or nonfinite physical quantities")
+    if (duration <= 0).any() or any((values < 0).any() for values in (base, capacity, limits, demand)):
+        raise ValueError("Figure inputs require positive durations and nonnegative loads, capacities and demands")
+    available = np.zeros(shape, dtype=bool)
     uniform = np.zeros(len(ids))
-    for v in vehicles.itertuples():
+    for i, v in enumerate(vehicles.itertuples()):
+        if not (int(v.arrival_period) == v.arrival_period and int(v.departure_period) == v.departure_period
+                and 0 <= v.arrival_period < v.departure_period <= len(ids)):
+            raise ValueError(f"Invalid availability window for {v.vehicle_id}")
         mask = (x >= v.arrival_period) & (x < v.departure_period)
+        available[i] = mask
         uniform[mask] += v.energy_kwh / duration[mask].sum()
+    _check_figure_allocation(allocation, available, limits, duration, demand, allocation_path.name)
     margin = capacity-base-total
+    if (margin < -1e-6).any():
+        raise ValueError("Saved allocation exceeds period capacity")
+    uniform_margin = capacity-base-uniform
 
     # Validate the full scenario set before producing any output files.
+    if sensitivity.empty or sensitivity.status.isna().any():
+        raise ValueError("Scenario status is required for every scenario")
+    sensitivity = sensitivity.sort_values("demand_scale").reset_index(drop=True)
+    all_scales = sensitivity.demand_scale.to_numpy(float)
+    if (not np.isfinite(all_scales).all() or (all_scales < 0).any()
+            or len(set(f"{scale:.2f}" for scale in all_scales)) != len(all_scales)):
+        raise ValueError("Demand scales must map to distinct nonnegative scenario filenames")
     feasible = sensitivity[sensitivity.status == "optimal"].sort_values("demand_scale")
     if feasible.empty:
         raise ValueError("No feasible scenario traces available for a scenario atlas")
@@ -124,117 +179,234 @@ def build_figures(periods_path: Path, allocation_path: Path, vehicles_path: Path
         path = sensitivity_path.parent / "scenarios" / f"allocation_{row.demand_scale:.2f}.csv"
         if not path.is_file():
             raise FileNotFoundError("Scenario atlas requires saved allocation: " + str(path))
-        charge = _allocation_matrix(path, roster, shape).sum(axis=0)
+        values = _allocation_matrix(path, roster, shape)
+        charge = values.sum(axis=0)
         scenario_margin = capacity-base-charge
         if not np.isclose(row.mean_margin_kw, scenario_margin.mean(), atol=1e-6, rtol=1e-7):
             raise ValueError(f"{path.name} contradicts its reported mean capacity margin")
+        if not np.isclose(row.minimum_margin_kw, scenario_margin.min(), atol=1e-6, rtol=1e-7):
+            raise ValueError(f"{path.name} contradicts its reported minimum capacity margin")
+        _check_figure_allocation(values, available, limits, duration, demand*row.demand_scale, path.name)
+        if (scenario_margin < -1e-6).any():
+            raise ValueError(f"{path.name} exceeds period capacity")
         margins.append(scenario_margin)
         scenario_sources.append(path)
     margins = np.asarray(margins)
+    shortfalls = {}
+    for row in sensitivity.itertuples():
+        if row.status != "infeasible":
+            continue
+        shortfall = _scenario_energy_shortfall(sensitivity_path, row.demand_scale)
+        if shortfall is not None:
+            shortfalls[row.demand_scale] = shortfall
+            result_path = sensitivity_path.parent / "scenarios" / f"result_{row.demand_scale:.2f}.json"
+            original = read_json(result_path)
+            scenario_sources.extend([result_path, Path(original["periods_path"]), Path(original["vehicles_path"])])
+
+    palette_path = Path(__file__).resolve().parents[1] / "templates" / "research_figure_palette.json"
+    catalog = read_json(palette_path)
+    colors = catalog["colors"]
+    role_names = {"structure": "ink", "baseline": "cobalt", "allocation": "jade",
+                  "comparison": "iris", "nonnegative_margin": "jade", "violation": "raspberry"}
+    role_meanings = {"structure": "坐标、文字与物理限值", "baseline": "基础状态",
+                     "allocation": "实际分配", "comparison": "同窗均分参考",
+                     "nonnegative_margin": "容量减总负荷后的非负余量", "violation": "负余量或不可行状态"}
+    roles = {role: {"catalog_key": key, "color": colors[key], "meaning": role_meanings[role]}
+             for role, key in role_names.items()}
+    jade_map = LinearSegmentedColormap.from_list("project_jade", [colors[key] for key in catalog["project_sequential"]])
+    ink, jade, cobalt, iris = (colors[key] for key in ("ink", "jade", "cobalt", "iris"))
 
     output_dir.mkdir(parents=True, exist_ok=True)
     fonts = font_contract()
-    plt.rcParams.update({"font.size": 9, "axes.unicode_minus": False, "pdf.fonttype": 42, "ps.fonttype": 42})
+    if fonts["chinese_status"] != "requested" or fonts["latin_status"] != "requested":
+        raise RuntimeError("Required Chinese and Latin figure fonts or approved fallbacks are unavailable")
+    plt.rcParams.update({"font.size": 9, "axes.unicode_minus": False, "pdf.fonttype": 42,
+                         "ps.fonttype": 42, "text.color": ink, "axes.labelcolor": ink})
     artifacts = []
 
     def layer(role, encoding, source, definition):
         return {"role": role, "encoding": encoding, "evidence_source": str(source), "evidence_definition": definition}
 
-    def save(fig, name, identity, role, question, caption, sources, layers, kind):
+    def save(fig, name, identity, role, question, caption, sources, layers, kind, *, scales=(), evidence=None):
         for ax in fig.axes:
             _mixed_axis(ax, fonts)
             if ax.images or ax.patches: ax.grid(False)
             for label in ax.texts: _style_figure_text(label, fonts, label.get_fontsize())
             if ax.get_legend():
                 for label in ax.get_legend().get_texts(): _style_figure_text(label, fonts, 8)
+        fig.canvas.draw()
+        renderer = fig.canvas.get_renderer()
+        clipped = []
+        labels = list(fig.texts)
+        for ax in fig.axes:
+            labels.extend(ax.texts)
+            if ax.axison:
+                labels.extend(ax.get_xticklabels() + ax.get_yticklabels())
+                labels.extend([ax.xaxis.label, ax.yaxis.label, ax.xaxis.get_offset_text(), ax.yaxis.get_offset_text()])
+            if ax.get_legend():
+                labels.extend(ax.get_legend().get_texts())
+        for label in labels:
+            if not label.get_visible() or not label.get_text().strip():
+                continue
+            box = label.get_window_extent(renderer)
+            if box.x0 < -.5 or box.y0 < -.5 or box.x1 > fig.bbox.width+.5 or box.y1 > fig.bbox.height+.5:
+                clipped.append(label.get_text())
+        if clipped:
+            plt.close(fig)
+            raise ValueError("Rendered text exceeds figure canvas: " + ", ".join(clipped))
         path = output_dir / name
-        fig.savefig(path, dpi=320)
+        exports = {}
+        for extension in ("png", "pdf"):
+            target = path.with_suffix("." + extension)
+            with matplotlib.rc_context({"savefig.bbox": None}):
+                fig.savefig(target, dpi=600, facecolor=colors["paper"])
+            exports[extension] = {"path": str(target), "sha256": file_hash(target)}
+        height_cm = fig.get_size_inches()[1] * 2.54
         plt.close(fig)
         sources = list(dict.fromkeys(map(str, sources)))
         artifacts.append({"id": identity, "path": str(path), "role": role, "question": question,
                           "width_cm": 15.6, "caption": caption, "plot_type": kind, "source": sources,
-                          "source_sha256": {s: file_hash(Path(s)) for s in sources}, "plot_layers": layers})
+                           "source_sha256": {s: file_hash(Path(s)) for s in sources}, "plot_layers": layers,
+                           "exports": exports, "numerical_evidence": evidence or {},
+                           "generator_script": str(Path(__file__).resolve()),
+                           "render_contract": {"schema": "senior_projectx.figure.render.v1",
+                                               "palette_source": str(palette_path), "palette_sha256": file_hash(palette_path),
+                                               "roles": roles, "scales": list(scales), "height_cm": height_cm,
+                                               "raster_dpi": 600, "clipped_text": clipped}})
 
     width_in = 15.6 / 2.54
-    ink, jade, cobalt, iris = "#20283A", "#19B89C", "#306BE8", "#7655D7"
     fig, (ax, residual) = plt.subplots(2, 1, figsize=(width_in, 4.05), sharex=True,
                                     gridspec_kw={"height_ratios": [2.2, 1]}, constrained_layout=True)
-    ax.step(x, base, where="mid", color=cobalt, label="基础负荷")
+    ax.step(x, base, where="mid", color=cobalt, linestyle="-.", label="基础负荷")
     ax.step(x, base+total, where="mid", color=jade, linewidth=1.6, label="分配后负荷")
-    ax.step(x, base+uniform, where="mid", color=iris, linestyle=":", label="均分参考")
+    ax.step(x, base+uniform, where="mid", color=iris, linestyle=":", marker="s", markersize=3,
+            markerfacecolor="white", label="均分参考")
     ax.step(x, capacity, where="mid", color=ink, linestyle="--", label="容量边界")
-    ax.fill_between(x, base+total, capacity, step="mid", color=jade, alpha=.15)
+    ax.fill_between(x, base+total, capacity, step="mid", color=colors["jade_wash"])
     ax.set_ylabel("功率（kW）")
     ax.legend(loc="lower center", bbox_to_anchor=(.5, 1.01), ncol=4, frameon=False)
-    residual.fill_between(x, 0, margin, step="mid", color=jade, alpha=.22)
+    residual.fill_between(x, 0, np.maximum(margin, 0), step="mid", color=colors["jade_wash"])
+    residual.fill_between(x, 0, np.minimum(margin, 0), step="mid", color=colors["raspberry_wash"])
     residual.step(x, margin, where="mid", color=jade)
-    residual.step(x, capacity-base-uniform, where="mid", color=iris, linestyle=":")
+    residual.step(x, uniform_margin, where="mid", color=iris, linestyle=":", marker="s", markersize=3,
+                  markerfacecolor="white")
     residual.axhline(0, color=ink, linewidth=.7)
-    tightest = int(np.argmin(margin))
-    residual.scatter(x[tightest], margin[tightest], color=jade, edgecolor=ink, zorder=5)
+    tightest = np.flatnonzero(np.isclose(margin, margin.min(), atol=1e-7, rtol=0))
+    residual.scatter(x[tightest], margin[tightest], color=colors["sun"], edgecolor=ink, zorder=5)
+    residual.annotate(f"最小余量 {margin.min():.1f} kW", (x[tightest[0]], margin[tightest[0]]),
+                      xytext=(8, 8), textcoords="offset points", fontsize=8)
     residual.set_ylabel("余量（kW）"); residual.set_xlabel("时段")
-    residual.set_xticks(x, ids)
+    residual.set_xticks(x, ids); residual.set_xlim(-.3, len(ids)-.7)
     save(fig, "figure_constraint_diagnostic.png", "figure_process", "过程与约束",
          "时间分配如何改变各时段容量占用和剩余容量？", "图1 充电时序、容量边界与逐时段余量",
          [periods_path, allocation_path, vehicles_path],
          [layer("observed_time_series", "line", periods_path, "基础负荷、容量和逐车辆均分参考使用原始时段与窗口"),
           layer("constraint_margin", "step_area", allocation_path, "余量等于容量减基础负荷再减实际分配功率，圆点标出最紧时段")],
-         "temporal_diagnostic")
+         "temporal_diagnostic", evidence={"margin_kw": margin.tolist(),
+             "tightest_periods": ids[tightest].tolist(), "uniform_margin_kw": uniform_margin.tolist(),
+             "uniform_minimum_margin_kw": float(uniform_margin.min()),
+             "uniform_capacity_breach_periods": ids[uniform_margin < -1e-7].tolist()})
 
     fig, ax = plt.subplots(figsize=(width_in, 3.45), constrained_layout=True)
-    cmap = plt.get_cmap("Blues")
     upper = float(vehicles.max_charge_kw.max())
+    power_norm = Normalize(vmin=0, vmax=upper if upper > 0 else 1)
     for row, v in enumerate(vehicles.itertuples()):
-        mask = (x >= v.arrival_period) & (x < v.departure_period)
+        mask = available[row]
         for j in np.flatnonzero(mask):
-            ax.add_patch(Rectangle((j-.46, row-.33), .92, .66, facecolor="#EEEEEE", edgecolor="white"))
+            ax.add_patch(Rectangle((j-.46, row-.33), .92, .66, facecolor=colors["cobalt_wash"],
+                                   edgecolor=ink, linewidth=.45))
+            if allocation[row, j] <= 1e-9:
+                ax.text(j, row, "0", ha="center", va="center", fontsize=8, color=ink)
         values = allocation[row]
         for j in np.flatnonzero(values > 1e-9):
             value = values[j]
-            ax.add_patch(Rectangle((j-.46, row-.33), .92, .66, facecolor=cmap(.22+.7*value/upper), edgecolor="white"))
+            fill = jade_map(power_norm(value))
+            ax.add_patch(Rectangle((j-.46, row-.33), .92, .66, facecolor=fill, edgecolor=ink, linewidth=.45))
             ax.text(j, row, f"{value:.1f}", ha="center", va="center", fontsize=8,
-                    color="white" if value/upper > .75 else "#111111")
+                    color=_figure_text_color(fill))
         delivered = float(np.dot(values, duration))
         ax.text(len(ids)-.15, row, f"{delivered:.1f}/{v.energy_kwh:.1f}", va="center", fontsize=8)
     ax.text(len(ids)-.15, -.75, "交付/需求（kWh）", fontsize=8, va="center")
     ax.set_xlim(-.65, len(ids)+1.65); ax.set_ylim(len(vehicles)-.4, -1.03)
     ax.set_xticks(x, ids); ax.set_yticks(np.arange(len(vehicles)), vehicles.vehicle_id)
     ax.set_xlabel("时段"); ax.set_ylabel("车辆")
-    ax.plot([], [], color="#DDDDDD", linewidth=7, label="可用窗口")
-    ax.plot([], [], color=cmap(.65), linewidth=7, label="实际功率（格内 kW）")
-    ax.legend(loc="upper center", bbox_to_anchor=(.43, 1.13), ncol=2, frameon=False)
+    ax.legend(handles=[Patch(facecolor=colors["cobalt_wash"], edgecolor=ink, label="可用且未充电")],
+              loc="upper left", bbox_to_anchor=(0, 1.12), frameon=False)
+    if upper > 0:
+        cb = fig.colorbar(plt.cm.ScalarMappable(norm=power_norm, cmap=jade_map), ax=ax,
+                          orientation="horizontal", pad=.16, fraction=.07, aspect=35)
+        cb.set_label("实际充电功率（kW）")
+        cb.set_ticks([0, upper/2, upper])
     save(fig, "figure_window_allocation.png", "figure_balance", "对象守恒与时间窗",
          "各对象如何在自身窗口和功率边界内满足需求电量？", "图2 车辆接入窗口、功率分配与电量满足关系",
          [periods_path, allocation_path, vehicles_path],
-         [layer("coverage", "gantt", vehicles_path, "灰色格表示车辆可用接入窗口；窗口外不安排充电"),
+         [layer("coverage", "gantt", vehicles_path, "浅蓝零值格表示可用且未充电；空白为窗口外，不计作缺测或零功率格"),
           layer("conditional_response", "annotated_tiles", allocation_path, "着色格及数值给出真实功率，右列比较累计交付与需求电量")],
-         "response_diagnostic")
+         "response_diagnostic", scales=[{"quantity": "charge_kw", "unit": "kW", "normalization": "sequential",
+             "vmin": 0, "vmax": upper, "data_min": float(allocation.min()), "data_max": float(allocation.max()),
+             "zero_meaning": "已知充电功率为零", "catalog_stops": catalog["project_sequential"]}],
+         evidence={"delivered_energy_kwh": (allocation @ duration).tolist(), "requested_energy_kwh": demand.tolist()})
 
-    fig, (ax, summary) = plt.subplots(1, 2, figsize=(width_in, 3.8), gridspec_kw={"width_ratios": [3.9, 1.55]}, constrained_layout=True)
-    mesh = ax.imshow(margins, cmap="YlGnBu", aspect="auto", vmin=0)
-    for i in range(len(feasible)):
+    fig, (ax, summary) = plt.subplots(1, 2, figsize=(width_in, 3.9), sharey=True,
+                                    gridspec_kw={"width_ratios": [3.9, 1.9]}, constrained_layout=True)
+    display_margin = np.maximum(margins, 0)
+    matrix = np.full((len(sensitivity), len(ids)), np.nan)
+    optimal_rows = np.flatnonzero(sensitivity.status.to_numpy() == "optimal")
+    matrix[optimal_rows] = display_margin
+    max_margin = float(display_margin.max())
+    mesh = ax.imshow(np.ma.masked_invalid(matrix), cmap=jade_map, aspect="auto", interpolation="nearest",
+                     vmin=0, vmax=max_margin if max_margin > 0 else 1)
+    for i in optimal_rows:
         for j in range(len(ids)):
-            value = 0.0 if abs(margins[i,j]) < 1e-9 else margins[i,j]
-            ax.text(j, i, f"{value:.0f}", ha="center", va="center", fontsize=8,
-                    color="white" if margins[i,j] > margins.max()*.62 else "#111111")
-    ax.set_xticks(x, ids); ax.set_yticks(np.arange(len(feasible)), [f"{v:.2f}" for v in feasible.demand_scale])
+            value = 0.0 if abs(matrix[i,j]) < 1e-7 else matrix[i,j]
+            fill = jade_map(mesh.norm(value))
+            ax.text(j, i, _margin_label(value), ha="center", va="center", fontsize=8,
+                    color=_figure_text_color(fill))
+            if abs(value) < 1e-7:
+                ax.add_patch(Rectangle((j-.47, i-.47), .94, .94, fill=False, edgecolor=ink, linewidth=.8))
+    ax.set_xticks(x, ids); ax.set_yticks(np.arange(len(sensitivity)), [f"{v:.2f}" for v in sensitivity.demand_scale])
     ax.set_xlabel("时段"); ax.set_ylabel("需求倍率")
-    cb = fig.colorbar(mesh, ax=ax, orientation="horizontal", pad=.18, fraction=.08, aspect=25)
-    cb.set_label("容量余量（kW）")
-    summary.set_xlim(0, 1); summary.set_ylim(len(feasible)-.5, -1)
-    summary.text(.05, -.85, "目标值", fontsize=9)
-    summary.text(.61, -.85, "平均余量", fontsize=9)
-    for i, row in enumerate(feasible.itertuples()):
-        summary.text(.05, i, f"{row.objective:.2f}", fontsize=8.5, va="center")
-        summary.text(.70, i, f"{row.mean_margin_kw:.2f}", fontsize=8.5, va="center")
-    summary.text(.70, len(feasible)-.3, "kW", fontsize=8)
+    if max_margin > 0:
+        cb = fig.colorbar(mesh, ax=[ax, summary], orientation="horizontal", pad=.18, fraction=.08, aspect=35)
+        cb.set_label("容量余量（kW），黑框为满载时段")
+        cb.set_ticks([0, max_margin/2, max_margin])
+    summary.set_xlim(0, 1); summary.set_ylim(len(sensitivity)-.5, -1.2)
+    for pos, label in ((.16, "最小\n(kW)"), (.50, "平均\n(kW)"), (.85, "满载\n时段数")):
+        summary.text(pos, -.8, label, fontsize=8.5, ha="center", va="center")
+    scenario_summary = []
+    headroom_energy = float(np.maximum(capacity-base, 0) @ duration)
+    for i, row in enumerate(sensitivity.itertuples()):
+        record = {"demand_scale": float(row.demand_scale), "status": str(row.status)}
+        if row.status == "optimal":
+            values = matrix[i]
+            record.update(minimum_margin_kw=float(values.min()), mean_margin_kw=float(values.mean()),
+                          binding_period_count=int(np.count_nonzero(values <= 1e-7)))
+            summary.text(.16, i, _margin_label(record['minimum_margin_kw'], 1), fontsize=8.5, va="center", ha="center")
+            summary.text(.50, i, f"{record['mean_margin_kw']:.2f}", fontsize=8.5, va="center", ha="center")
+            summary.text(.85, i, str(record["binding_period_count"]), fontsize=8.5, va="center", ha="center")
+        else:
+            label = "不可行" if row.status == "infeasible" else str(row.status)
+            if row.demand_scale in shortfalls:
+                requested_energy, available_energy = shortfalls[row.demand_scale]
+                shortfall = requested_energy-available_energy
+                label += f"，电量缺口至少 {shortfall:g} kWh"
+                record.update(energy_shortfall_lower_bound_kwh=shortfall, requested_energy_kwh=requested_energy,
+                              available_energy_bound_kwh=available_energy)
+            ax.text((len(ids)-1)/2, i, label, color=colors["raspberry"], fontsize=8, ha="center", va="center")
+            for pos in (.16, .50, .85):
+                summary.text(pos, i, "—", fontsize=8.5, ha="center", va="center")
+        scenario_summary.append(record)
     summary.set_axis_off()
     save(fig, "figure_scenario_constraint_atlas.png", "figure_sensitivity", "情景与容量压力",
-         "需求增长后哪些时段接近容量上限，调度目标值怎样变化？", "图3 需求增长下的逐时段容量余量与调度指标",
-         [periods_path, sensitivity_path, *scenario_sources],
+         "需求增长后哪些时段达到容量上限，平均余量能否代表局部约束？", "图3 需求增长下的逐时段容量余量、满载时段与不可行情景",
+         [periods_path, vehicles_path, sensitivity_path, *scenario_sources],
          [layer("constraint_margin", "conditional_matrix", scenario_sources[0], "逐情景读取实际分配序列，逐时段计算容量余量；每一情景源文件均列于source"),
-          layer("conditional_response", "aligned_numeric_profile", sensitivity_path, "按同一情景行对齐目标值与平均余量，不插值、不作概率区间")],
-         "composite_diagnostic")
+          layer("conditional_response", "aligned_numeric_profile", sensitivity_path, "按同一情景行对齐最小和平均余量、满载时段数；不可行保留状态，容量总额给出缺口下界")],
+         "composite_diagnostic", scales=[{"quantity": "capacity_margin_kw", "unit": "kW", "normalization": "sequential",
+             "vmin": 0, "vmax": max_margin, "data_min": float(display_margin.min()), "data_max": max_margin,
+             "zero_meaning": "容量恰好占满，黑框标识", "catalog_stops": catalog["project_sequential"]}],
+         evidence={"scenario_summary": scenario_summary, "headroom_energy_kwh": headroom_energy,
+                   "baseline_requested_energy_kwh": float(demand.sum()), "zero_tolerance_kw": 1e-7})
 
     for item in artifacts:
         item["sha256"] = file_hash(Path(item["path"]))
@@ -488,6 +660,26 @@ def _add_table(doc: Document, headers: list[str], rows: list[list[str]], widths:
     return table
 
 
+def _scenario_energy_shortfall(sensitivity_path: Path, scale: float) -> tuple[float, float] | None:
+    """Return the actual demand and transformer energy bound for a saved infeasible case."""
+    result_path = sensitivity_path.parent / "scenarios" / f"result_{scale:.2f}.json"
+    if not result_path.is_file():
+        return None
+    result = read_json(result_path)
+    if result.get("termination") != "infeasible":
+        return None
+    periods_path = Path(result.get("periods_path", ""))
+    vehicles_path = Path(result.get("vehicles_path", ""))
+    if not (periods_path.is_file() and vehicles_path.is_file()):
+        return None
+    periods = pd.read_csv(periods_path)
+    vehicles = pd.read_csv(vehicles_path)
+    headroom = periods.capacity_kw - periods.base_load_kw
+    available = float(headroom.clip(lower=0) @ periods.duration_h)
+    demand = float(vehicles.energy_kwh.sum())
+    return (demand, available) if demand - available > 1e-7 else None
+
+
 def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Path], result_path: Path,
                  validation_path: Path, brief_path: Path, figure_manifest_path: Path,
                  sensitivity_path: Path, output_path: Path, formula_manifest_path: Path) -> dict:
@@ -508,14 +700,14 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
 
     doc.add_heading("摘要", level=1)
     minimum_margin = float(validation["minimum_capacity_margin_kw"])
-    _add_body(doc, f"充电计划需要在变压器剩余容量内满足车辆的离站电量需求。连续线性规划按各车辆的接入窗口分配逐时段功率，所得方案的最小容量余量为 {minimum_margin:.2f} kW。按不同需求倍率重算分配，考察变压器余量与加权调度目标值的变化。")
+    _add_body(doc, f"用连续线性规划为各车辆安排充电功率。将功率限制在各自的接入窗口后，基准计划满足全部离站电量要求，变压器的最小容量余量为 {minimum_margin:.2f} kW。可增充电量取决于车辆接入时段内的逐段余量。")
     _add_body(doc, "关键词　充电资源分配、连续线性规划、容量约束、敏感性分析")
 
     doc.add_heading("1 项目概述与研究任务", level=1)
-    _add_body(doc, "充电站需要确定每辆车的充电时段，使车辆在离站前取得规定电量。站内基础负荷随时段变化，变压器留给车辆的容量也随之变化。用逐车充电功率编制计划，再核查各时段余量，识别需求增加时可能出现的容量限制。")
+    _add_body(doc, "充电站在车辆离站前交付规定电量。基础负荷先占用变压器容量，其余功率由同时接入的车辆分配。计划须落实到每辆车的接入时段，并据此核算设备余量。")
 
     doc.add_heading("2 研究对象、资料与数据", level=1)
-    _add_body(doc, "本例采用合成的时段负荷与车辆需求数据。时段数据包含基础负荷、变压器容量和时长，车辆数据包含车辆标识、到离时间、需求电量和最大充电功率。两类数据通过接入窗口关联，形成各车辆在各时段的可分配范围。")
+    _add_body(doc, "表1列出算例采用的两组合成数据。时段表给出站内基础负荷及变压器容量。两者的差值是该时段可用于充电的功率。车辆按到站、离站时刻占用相应时段，需求电量与车端功率上限进入分配模型。")
     rows = []
     for audit in audits:
         is_period = "base_load_kw" in audit["profiles"]
@@ -523,30 +715,49 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
                      "基础负荷、容量（kW），时长（h）" if is_period else "需求电量（kWh），功率上限（kW），接入窗口"])
     _add_caption(doc, "表1 输入数据及单位")
     _add_table(doc, ["数据对象", "记录数", "主要变量及单位"], rows, [3.0, 2.0, 10.6])
-    _add_body(doc, "充电功率按时段分配，并乘以对应时长累计为交付电量。容量约束作用于每个时段，电量约束作用于每辆车辆的完整接入窗口，因此时段长度和车辆到离时间共同决定分配方案的可行范围。")
 
     doc.add_heading("3 数学模型与求解", level=1)
-    _add_body(doc, r"模型以时段 $t$ 和车辆 $v$ 为索引。变压器容量 $C_t$ 与基础负荷 $L_t$ 的差值为可分配功率 $H_t$，车辆在该时段的充电功率记为 $x_{v,t}$。", formulas=formulas, equation_backend=equation_backend)
+    _add_body(doc, r"模型以时段 $t$ 和车辆 $v$ 为索引。从变压器容量 $C_t$ 扣除基础负荷 $L_t$，得到可分配功率 $H_t$。各车辆分配到的充电功率记为 $x_{v,t}$。", formulas=formulas, equation_backend=equation_backend)
     _add_formula(doc, r"H_t=C_t-L_t", "headroom", formulas, equation_backend=equation_backend)
     _add_formula(doc, r"\min_{x}\ \sum_{v\in\mathcal{V}}\sum_{t\in\mathcal{T}} c_{v,t}x_{v,t}", "objective", formulas, equation_backend=equation_backend)
     _add_formula(doc, r"\sum_{t\in\mathcal{T}_v}\Delta t_t x_{v,t}=E_v,\quad \forall v\in\mathcal{V}", "energy", formulas, equation_backend=equation_backend)
     _add_formula(doc, r"\sum_{v\in\mathcal{V}}x_{v,t}\leq H_t,\quad \forall t\in\mathcal{T}", "capacity", formulas, equation_backend=equation_backend)
     _add_formula(doc, r"0\leq x_{v,t}\leq \overline{x}_v\,\mathbf{1}\{t\in\mathcal{T}_v\}", "bounds", formulas, equation_backend=equation_backend)
-    _add_body(doc, r"车辆集合与时段集合分别记为 $\mathcal{V}$ 和 $\mathcal{T}$。车辆的接入窗口 $\mathcal{T}_v$ 限定充电时段，需求电量 $E_v$ 由各时段功率与时长 $\Delta t_t$ 的乘积累计得到，功率上界 $\overline{x}_v$ 则限定单车充电速率。功率、电量和时长的单位分别为 kW、kWh 和 h。目标系数 $c_{v,t}$ 由时段权重与时间偏好组成，各约束与目标均为线性关系，采用连续线性规划求解。", formulas=formulas, equation_backend=equation_backend)
-    _add_body(doc, f"所得分配方案的目标值为 {result['objective']:.3f}。其逐时段负荷和逐车交付电量分别用于分析容量占用及需求满足情况。")
+    _add_body(doc, r"车辆集合记为 $\mathcal{V}$，时段集合记为 $\mathcal{T}$。车辆只在接入窗口 $\mathcal{T}_v$ 内充电。交付电量应等于需求 $E_v$，由各时段的功率乘时长 $\Delta t_t$ 后累计得到。窗内充电功率受单车上限 $\overline{x}_v$ 约束，所有车辆在同一时段的功率之和受变压器余量约束。目标系数 $c_{v,t}$ 由时段权重加上车端时间偏好项得到。线性规划在上述约束下最小化加权功率和。", formulas=formulas, equation_backend=equation_backend)
 
     doc.add_heading("4 分配结果与容量约束", level=1)
     process = next(a for a in figure_manifest["artifacts"] if a["id"] == "figure_process")
     p = doc.add_paragraph(); _paragraph_role(p, "figure"); p.paragraph_format.keep_with_next = True
     p.add_run().add_picture(process["path"], width=Cm(process["width_cm"]))
     _add_caption(doc, process["caption"]).paragraph_format.keep_with_next = True
-    tight = validation.get("tightest_period", int(np.argmin(result["capacity_margin_kw"])))
-    _add_body(doc, f"图1在编号 {tight} 的时段标出最小容量余量 {minimum_margin:.2f} kW。评估该时段能否增加充电功率，还要核对新增车辆的接入窗口。原计划中的车辆只能在各自接入窗口内移时。")
+    tight_index = int(np.argmin(result["capacity_margin_kw"]))
+    tight = validation.get("tightest_period", result.get("tightest_period", tight_index))
+    headroom, charge = result.get("headroom_kw", []), result.get("period_total_charge_kw", [])
+    bottleneck = f"容量余量最小的是时段 {tight}（图1）。"
+    if tight_index < min(len(headroom), len(charge)):
+        bottleneck = (f"时段 {tight} 可供充电 {headroom[tight_index]:.2f} kW，"
+                      f"计划分配 {charge[tight_index]:.2f} kW（图1）。")
+    if abs(minimum_margin) <= 1e-7:
+        uniform_margin = process.get("numerical_evidence", {}).get("uniform_minimum_margin_kw")
+        if uniform_margin is not None and uniform_margin > 1e-7:
+            bottleneck += f"按接入窗均分时，变压器最小余量为 {uniform_margin:.2f} kW。加权调度用满了时段 {tight} 的可分配功率。"
+        else:
+            bottleneck += "该时段的变压器容量已经用满。"
+        bottleneck += "要在该时段增加充电功率，须先把已安排的充电移到相应车辆接入窗内还有余量的时段。"
+    else:
+        bottleneck += f"原分配维持时，该时段最多还能增加 {minimum_margin:.2f} kW 充电功率，具体增量取决于接入车辆的剩余功率上限。"
+    _add_body(doc, bottleneck)
     balance = next(a for a in figure_manifest["artifacts"] if a["id"] == "figure_balance")
     p = doc.add_paragraph(); _paragraph_role(p, "figure"); p.paragraph_format.keep_with_next = True
     p.add_run().add_picture(balance["path"], width=Cm(balance["width_cm"]))
     _add_caption(doc, balance["caption"]).paragraph_format.keep_with_next = True
-    _add_body(doc, f"图2的格内功率乘对应时长，按车辆累加得到右列的交付电量。交付电量与需求的最大绝对差为 {validation['maximum_energy_residual_kwh']:.2e} kWh。")
+    delivered = result.get("vehicle_delivered_energy_kwh", {})
+    delivery_text = "图2把各时段的充电功率按接入窗口排开，格内功率乘时长后按车累加。"
+    if delivered:
+        delivery_text += f"该计划共交付 {sum(delivered.values()):.3g} kWh，右列逐车核对交付量及其离站需求。"
+    else:
+        delivery_text += "右列的交付电量据此与各车离站需求核对。"
+    _add_body(doc, delivery_text)
     doc.add_heading("5 工况变化与敏感性分析", level=1)
     sens = next(a for a in figure_manifest["artifacts"] if a["id"] == "figure_sensitivity")
     p = doc.add_paragraph(); _paragraph_role(p, "figure"); p.paragraph_format.keep_with_next = True
@@ -560,21 +771,33 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
     feasible = sensitivity[sensitivity.status == "optimal"].sort_values("demand_scale")
     if feasible["demand_scale"].nunique() > 1:
         lo, hi = feasible.iloc[0], feasible.iloc[-1]
-        _add_body(doc, f"需求倍率由 {lo.demand_scale:.2f} 增至 {hi.demand_scale:.2f} 时，两种可行工况的平均容量余量由 {lo.mean_margin_kw:.2f} kW 变为 {hi.mean_margin_kw:.2f} kW（图3、表2）。原分配保持时，取车端剩余充电功率与变压器余量的较小值，按接入窗内各时段的时长折算并累计，得到单车可增加的电量。")
+        comparison = (f"需求倍率由 {lo.demand_scale:.2f} 增至 {hi.demand_scale:.2f} 时，"
+                      f"平均容量余量由 {lo.mean_margin_kw:.2f} 变为 {hi.mean_margin_kw:.2f} kW（图3、表2）。")
+        summaries = sens.get("numerical_evidence", {}).get("scenario_summary", [])
+        binding_counts = {row["demand_scale"]: row["binding_period_count"] for row in summaries if row["status"] == "optimal"}
+        if lo.demand_scale in binding_counts and hi.demand_scale in binding_counts:
+            comparison += f"满载时段由 {binding_counts[lo.demand_scale]} 个变为 {binding_counts[hi.demand_scale]} 个。"
+        _add_body(doc, comparison)
+    _add_body(doc, "保持原计划时，接入时段的可增充电功率取变压器余量与该车剩余功率上限的较小值。各段可增充电功率乘对应时长后相加，得到单车可增充的电量。")
     infeasible = sensitivity[sensitivity.status == "infeasible"]
     if not infeasible.empty:
         scale = infeasible["demand_scale"].min()
-        _add_body(doc, f"需求倍率 {scale:.2f} 是已算工况中倍率最低的不可行点。给定接入窗口、充电功率上限和变压器容量，此工况无法同时满足所有车辆的电量要求。")
+        shortfall = _scenario_energy_shortfall(sensitivity_path, scale)
+        if shortfall:
+            demand, available = shortfall
+            _add_body(doc, f"需求倍率 {scale:.2f} 时，车辆合计需要 {demand:.3g} kWh。将各时段的可分配功率按时长累计，得到 {available:.3g} kWh 的供电上限，电量缺口至少为 {demand - available:.3g} kWh。")
+        else:
+            _add_body(doc, f"需求倍率 {scale:.2f} 时，在现有接入窗口、车端功率上限和变压器容量下，车辆的电量要求无法同时满足。")
 
     doc.add_heading("6 需求满足与容量占用", level=1)
-    checks = [["最大电量差值", f"{validation['maximum_energy_residual_kwh']:.2e}", "kWh"],
-              ["最大容量越界量", f"{validation['maximum_capacity_violation_kw']:.2e}", "kW"],
+    checks = [["最大电量差值", f"{validation['maximum_energy_residual_kwh']:.3g}", "kWh"],
+              ["最大容量越界量", f"{validation['maximum_capacity_violation_kw']:.3g}", "kW"],
               ["最小容量余量", f"{minimum_margin:.2f}", "kW"]]
     _add_caption(doc, "表3 电量与容量指标")
     _add_table(doc, ["指标", "数值", "单位"], checks, [8.0, 4.0, 3.6])
-    _add_body(doc, "表3的电量差值按车累计，容量指标按时段核对总负荷。算例假定车辆充电功率可连续调节。设备采用离散功率档位时，应按档位重算分配，再用相同指标核对电量和容量。")
+    _add_body(doc, "表3的电量差值由逐车比较交付电量和离站需求得到，取各车偏差的最大绝对值。容量越界量按时段核对，取总负荷超出额定容量的最大正差值。")
     doc.add_heading("7 结论及工程建议", level=1)
-    _add_body(doc, "基础负荷改变后，按更新后的时段余量调整充电时序。若车辆接入窗口内仍无法供足电量，优先核对能否延长接入窗口，再评估增加变压器容量的必要性。")
+    _add_body(doc, "基础负荷变化后，按更新的余量重排充电时序。变压器有余量的时段须落在车辆接入窗口内。若车辆还能延长接入时间，应把延长段的供电能力计入分配，再核定是否需要增容。设备按档位控制时，重排须采用可用的实际功率档位。")
     doc.core_properties.author = ""; doc.core_properties.last_modified_by = ""
     output_path.parent.mkdir(parents=True, exist_ok=True); doc.save(output_path)
     is_office_math = equation_backend == "office_math"

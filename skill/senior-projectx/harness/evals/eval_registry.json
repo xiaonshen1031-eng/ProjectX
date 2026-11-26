@@ -81,6 +81,17 @@
         "references/release-validation.md"
       ],
       "notes": ""
+    },
+    {
+      "eval_id": "release-1.2.2-source",
+      "timestamp": "2026-11-26T09:43:25+08:00",
+      "status": "pass",
+      "checks": [
+        "127 passed; 0 failed; 0 errors; 0 skipped",
+        "Word 16 saved and reopened: 4 rendered pages, 18 native MathType objects, 5 sequential display equation fields"
+      ],
+      "artifacts": [],
+      "notes": "Project sample regenerated and reviewed with the current NPS writing rules."
     }
   ]
 }

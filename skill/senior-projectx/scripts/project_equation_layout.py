@@ -132,8 +132,10 @@ def format_paragraph(paragraph, equation, width, number, styles):
             continue
         if node.xpath(".//w:object | .//w:drawing | .//w:pict | .//m:oMath", namespaces=NS):
             raise ValueError("Unexpected object outside the display formula")
+        # Word may cache a previous layout break in the formula's tab run.
+        # Repagination recreates this cache. An explicit w:br stays protected.
         if node.tag == tag("w:r") and any(n.tag not in {tag(t) for t in
-                ["w:rPr", "w:t", "w:tab", "w:fldChar", "w:instrText"]} for n in node):
+                ["w:rPr", "w:t", "w:tab", "w:fldChar", "w:instrText", "w:lastRenderedPageBreak"]} for n in node):
             raise ValueError("Unexpected non-text content outside the display formula")
         text.extend(node.xpath(".//w:t/text()", namespaces=NS))
         instructions = node.xpath(".//w:instrText/text()", namespaces=NS)

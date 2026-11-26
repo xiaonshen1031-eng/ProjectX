@@ -1,17 +1,17 @@
 {
   "name": "Senior-ProjectX",
   "displayName": "ProjectX",
-  "version": "1.2.1",
-  "date": "2026-11-25",
+  "version": "1.2.2",
+  "date": "2026-11-26",
   "license": "MIT",
   "author": "XiaoN",
   "copyright": "Copyright © NCEPU-Senior",
-  "download": "downloads/Senior-ProjectX-v1.2.1.zip",
-  "bytes": 400565,
-  "sha256": "6dab272dbe67f61e84fe71e58f5c2191330c3c64ebcf37b1f5380bb9302e7d33",
+  "download": "downloads/Senior-ProjectX-v1.2.2.zip",
+  "bytes": 410295,
+  "sha256": "ceb07ecc42ba7e10f2fe9aa7cb3f41990ae37b7a7610962070aca56df339b698",
   "source": "https://github.com/xiaonshen1031-eng/ProjectX",
   "tests": {
-    "regressions": 124,
+    "regressions": 127,
     "cli": 27,
     "powershell": 5
   },
@@ -19,59 +19,59 @@
     "src": "assets/ProjectX-workflow-demo.mp4",
     "poster": "assets/project-workflow-poster.webp",
     "captions": "assets/workflow-demo.zh.vtt",
-    "duration": 80.666667,
+    "duration": 73.009,
     "chapters": [
       {
         "id": "task",
-        "title": "任务与资料",
+        "title": "调度任务",
         "start": 0,
-        "duration": 11.659,
-        "text": "ProjectX面向委托研究与工程项目。从任务书、已有资料和客户模板开始，明确研究对象、承担范围与交付要求。"
+        "duration": 10.155,
+        "text": "一台容量上限为五十五千瓦的变压器为五辆车供电。车辆只能在各自的接入窗口内充电。算例要确定每小时该分配多少功率。"
       },
       {
         "id": "data",
-        "title": "数据与适配",
-        "start": 11.659,
-        "duration": 11.573,
-        "text": "整理数据的字段、单位和时间尺度，检查缺失与异常。需要场景适配时，结合当地规模调整，并核查总量关系。"
+        "title": "数据入模",
+        "start": 10.155,
+        "duration": 10.235,
+        "text": "用变压器上限减去当小时的基础负荷，就得到可分配给充电的功率。十时的基础负荷为二十五千瓦，因此最多可分配三十千瓦。"
       },
       {
         "id": "model",
-        "title": "模型与方法",
-        "start": 23.231,
-        "duration": 11.506,
-        "text": "围绕研究问题，明确模型的输入、变量、目标与约束。参考相关方法建立模型，说明关键关系如何影响输出。"
+        "title": "模型约束",
+        "start": 20.39,
+        "duration": 10.464,
+        "text": "每辆车只在接入窗口内分配功率。各车功率之和加上基础负荷，得到变压器负荷。再对每辆车的功率积分，核对它获得的电量。"
       },
       {
         "id": "compute",
-        "title": "计算与校核",
-        "start": 34.737,
-        "duration": 11.01,
-        "text": "执行求解、预测或仿真，在相同条件下组织比较。结合约束检查和独立复核，发现并修正计算中的异常。"
+        "title": "独立复算",
+        "start": 30.854,
+        "duration": 9.813,
+        "text": "十时共分配三十千瓦，变压器负荷达到五十五千瓦。一辆车如需增加充电功率，就得查看它在哪些有余量的时段仍可接入。"
       },
       {
         "id": "visual",
-        "title": "结果与分析",
-        "start": 45.746,
-        "duration": 11.698,
-        "text": "分析总体差异以及时间、空间和场景变化。图表帮助呈现分布、区间和关联，再把结果与工程含义连成完整分析。"
+        "title": "结果解释",
+        "start": 40.667,
+        "duration": 14.208,
+        "text": "需求放大为基准的四倍时，五辆车共需四百千瓦时。可分配功率在八个时段累计最多只能供二百五十七千瓦时。即使放宽到八个时段全部接入，仍差一百四十三千瓦时。"
       },
       {
         "id": "charts",
-        "title": "结果可视化",
-        "start": 57.445,
-        "duration": 11.654,
-        "text": "按问题选择图型，展示多阶段流向、多指标关系、时频结构与空间分布。MATLAB导出EMF，Python导出PNG。"
+        "title": "图件复核",
+        "start": 54.875,
+        "duration": 9.154,
+        "text": "将充电功率和接入窗口画在同一时间轴上，就能核对分配发生在哪些时段。这里使用工程图册中的独立合成示例。"
       },
       {
         "id": "delivery",
-        "title": "成果交付",
-        "start": 69.099,
-        "duration": 11.563,
-        "text": "最后整理技术报告、模板PPT、图件和计算源码。检查公式、排版与结果分析，将成熟经验用于下一次项目。"
+        "title": "报告交付",
+        "start": 64.029,
+        "duration": 8.98,
+        "text": "报告在负荷图旁解释容量用满的时段。需求超过可供电量的情况放在情景比较处，读者可以用相同参数复算。"
       }
     ],
-    "content": "Project research workflow with independently generated illustrative charts",
+    "content": "Synthetic charging allocation and report workflow",
     "narration": "中文语音与字幕"
   }
 }

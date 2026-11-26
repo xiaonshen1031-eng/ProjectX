@@ -5,8 +5,9 @@
   const range = document.querySelector('#load-period');
   const time = document.querySelector('#load-time');
   const loadValue = document.querySelector('#load-value');
+  const chargingValue = document.querySelector('#charging-value');
   const marginValue = document.querySelector('#margin-value');
-  const state = document.querySelector('#load-state');
+  const summary = document.querySelector('#load-summary');
   if (!canvas || !range) return;
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
@@ -17,14 +18,9 @@
   const load = [0, 51, 55, 53, 38, 33, 31, 22];
   const steps = load.length;
   const inset = { left: 33, right: 14, top: 15, bottom: 26 };
+  const colors = { load: '#f0f5ff', base: '#8ba9f9', fill: '#627fe75c', limit: '#d6e2ff', bound: '#f3c329' };
   const clock = index => String(index + 8).padStart(2, '0') + ':00';
   let current = Number(range.value);
-
-  function rgbStop(gradient, first, last) {
-    gradient.addColorStop(0, first);
-    gradient.addColorStop(1, last);
-    return gradient;
-  }
 
   function draw() {
     const width = canvas.clientWidth;
@@ -42,7 +38,8 @@
     const left = inset.left;
     const right = width - inset.right;
     const bottom = height - inset.bottom;
-    const x = index => left + (right - left) * index / (steps - 1);
+    const slot = (right - left) / steps;
+    const x = index => left + slot * (index + .5);
     const y = value => bottom - (bottom - inset.top) * value / 64;
 
     ctx.font = '11px Manrope, sans-serif';
@@ -64,54 +61,59 @@
     ctx.fillText('kW', 1, 9);
 
     function stepped(values) {
-      ctx.moveTo(x(0), y(values[0]));
-      for (let i = 1; i < steps; i++) {
-        const edge = (x(i - 1) + x(i)) / 2;
-        ctx.lineTo(edge, y(values[i - 1]));
+      ctx.moveTo(left, y(values[0]));
+      for (let i = 0; i < steps; i++) {
+        const edge = left + slot * (i + 1);
         ctx.lineTo(edge, y(values[i]));
-        ctx.lineTo(x(i), y(values[i]));
+        if (i < steps - 1) ctx.lineTo(edge, y(values[i + 1]));
       }
     }
 
-    ctx.beginPath();
-    stepped(load);
-    ctx.lineTo(right, bottom);
-    ctx.lineTo(left, bottom);
-    ctx.closePath();
-    ctx.fillStyle = rgbStop(ctx.createLinearGradient(0, inset.top, 0, bottom), '#6be6ff66', '#78c2ff03');
-    ctx.fill();
+    ctx.fillStyle = '#d0ddff13';
+    ctx.fillRect(left + current * slot, inset.top, slot, bottom - inset.top);
+    ctx.fillStyle = colors.fill;
+    load.forEach((value, index) => {
+      ctx.fillRect(left + index * slot, y(value), slot, y(base[index]) - y(value));
+    });
 
     ctx.beginPath();
     stepped(base);
     ctx.lineWidth = 1.7;
-    ctx.strokeStyle = '#adbaff';
+    ctx.strokeStyle = colors.base;
     ctx.stroke();
     ctx.beginPath();
     stepped(load);
-    ctx.lineWidth = 2.4;
-    ctx.strokeStyle = '#7fe7ff';
+    ctx.lineWidth = 2.2;
+    ctx.strokeStyle = colors.load;
     ctx.stroke();
 
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = '#b4eaff7a';
+    const marker = x(current);
+    if (load[current] < limit) {
+      ctx.lineWidth = 1.4;
+      ctx.strokeStyle = colors.limit;
+      ctx.beginPath();
+      ctx.moveTo(marker - 4, y(limit)); ctx.lineTo(marker + 4, y(limit));
+      ctx.moveTo(marker, y(limit)); ctx.lineTo(marker, y(load[current]));
+      ctx.stroke();
+    }
     ctx.beginPath();
-    ctx.moveTo(x(current), inset.top);
-    ctx.lineTo(x(current), bottom + 3);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.arc(x(current), y(load[current]), 9, 0, Math.PI * 2);
-    ctx.fillStyle = '#7fe7ff38';
+    if (load[current] === limit) {
+      const level = y(limit);
+      ctx.moveTo(marker, level - 5); ctx.lineTo(marker + 5, level);
+      ctx.lineTo(marker, level + 5); ctx.lineTo(marker - 5, level);
+      ctx.closePath();
+      ctx.fillStyle = colors.bound;
+    } else {
+      ctx.arc(marker, y(load[current]), 4, 0, Math.PI * 2);
+      ctx.fillStyle = colors.load;
+    }
     ctx.fill();
-    ctx.beginPath();
-    ctx.arc(x(current), y(load[current]), 4.3, 0, Math.PI * 2);
-    ctx.fillStyle = '#f5fbff';
-    ctx.fill();
-    ctx.strokeStyle = '#68ddff';
+    ctx.strokeStyle = '#172b6d';
     ctx.stroke();
 
     for (const i of [0, 2, 4, 7]) {
       ctx.fillStyle = '#d7e5ff';
-      ctx.textAlign = i === 0 ? 'left' : i === steps - 1 ? 'right' : 'center';
+      ctx.textAlign = 'center';
       ctx.fillText(clock(i), x(i), bottom + 15);
     }
   }
@@ -127,15 +129,16 @@
     time.value = selectedTime;
     range.setAttribute('aria-valuetext', selectedTime);
     loadValue.firstChild.textContent = String(load[next]) + ' ';
+    chargingValue.firstChild.textContent = String(load[next] - base[next]) + ' ';
     marginValue.firstChild.textContent = String(margin) + ' ';
-    state.textContent = margin === 0 ? '达到上限' : '仍有余量';
+    summary.classList.toggle('at-limit', margin === 0);
     draw();
   }
 
   range.addEventListener('input', () => setPeriod(Number(range.value)));
   canvas.addEventListener('click', event => {
     const width = canvas.getBoundingClientRect().width - inset.left - inset.right;
-    if (width > 0) setPeriod(Math.round((event.offsetX - inset.left) / width * (steps - 1)));
+    if (width > 0) setPeriod(Math.floor((event.offsetX - inset.left) / width * steps));
   });
   const resize = new ResizeObserver(draw);
   resize.observe(canvas);

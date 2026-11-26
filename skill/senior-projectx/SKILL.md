@@ -3,7 +3,7 @@ name: senior-projectx
 description: "面向横向委托研究、工程技术报告和项目汇报，完成资料与数据分析、物理或数学建模、计算与对比分析、中文结果阐释、Word原生公式与图表排版，以及基于客户模板的PPT制作和修订。适用于任务书约束下的完整研究或指定专题、章节、图件和格式修改。"
 metadata:
   display_name: Senior-ProjectX
-  version: "1.2.1"
+  version: "1.2.2"
   author: XiaoN
   copyright: "Copyright © NCEPU-Senior"
 ---
@@ -64,7 +64,7 @@ python scripts/project_research.py brief project_manifest.json --task-id T1 --re
 
 撰写与修改前阅读 [语言与定稿要求](references/writing-and-release.md)，具体语言诊断见 [中英文写作指南](references/bilingual-writing-playbook.md)。报告从研究对象、模型关系进入计算量，再用这些量回答工程问题。长短句随推理关系安排，前后段落通过同一数量、条件、公式或发现衔接。
 
-最终正文、图题、表格和结论均需消除实验报告式、套话式、堆叠式、冗余、防御性和机械割裂的表述。保留真实数据来源、适配关系、条件、约束、误差和不利结果，直接陈述其工程含义。文件路径、调参过程、目标胜率、核查记录和交付状态保存在内部记录；不在正式正文中写“证据链”“口径”“审计通过”等制作过程说明。
+审读范围覆盖摘要、正文、图题、表格及结论。按原始数据和比较条件重写宽泛的自我评价，把真实的不利结果放在影响判断的位置。删掉由套话承接的句子后，检查上一句给出的量怎样进入下一句。文件路径、调参记录及校验状态归入计算附件。
 
 结果按工程问题组织，说明比较条件、关键数值或变化、已有模型支持的原因及其影响。表给出准确数值，图呈现结构、分布与过程，文字解释关系；同一发现集中分析一次，不逐格复述表格。最大值、均值、分位数、功率、电量、响应与恢复分别使用准确含义，区域总峰值从同步序列求和后计算。
 
@@ -72,15 +72,15 @@ python scripts/project_research.py brief project_manifest.json --task-id T1 --re
 python scripts/check_writing_quality.py report.docx --manuscript-mode project --language chinese --require-clean --json-out review/writing.json
 ```
 
-逐项结合上下文处理提示，必要的科学或工程内容可用当前文本绑定的 `--review-decisions` 记录保留理由。自动检查后仍通读相邻段落和完整结果分析，零提示或高分不能代替语义阅读。
+逐项结合上下文处理提示。实际模型定义、必要条件或经核实的观测可用当前文本绑定的 `--review-decisions` 说明。出稿前通读每节以及两侧衔接，读到数字就核对来源，读到成因就追到状态方程、实际比较或可验证的机制。对于反复出现的“和”“与”“以及”，先弄清各项的关系，再按先后、条件或因果重组句子。确实属于同一集合的对象使用并列。
 
 ## 图件与结果呈现
 
-先确定图要回答的问题，按 [Project 图型规则](references/project-figure-policy.md) 选图。新图或实质性重绘使用 [图形设计与复绘指南](references/figure-craft-and-replay.md)，由数据关系选择研究概览、机制、实施流程或结果诊断。已认可的图面偏单薄时，优先在原坐标轴补真实的配对变化、阈值、区间端点或状态，再看读者是否需要单列详情。证据只有少数数值时，用能读清的小图或表。
+先确定读者看图要完成哪项判断，再按 [Project 图型规则](references/project-figure-policy.md) 选择几何结构。新图或实质性重绘使用 [图形设计与复绘指南](references/figure-craft-and-replay.md)。图面偏单薄时，先从真实数据中恢复配对关系、阈值、区间端点或状态。只有少量独立数值时优先用表，或在已有结论图的同一尺度内放入必要的对照。
 
 按需查阅 [图件与交付](references/figure-and-delivery.md)、[子图设计](references/advanced-figure-workflow.md)、[图型库](references/figure-pattern-pool.md)、[Python](references/python-figure-playbook.md) 或 [MATLAB](references/matlab-figure-playbook.md) 路线。原生流程、机制或连接线修订使用 [可编辑图示](references/editable-diagram-playbook.md)，已有图导出与 Word 插入使用 [图件集成](references/word-figure-integration.md)，预览、矢量件和文稿显示不一致时查 [显示修复](references/figure-display-repair.md)。
 
-图型服从数据关系：过程与约束、区域构成、持续时长—容量边界、分布、条件差异和对比结果各有用途，不把整篇报告做成热力图或一组稀疏柱线散点图。复杂性来自真实信息，不靠装饰、重复子图、虚构置信带或插值增加观测。一张复杂图可单独呈现，多张互补的简单图可合理组合。图中数据、条件、单位、分母、范围与正文一致。
+沿用 [角色色表](templates/research_figure_palette.json) 或客户已批准的色表。先把颜色绑定到基准、可行、触界、负差等实际状态，再落到色值。停用蓝绿配砖橙、灰橄榄配灰紫的默认组合；逐个检查色图、图例和导出件是否仍带入旧颜色。关键判断同时由位置、线型、点形或直接标注表达。同一张时序图可对齐负荷、上限与余量，让读者追到限制发生在哪个时段。稀疏柱线散点、装饰性热图及缺乏配对依据的连线不能单独承担工程判断。遇到缺测或不可行工况时标出对应状态。
 
 报告图的中文用已安装的微软雅黑加粗或批准的中文字体，英文与数字用 Times New Roman。默认最终插入尺寸下轴标签9—11 pt，刻度与图例8—10 pt；按当前明确要求调整。中文分类刻度与混合标签同样检查。保持宽高比，不默认添加总标题或防御性页脚，检查独立矢量图和实际插入页面的字形、边框、图例、裁剪与遮挡。
 

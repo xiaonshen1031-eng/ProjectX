@@ -11,6 +11,9 @@ def main():
     parser=argparse.ArgumentParser();parser.add_argument('--language',choices=['zh','en','both'],default='both');parser.add_argument('--charts',nargs='*');args=parser.parse_args()
     configure()
     catalog=json.loads((ROOT/'gallery/catalog.json').read_text(encoding='utf-8'))['charts']
+    unknown=set(args.charts or ())-{chart['id'] for chart in catalog}
+    if unknown:
+        parser.error(f"Unknown chart IDs: {', '.join(sorted(unknown))}")
     data=json.loads((ROOT/'gallery/demo-data.json').read_text(encoding='utf-8'));additional=json.loads((ROOT/'gallery/extra-data.json').read_text(encoding='utf-8'))
     languages=['en','zh'] if args.language=='both' else [args.language]
     records=[]
@@ -28,6 +31,8 @@ def main():
             with Image.open(path) as image:image.resize((1440,864),Image.Resampling.LANCZOS).save(preview/('python-'+slug+'.webp'),'WEBP',quality=92,method=6)
             records.append({'chart':slug,'language':language,'labels':labels})
             print('Python PNG:',language,slug,flush=True)
-    audit=ROOT/'work/bilingual-python-labels.json';audit.write_text(json.dumps({'fontPolicy':REGISTRY['fontPolicy'],'charts':records},ensure_ascii=False,indent=2),encoding='utf-8')
+    audit=ROOT/'work/bilingual-python-labels.json'
+    audit.parent.mkdir(parents=True,exist_ok=True)
+    audit.write_text(json.dumps({'fontPolicy':REGISTRY['fontPolicy'],'charts':records},ensure_ascii=False,indent=2),encoding='utf-8')
 
 if __name__=='__main__':main()

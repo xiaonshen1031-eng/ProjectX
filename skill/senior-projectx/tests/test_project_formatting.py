@@ -27,6 +27,21 @@ class ProjectFormattingTests(unittest.TestCase):
         report._configure_styles(self.doc)
         report._configure_page(self.doc)
 
+    def test_infeasible_case_energy_bound_uses_actual_period_durations(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            work = Path(tmp)
+            periods = work / "periods.csv"
+            periods.write_text("capacity_kw,base_load_kw,duration_h\n8,3,0.5\n6,4,1.5\n", encoding="utf-8")
+            vehicles = work / "vehicles.csv"
+            vehicles.write_text("energy_kwh\n2\n4\n", encoding="utf-8")
+            result = work / "scenarios" / "result_4.00.json"
+            evidence = {"termination": "infeasible", "periods_path": str(periods), "vehicles_path": str(vehicles)}
+            report.write_json(result, evidence)
+            sensitivity = work / "sensitivity.csv"
+            self.assertEqual(report._scenario_energy_shortfall(sensitivity, 4.0), (6.0, 5.5))
+            report.write_json(result, {**evidence, "termination": "unresolved"})
+            self.assertIsNone(report._scenario_energy_shortfall(sensitivity, 4.0))
+
     def test_default_fonts_are_black_regular_and_theme_free(self):
         for name in ["Normal", "Title", "Subtitle", "Heading 1", "Heading 2", "Heading 3", "Caption"]:
             style = self.doc.styles[name]

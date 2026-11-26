@@ -160,12 +160,12 @@
   }
 
   const stages = {
-    task: ['01 / TASK & MATERIALS', '确定项目要解决的问题', '从任务书、合同和已有成果确认承担范围，再把研究要求拆成可核查的问题。', '任务书、已有成果、客户模板', '核对研究对象、交付范围及约束', '技术问题和交付清单'],
-    data: ['02 / DATA & ADAPTATION', '整理模型所需的数据', '核对字段、单位、时段及样本覆盖。曲线需要迁移到其他地区时，按当地规模调整，再校核总量。', '原始表格、历史曲线、地区规模', '清理数据，统一时段和统计单位', '模型输入、参数表、处理脚本'],
-    model: ['03 / MODEL & METHOD', '建立能回答问题的模型', '确定输入、变量和运行约束。用已有物理关系或可验证的统计关系解释输出如何形成，再选择计算方法。', '工程问题和数据输入', '建立变量关系、边界和目标', '可计算的模型'],
-    compute: ['04 / COMPUTE & VALIDATE', '复算关键约束', '在相同信息条件下比较各方案。从保存的结果重算约束残差，核对异常是来自输入、模型还是实现。', '模型、参数和对照方案', '求解并独立复核关键约束', '结果、比较指标和复算代码'],
-    analysis: ['05 / RESULTS & ANALYSIS', '解释差异怎样产生', '在相同工况下比较结果。用曲线、配对差值或阈值定位变化，再说明哪个约束限制了可用能力。', '计算结果与对照工况', '定位差异，解释运行约束', '结果图表和工程判断'],
-    delivery: ['06 / DELIVERABLES', '按客户模板交付', '把方法、工况和可复算结果编入技术报告。汇报页呈现决定方案的关键证据，并复核公式、图表和页面。', '结果、分析与客户模板', '编排报告，按实际页面复核', '报告、汇报、图件和源码']
+    task: ['SCOPE', '界定研究任务', '从任务书确认客户需要做哪项判断。把判断所需的工况和指标写成计算问题。', '任务书、客户模板', '确定据以决策的工况和指标', '待回答的工程问题'],
+    data: ['INPUT DATA', '让数据对应模型时段', '按计算问题确定采样间隔。汇总功率曲线时保留相同时间边界，回算电量，核对变更时间尺度后的总量。', '原始时序、单位、设备参数', '核对缺测，统一时间尺度', '各时段的模型输入'],
+    model: ['MODEL', '用运行条件确定可行范围', '以充电调度为例，每辆车的接入窗口限定了可以分配功率的时段。聚合后的充电功率还受变压器余量约束。', '接入窗口、负荷、设备容量', '定义功率变量和时段约束', '可求解的调度模型'],
+    compute: ['RECOMPUTATION', '从分配结果回算约束', '将车辆的时段功率相加，再加上基础负荷，即可逐时查验变压器限值。按每辆车的功率序列积分，核对它实际获得的电量。', '逐车功率分配结果', '独立重建变压器负荷和车辆电量', '可比较的工况结果'],
+    analysis: ['INTERPRETATION', '找出限制下一步调整的工况', '容量余量降到零时，增加充电功率需要改排到其他有余量的可用时段。图中把接入窗口和负荷放在同一时间轴上，可以看到这些时段是否存在。', '容量余量、车辆接入窗口', '对照触界时段与可改排时段', '可执行的调度判断'],
+    delivery: ['DELIVERABLES', '把计算依据交给客户', '在报告中把限制条件放在相关图表旁。计算脚本复现图上的数值，汇报页保留影响方案选择的工况。', '工程判断、客户模板', '编排报告并检查成稿页面', '技术报告、汇报和复算材料']
   };
   const stageTabs = $$('[data-stage]');
   const stagePanel = $('#workflow-detail');
@@ -288,9 +288,9 @@
   function figurePaths(chart) {
     const folder = language === 'zh' ? 'zh/' : '';
     return {
-      thumbnail: 'assets/charts/' + folder + mode + '-' + chart.id + '.webp',
-      original: 'downloads/figures/' + mode + '/' + folder + chart.id + '.' + formatByMode[mode].toLowerCase(),
-      detail: 'assets/charts/detail/' + folder + 'matlab-' + chart.id + '.webp'
+      thumbnail: 'assets/charts/' + folder + mode + '-' + chart.id + '.webp?v=122',
+      original: 'downloads/figures/' + mode + '/' + folder + chart.id + '.' + formatByMode[mode].toLowerCase() + '?v=122',
+      detail: 'assets/charts/detail/' + folder + 'matlab-' + chart.id + '.webp?v=122'
     };
   }
   function setPressed(buttons, key, selected) {
@@ -547,6 +547,7 @@
         $$('[data-test-count]').forEach(element => setText(element, String(data.tests.regressions)));
       }
     }
+    if (!releaseIsCurrent(data.version)) return null;
     if (Number.isFinite(data.video?.duration) && data.video.duration > 0) {
       $$('[data-video-duration]').forEach(element => setText(element, formatTime(data.video.duration)));
     }
