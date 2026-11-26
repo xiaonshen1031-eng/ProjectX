@@ -157,7 +157,7 @@ class ProjectFormattingTests(unittest.TestCase):
                                         figures, sensitivity, output, inventory)
             doc = Document(output)
             text = "\n".join(p.text for p in doc.paragraphs)
-            for token in ["PRIVATE_INTERNAL_PATH", "JSON 指针", "章节 brief", "证据链", "success 布尔", "复核职责"]:
+            for token in ["PRIVATE_INTERNAL_PATH", "JSON 指针", "章节 brief", "证据链", "success 布尔", "复核职责", "核查", "证据表明", "重新校核"]:
                 self.assertNotIn(token, text)
             self.assertIn("合成", text)  # Do not erase the factual source classification.
             hard_breaks = doc.element.xpath(".//w:br[@w:type='page']|.//w:pageBreakBefore")

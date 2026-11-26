@@ -536,7 +536,7 @@ def _configure_page(doc: Document) -> None:
 def create_default_template(path: Path) -> None:
     doc = Document(); _configure_styles(doc); _configure_page(doc)
     p = doc.add_paragraph("项目技术研究报告", style="Title"); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p = doc.add_paragraph("按任务书、技术问题与当前证据调整章节", style="Subtitle"); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    p = doc.add_paragraph("工程研究与技术分析", style="Subtitle"); p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     doc.add_page_break()
     for heading in ["项目概述与研究任务", "研究对象、资料与数据", "研究专题", "综合技术评价与工程建议", "结论及后续工作"]:
         doc.add_heading(heading, level=1)
@@ -730,7 +730,7 @@ def _compare_scenario_capacity(low, high, summaries: list[dict]) -> str:
     low_record, high_record = by_scale.get(low.demand_scale, {}), by_scale.get(high.demand_scale, {})
     before, after = low_record.get("binding_periods"), high_record.get("binding_periods")
     if before is None or after is None:
-        return text + "要判断某辆车还能增充多少，须核对其接入窗内各时段的容量余量。"
+        return text + "单车可利用的容量分布在其实际接入的时段。"
     added = [period for period in after if period not in before]
     relieved = [period for period in before if period not in after]
     example = high_record.get("newly_full_example") if float(low.demand_scale) == 1.0 else None
@@ -822,7 +822,7 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
                           f"各车在接入窗口内均匀充电的参考方案，在同一时段仍有 {extra} kW 余量。")
         else:
             bottleneck += "该时段的变压器容量已经用满。"
-        bottleneck += "要在该时段安排新增充电，需核查已分配车辆在其他接入时段的可转移电量。"
+        bottleneck += "在既定容量下，该时段可接纳的新增充电功率来自已有分配的转移。"
     else:
         bottleneck += f"该时段在设备侧最多还能增加 {_margin_label(minimum_margin, 2)} kW。图2给出各车的接入窗口，据此确定可分配的车辆。"
     _add_body(doc, bottleneck)
@@ -882,17 +882,17 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
         shortfall = _scenario_energy_shortfall(sensitivity_path, scale)
         if shortfall:
             demand, available = shortfall
-            _add_body(doc, f"需求为基准的 {scale:.2f} 倍时，车辆合计需要 {demand:.3g} kWh。将各时段可用于充电的变压器余量按时长累计，可供电量上界为 {available:.3g} kWh，对应至少 {demand - available:.3g} kWh 的缺口。增供方案还需满足各车接入窗口内的充电能力。")
+            _add_body(doc, f"需求为基准的 {scale:.2f} 倍时，车辆合计需要 {demand:.3g} kWh。各时段可用于充电的变压器余量按时长累计，可供电量上界为 {available:.3g} kWh。由此得到至少 {demand - available:.3g} kWh 的电量缺口，充电时段调整无法改变这一上界。")
         else:
             _add_body(doc, f"需求倍率 {scale:.2f} 时，在现有接入窗口、车端功率上限和变压器容量下，车辆的电量要求无法同时满足。")
 
-    doc.add_heading("6 校核结果与工程结论", level=1)
+    doc.add_heading("6 基准方案可行性与运行边界", level=1)
     checks = [["最大电量差值", f"{validation['maximum_energy_residual_kwh']:.3g}", "kWh"],
               ["最大容量越界量", f"{validation['maximum_capacity_violation_kw']:.3g}", "kW"],
               ["最小容量余量", f"{minimum_margin:.2f}", "kW"]]
     _add_caption(doc, "表3 电量与容量指标")
     _add_table(doc, ["指标", "数值", "单位"], checks, [8.0, 4.0, 3.6])
-    _add_body(doc, "基准调度满足各车的离站电量需求，逐时总负荷均在变压器容量以内（表3）。需求变化后，应使用更新的分配结果重新校核这两项约束。")
+    _add_body(doc, "基准调度满足各车的离站电量需求，逐时总负荷均在变压器容量以内（表3）。对于单车，只有接入窗口内的容量余量可用于充电。对于全站，变压器容量与同期基础负荷共同决定调度周期内的可供电量上界。")
     doc.core_properties.author = ""; doc.core_properties.last_modified_by = ""
     output_path.parent.mkdir(parents=True, exist_ok=True); doc.save(output_path)
     is_office_math = equation_backend == "office_math"
