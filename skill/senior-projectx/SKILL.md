@@ -3,7 +3,7 @@ name: senior-projectx
 description: "面向横向委托研究、工程技术报告和项目汇报，完成资料与数据分析、物理或数学建模、计算与对比分析、中文结果阐释、Word原生公式与图表排版，以及基于客户模板的PPT制作和修订。适用于任务书约束下的完整研究或指定专题、章节、图件和格式修改。"
 metadata:
   display_name: Senior-ProjectX
-  version: "1.3.5"
+  version: "1.3.6"
   author: XiaoN
   copyright: "Copyright © NCEPU-Senior"
 ---
@@ -62,7 +62,7 @@ python scripts/project_research.py brief project_manifest.json --task-id T1 --re
 
 ## 连贯的中文技术分析
 
-撰写与修改前阅读 [语言与定稿要求](references/writing-and-release.md)。算例分析采用自然、正式的科研和工程语体，参照 [从算例读出工程结论](references/project-results-analysis.md) 组织比较与归因。后段使用上一段已经确定的事实或条件，例如由削减电量分析同批负荷的回补，由原峰时刻转入新峰时刻的容量校核。
+撰写与修改前阅读 [语言与定稿要求](references/writing-and-release.md)。算例分析采用自然、正式的科研和工程语体，参照 [从算例读出工程结论](references/project-results-analysis.md) 组织比较与归因。围绕同一工程问题的结果、解释及应用写在同段。转入新的时间尺度或判断对象时另起一段，明确它承接哪项结果。
 
 审读范围覆盖摘要、正文、图题、表格及结论。结果段从实际比较及其工程含义展开，直接给出变化的时段、受限条件及计算所得的运行后果。删除防御性表述与试验过程流水账，审阅指令归入工作记录。缺额、越界及适用条件在影响判断处交代。
 

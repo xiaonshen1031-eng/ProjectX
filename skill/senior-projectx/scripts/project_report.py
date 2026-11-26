@@ -737,7 +737,7 @@ def _compare_scenario_capacity(low, high, summaries: list[dict]) -> str:
     if example and example["period"] in added and not relieved:
         items = [f"{car} 的充电功率增加 {_margin_label(power, 2)} kW" for car, power in example["increases_kw"].items()]
         room = _margin_label(example["baseline_margin_kw"], 2)
-        text += f"时段 {example['period']} 原有 {room} kW 余量，" + "，".join(items) + "，两车新增功率之和恰好占满该时段的余量。"
+        text += f"时段 {example['period']} 原有 {room} kW 余量，" + "，".join(items) + "，新增功率恰好用尽该时段的余量。"
     elif added and relieved:
         text += f"时段 {relieved[0]} 的余量恢复为正，时段 {added[0]} 达到容量上限。"
     elif added:
@@ -750,7 +750,7 @@ def _compare_scenario_capacity(low, high, summaries: list[dict]) -> str:
         text += "两种需求下的各时段都保有余量。"
     if after:
         tight = added[0] if added else after[0]
-        return text + f"时段 {tight} 新增充电需求的可行性，取决于已有充电能否转移至其他有余量的接入时段。"
+        return text + f"为时段 {tight} 安排新增充电时，可从其他有余量的接入时段估算现有计划中可转出的电量。"
     return text + "高需求条件下的可增充电量取决于车辆接入时段内可利用的容量。"
 
 
@@ -863,6 +863,7 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
                   f"{r.mean_margin_kw:.2f}" if np.isfinite(r.mean_margin_kw) else "—"] for r in sensitivity.itertuples()]
     _add_caption(doc, "表2 需求倍率敏感性结果")
     _add_table(doc, ["需求倍率", "状态", "目标值", "平均容量余量（kW）"], sens_rows, [3.0, 3.0, 4.0, 6.0])
+    scenario_analysis = ""
     feasible = sensitivity[sensitivity.status == "optimal"].sort_values("demand_scale")
     if feasible["demand_scale"].nunique() > 1:
         lo, hi = feasible.iloc[0], feasible.iloc[-1]
@@ -875,8 +876,8 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
                                  if item["demand_scale"] > 1 and set(item.get("binding_periods") or []) - set(base_periods)), None)
             if first_change is not None and first_change in set(feasible.demand_scale):
                 lo, hi = baseline.iloc[0], feasible[feasible.demand_scale == first_change].iloc[0]
-        _add_body(doc, _compare_scenario_capacity(lo, hi, summaries))
-    _add_body(doc, "保持其他车辆分配不变，单车在各接入时段的可增充功率取变压器余量与车端剩余功率的较小值。将各时段的可增充功率乘以持续时间后求和，得到该车在接入窗口内的可增充电量。")
+        scenario_analysis = _compare_scenario_capacity(lo, hi, summaries)
+    _add_body(doc, scenario_analysis + "估算单车可增充电量时，保持其他车辆分配不变，在该车接入窗口内逐时取变压器余量与车端剩余功率的较小值，再按时长折算并累计。")
     infeasible = sensitivity[sensitivity.status == "infeasible"]
     shortfall = None
     if not infeasible.empty:
@@ -884,7 +885,9 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
         shortfall = _scenario_energy_shortfall(sensitivity_path, scale)
         if shortfall:
             demand, available = shortfall
-            _add_body(doc, f"需求为基准的 {scale:.2f} 倍时，车辆合计需要 {demand:.3g} kWh。各时段可用于充电的变压器余量按时长累计，可供电量上界为 {available:.3g} kWh，由此得到至少 {demand - available:.3g} kWh 的电量缺口。")
+            _add_body(doc, f"需求达到基准的 {scale:.2f} 倍时，供电总量也成为约束。车辆合计需要 {demand:.3g} kWh，"
+                           f"各时段可用于充电的变压器余量按时长累计后，可供电量上界为 {available:.3g} kWh。"
+                           f"两者相差 {demand - available:.3g} kWh，给出了该工况所需补充供电量的下限。")
         else:
             _add_body(doc, f"需求倍率为 {scale:.2f} 时，逐车离站需求超出现有接入窗口、车端功率上限和变压器容量共同限定的分配范围。")
 
@@ -896,18 +899,18 @@ def build_report(template_path: Path, manifest_path: Path, audit_paths: list[Pat
     _add_table(doc, ["指标", "数值", "单位"], checks, [8.0, 4.0, 3.6])
     conclusion = "基准调度满足各车的离站电量需求，逐时总负荷均在变压器容量以内（表3）。"
     if applicable_move:
-        conclusion += (f"图2的移时方案为时段 {tight} 释放了 {move['released_kw']:.6g} kW 充电功率，"
-                       "可据此安排该时段已接入车辆的新增充电需求。")
+        conclusion += (f"图2的移时方案在现有供电量下为时段 {tight} 释放了 {move['released_kw']:.6g} kW，"
+                       "可分配给该时段已接入的车辆。")
     elif minimum_margin > 1e-7:
         conclusion += (f"时段 {tight} 的 {_margin_label(minimum_margin, 2)} kW 容量余量，"
                        "可作为现有计划下分配新增充电功率的设备侧额度。")
     else:
         conclusion += f"时段 {tight} 是基准调度的满载时段，可作为新增需求下优先调整充电分配的时段。"
-    _add_body(doc, conclusion)
     if shortfall is not None:
         deficit = shortfall[0] - shortfall[1]
-        _add_body(doc, f"{scale:.2f} 倍需求工况对应 {deficit:.3g} kWh 的最低增供电量，"
-                       "可作为安排本周期新增供电的量化依据。")
+        conclusion += (f"编制周期供电计划时，可采用 {scale:.2f} 倍需求工况算得的 {deficit:.3g} kWh "
+                       "作为补充供电量的下限。")
+    _add_body(doc, conclusion)
     doc.core_properties.author = ""; doc.core_properties.last_modified_by = ""
     output_path.parent.mkdir(parents=True, exist_ok=True); doc.save(output_path)
     is_office_math = equation_backend == "office_math"
